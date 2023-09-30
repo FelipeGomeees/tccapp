@@ -1,0 +1,128 @@
+<template>
+    <div>
+        <div class="d-flex">
+            <v-autocomplete
+              v-model="itemsAdicionados"
+              :items="items"
+              outlined
+              chips
+              color="blue-grey lighten-2"
+              label="Select"
+              item-text="name"
+              item-value="name"
+              multiple
+            >
+              <template v-slot:selection="data">
+                <v-chip
+                  v-bind="data.attrs"
+                  :input-value="data.selected"
+                  close
+                  @click="data.select"
+                  @click:close="remove(data.item)"
+                >
+                  <v-avatar left>
+                    <v-img>F</v-img>
+                  </v-avatar>
+                  {{ data.item.name }}
+                </v-chip>
+              </template>
+              <template v-slot:item="data">
+                  <v-list-item-avatar :color="data.item.color">
+                    F
+                    <!-- <img :src="data.item.avatar"> -->
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{data.item.name}}</v-list-item-title>
+                    <v-list-item-subtitle>{{data.item.group}}</v-list-item-subtitle>
+                  </v-list-item-content>
+              </template>
+            </v-autocomplete>
+            <v-btn color="primary margin" height="54px" @click="$_saveTags">
+            <v-icon>mdi-arrow-down-thick</v-icon>
+            </v-btn>
+        </div>
+        <span style="color: #999999">Usuarios Salvos</span>
+        <div class="tag-filler" v-if="itemsAdicionados.length">
+            <div v-for="(item, index) in itemsAdicionados" :key="index" class="tag-container">
+                <v-btn :color="item.color" :dark="item.dark" rounded class="elevation-0 pa-2 tag" height="19px"
+                @click="$_returnTag(item)">
+                    {{item.name}}
+                </v-btn>
+            </div>
+        </div>
+        <div class="tag-filler" v-else>
+            <div style="margin-left: 10px">
+                . . .
+            </div>       
+        </div>
+    </div>
+</template>
+
+<script>
+
+export default {
+    name: 'TagSelector',
+    data() {
+        return {
+            items: [{
+                name: 'Node',
+                color: '#072',
+                dark: true,
+            },{
+                name: 'Vue',
+                color: '#0a4',
+                dark: true,
+            },{
+                name: 'Desenvolvimento',
+                color: '#55e',
+                dark: true,
+            }],
+            itemsAdicionados: [],
+            selecionados: null,
+        }
+    },
+
+    methods: {
+        $_saveTags() {
+            this.selecionados.forEach(el => {
+                this.itemsAdicionados.push(el);
+                this.items = this.items.filter((item) => {
+                    console.log(el, item, 'a');
+                    return item.name != el.name;
+                })
+            });
+            this.selecionados = [];
+        },
+
+        $_returnTag(item) {
+            this.items.push(item);
+            this.itemsAdicionados = this.itemsAdicionados.filter((el) => {
+                return el.name != item.name;
+            })
+        }
+    }
+}
+</script>
+
+
+<style scoped>
+  .tag-filler {
+    border: 1px solid #a9a9a9;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .tag-container {
+
+  }
+
+  .tag {
+    margin: 15px;
+  }
+
+  .margin {
+    margin-left: 15px;
+  }
+</style>
