@@ -32,6 +32,7 @@ export default {
             search: null,
             dialog: false,
             selecionado: null,
+            loading: true,
         };
     },
 
@@ -44,21 +45,27 @@ export default {
             this.selecionado = e;
         },
 
-        ShowProfile() {
-
-        },
-    },
-
-    created() {
-        // FILTRAR POR AMBIENTE NO FUTURO
+        $_load() {
+         // FILTRAR POR AMBIENTE NO FUTURO
+        this.loading = true;
         const res = axios.get(
             '/tag/resumo',
         );
         res.then((item) => {
-            console.log(item, 'KKK');
             this.items = item.data;
+            this.loading = false;
         });
-    }
+    },
+
+        $_reload() {
+
+            this.$_load();
+        },
+    },
+
+    created() {
+       this.$_load();
+    },
 }
 </script>
 
@@ -95,7 +102,7 @@ export default {
                 item-key="name"
                 class="elevation-1 table-header"
                 :search="search"
-                v-if="items"
+                v-if="!loading"
                  @click:row="$_selectItem"
                 >
                 <template v-slot:item.tagcor="{ item }">
@@ -109,7 +116,7 @@ export default {
                 <v-card-title class="text-h5 primary" >
                     <v-icon>mdi-tag</v-icon> Nova Tag
                 </v-card-title>
-                <tag-form @sucesso="dialog = false"></tag-form>
+                <tag-form @sucesso="dialog = false; $_reload"></tag-form>
             </v-dialog>
         </template>
         <template v-slot:side>
