@@ -15,6 +15,12 @@ export default function AxiosSetup() {
 }
 
 export function SetToken(token) {
-  sessionStorage.setItem('token', token);
-  axios.defaults.headers.Authorization = token ? `Bearer ${token.toktoken}` : null;
+  const tokenAtual = sessionStorage.getItem('token');
+  if (!tokenAtual) {
+    sessionStorage.setItem('token', JSON.stringify(token[0]));
+    axios.defaults.headers.Authorization = token ? `Bearer ${token[0].toktoken}` : null;
+  } else {
+    axios.defaults.headers.Authorization = token ? `Bearer ${token.toktoken}` : null;
+  }
+  
 }
