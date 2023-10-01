@@ -60,13 +60,13 @@
               <br/>
               <div class="d-flex justify-space-around">
                 <div class="data-final">
-                  <v-text-field label="Data Entrega" outlined/>
+                  <v-text-field label="Data Entrega" outlined v-model="formulario.tardataprazo"/>
                 </div>
                 <div>
-                  <v-switch label="Pedidos de Participação"/>
+                  <v-switch label="Pedidos de Participação" v-model="formulario.tarpedirconvite"/>
                 </div>
                 <div>
-                  <v-switch label="Visivel para todos"/>
+                  <v-switch label="Visivel para todos" v-model="formulario.tarvisibilidade"/>
                 </div>
               </div>
             </v-stepper-content>
@@ -98,7 +98,7 @@ export default {
         e1: 1,
         formAtual: 0,
         formulario: {
-          taridambiente: null,
+          taridambiente: sessionStorage.getItem('ambiente').toString(),
           tarnome: null,
           tardescricao: null,
           taridexecutavel: null,

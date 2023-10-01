@@ -2,23 +2,21 @@
     <div>
         <div class="d-flex">
             <v-autocomplete
-              v-model="itemsAdicionados"
+              v-model="selecionados"
               :items="items"
               outlined
               chips
               color="blue-grey lighten-2"
               label="Select"
               item-text="name"
-              item-value="name"
               multiple
+              return-object
             >
               <template v-slot:selection="data">
                 <v-chip
                   v-bind="data.attrs"
                   :input-value="data.selected"
-                  close
                   @click="data.select"
-                  @click:close="remove(data.item)"
                 >
                   <v-avatar left>
                     <v-img>F</v-img>
@@ -41,11 +39,14 @@
             <v-icon>mdi-arrow-down-thick</v-icon>
             </v-btn>
         </div>
-        <span style="color: #999999">Usuarios Salvos</span>
+        <span style="color: #999999">Usuarios Salvoss</span>
         <div class="tag-filler" v-if="itemsAdicionados.length">
-            <div v-for="(item, index) in itemsAdicionados" :key="index" class="tag-container">
-                <v-btn :color="item.color" :dark="item.dark" rounded class="elevation-0 pa-2 tag" height="19px"
+            <div v-for="(item, index) in itemsAdicionados" :key="index" class="tag">
+                <v-btn :color="item.color" :dark="item.dark" rounded class="elevation-0 pa-2 tag" height="38px"
                 @click="$_returnTag(item)">
+                  <v-avatar left class="avatar">
+                    <v-img>F</v-img>
+                  </v-avatar>
                     {{item.name}}
                 </v-btn>
             </div>
@@ -65,15 +66,15 @@ export default {
     data() {
         return {
             items: [{
-                name: 'Node',
+                name: 'Felipe Gomes',
                 color: '#072',
                 dark: true,
             },{
-                name: 'Vue',
+                name: 'Fernanda Takano',
                 color: '#0a4',
                 dark: true,
             },{
-                name: 'Desenvolvimento',
+                name: 'Davi Machado',
                 color: '#55e',
                 dark: true,
             }],
@@ -119,10 +120,14 @@ export default {
   }
 
   .tag {
-    margin: 15px;
+    margin: 2px;
   }
 
   .margin {
     margin-left: 15px;
+  }
+
+  .avatar {
+    z-index: 10;
   }
 </style>

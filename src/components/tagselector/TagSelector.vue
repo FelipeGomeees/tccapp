@@ -34,7 +34,7 @@
 <script>
 
 export default {
-    name: 'TagSelector',
+    name: 'UserSelector',
     data() {
         return {
             items: [{

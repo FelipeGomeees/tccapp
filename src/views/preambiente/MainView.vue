@@ -268,7 +268,7 @@ export default {
     },
 
     created() {
-        const token = JSON.parse(sessionStorage.getItem('token'))[0];
+        const token = JSON.parse(sessionStorage.getItem('token'));
         this.token = token;
         this.$_carregaTags();
         this.$_carregaAmbientes();

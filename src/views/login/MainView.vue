@@ -98,7 +98,7 @@ export default {
             res.then((data) => {
                 console.log(data);
                 if (data.data.length > 0) {
-                    SetToken(JSON.stringify(data.data));
+                    SetToken(data.data);
                     this.NavigateTo('/preambiente')
                 } else {
                      this.text = 'Usuario ou senha inválidos';

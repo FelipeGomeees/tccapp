@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 // import initialColor from '@/plugins/initialcolor.js';
 
 export default {
@@ -34,9 +35,21 @@ export default {
     methods: {
         $_openAmbiente(item) {
             sessionStorage.setItem('ambiente', item.idambiente);
-            this.$router.push({
-                path: '/home',
-            })
+            const idusuario = JSON.parse(sessionStorage.getItem('token')).tokidusuario;
+            const dados = {
+                where: { usaidambiente: item.idambiente, usaidusuario: idusuario },
+            };
+            const res = axios.get(
+                '/usuarioambiente',
+                { params: dados },
+            );
+            res.then((res) => {
+                console.log(res, 'res');
+                sessionStorage.setItem('usuarioambiente', res.data[0].id);
+                this.$router.push({
+                    path: '/home',
+                })
+            });
         }
     },
 }
