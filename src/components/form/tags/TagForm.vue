@@ -74,10 +74,10 @@ export default {
           default: 4
         }
         this.formulario.tagdark = (this.formulario.tagdark) ? 0 : 1;
-        const body = this.formulario;
+        const dados = this.formulario;
         const res = axios.post(
             '/tag',
-            { body },
+            { dados },
         );
         res.then((item) => {
           this.$$emit('sucesso', item);

@@ -12,16 +12,16 @@
         <br/>
         <div class="flex-center">
             <v-btn class="elevation-0 pa-2 tag" dark
-            color="#909" rounded>Teste</v-btn>
+            :color="dados.tagcor" rounded>{{dados.tagnome}}</v-btn>
         </div>
         <br/>
         <div class="flex-center justify-space-around">
-            <div>Tag de Fluxo</div>
-            <div>Prioridade 2</div>
+            <div>{{dados.tatdescricao}}</div>
+            <div>Prioridade {{dados.tagprioridade}}</div>
         </div>
         <br/>
         <div class="flex-center">
-            Projeto em estado de coding
+            "{{dados.tagdescricao}}"
         </div>
         <br/>
         <v-divider></v-divider>
@@ -34,7 +34,7 @@
             <core-icon-stack :items="usersMenor" class="flex-center"></core-icon-stack>
         </v-card-text>
         <div class="flex-center">
-            <v-icon>mdi-calendar-heart</v-icon> 17 de Março de 2023
+            <v-icon>mdi-calendar-heart</v-icon> {{$_formataData(dados.tagdatacriacao)}}
         </div>
         <br/>
         <v-divider></v-divider>
@@ -85,11 +85,18 @@
 <script>
 // import CoreDialog from '@/components/dialog/SolicitacaoDialog.vue';
 import CoreIconStack from '@/components/bigiconstack/CoreIconStack.vue'
+import moment from 'moment'
 
 export default {
     name: 'SideTarefas',
     components: {
         CoreIconStack
+    },
+
+    props: {
+        dados: {
+            type: Object,
+        }
     },
 
     data() {
@@ -104,6 +111,12 @@ export default {
                     usegithub: '@...',
                 },
             ],
+        }
+    },
+
+    methods: {
+        $_formataData(data) {
+            return moment(data).format('DD/MM/YYYY');
         }
     }
 } 

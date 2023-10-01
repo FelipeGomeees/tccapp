@@ -31,6 +31,7 @@ export default {
             items: null,
             search: null,
             dialog: false,
+            selecionado: null,
         };
     },
 
@@ -39,9 +40,8 @@ export default {
             this.$router.push({ path: url })
         },
 
-        OpenDetail(bool) {
-            console.log(bool);
-            this.detail = bool;
+        $_selectItem(e) {
+            this.selecionado = e;
         },
 
         ShowProfile() {
@@ -52,7 +52,7 @@ export default {
     created() {
         // FILTRAR POR AMBIENTE NO FUTURO
         const res = axios.get(
-            '/tag',
+            '/tag/resumo',
         );
         res.then((item) => {
             console.log(item, 'KKK');
@@ -96,6 +96,7 @@ export default {
                 class="elevation-1 table-header"
                 :search="search"
                 v-if="items"
+                 @click:row="$_selectItem"
                 >
                 <template v-slot:item.tagcor="{ item }">
                     <v-btn class="elevation-0 pa-2 circulo"
@@ -112,7 +113,7 @@ export default {
             </v-dialog>
         </template>
         <template v-slot:side>
-            <side-tag/>
+            <side-tag :dados="selecionado" v-if="selecionado"/>
         </template>
     </core-screen>
 </template>
