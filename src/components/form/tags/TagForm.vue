@@ -50,6 +50,7 @@ export default {
     data () {
       return {
         formulario: {
+          tagidusuarioambiente: sessionStorage.getItem('usuarioambiente').toString(),
           tagnome: '',
           tagdescricao: '',
           tagcor: '#faa',
@@ -62,13 +63,26 @@ export default {
 
     methods: {
       $_criarTarefa() {
-        const dados = this.formulario;
+        // Fluxo','Categoria','Geral
+        switch (this.formulario.tagidtagtipo) {
+          case 'Fluxo': this.formulario.tagidtagtipo = 5;
+          break;
+          case 'Categoria': this.formulario.tagidtagtipo = 6;
+          break;
+          case 'Geral': this.formulario.tagidtagtipo = 4;
+          break;
+          default: 4
+        }
+        this.formulario.tagdark = (this.formulario.tagdark) ? 0 : 1;
+        const body = this.formulario;
         const res = axios.post(
-            '/tarefa',
-            { dados },
+            '/tag',
+            { body },
         );
         res.then((item) => {
-          console.log(item);
+          this.$$emit('sucesso', item);
+        }).catch(() => {
+          //
         })
         this.$emit('finalizar');
       },

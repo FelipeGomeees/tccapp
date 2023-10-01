@@ -3,6 +3,7 @@
 import CoreScreen from '@/components/always/CoreScreen.vue';
 import TagForm from '@/components/form/tags/TagForm.vue';
 import SideTag from '@/components/side/side-tag/SideTag.vue';
+import axios from 'axios';
 
 export default {
     name: 'ContatoView',
@@ -27,61 +28,7 @@ export default {
                 { text: 'Prioridade', value: 'tagprioridade' },
                 { text: 'Cor', value: 'tagcor', align: 'center' },
             ],
-            items: [
-            {
-                tagnome: 'Desenvolvimento',
-                tagdescricao: 'Projeto em estado de coding',
-                tagtipo: 'Fluxo',
-                tagprioridade: '3',
-                tagcor: '#0077',
-                tagdark: true,
-                acoes: '5'
-            },
-            {
-                tagnome: 'Em Andamento',
-                tagdescricao: 'Projeto em estado de coding',
-                tagtipo: 'Fluxo',
-                tagprioridade: '3',
-                tagcor: '#aaffaa',
-                tagdark: false,
-                acoes: '5'
-            },
-            {
-                tagnome: 'Desenvolvimento',
-                tagdescricao: 'Projeto em estado de coding',
-                tagtipo: 'Fluxo',
-                tagprioridade: '3',
-                tagcor: '#aaffaa',
-                tagdark: false,
-                acoes: '5'
-            },
-            {
-                tagnome: 'Desenvolvimento',
-                tagdescricao: 'Projeto em estado de coding',
-                tagtipo: 'Fluxo',
-                tagprioridade: '3',
-                tagcor: '#aaffaa',
-                tagdark: false,
-                acoes: '5'
-            },
-            {
-                tagnome: 'Desenvolvimento',
-                tagdescricao: 'Projeto em estado de coding',
-                tagtipo: 'Fluxo',
-                tagprioridade: '3',
-                tagcor: '#aaffaa',
-                tagdark: false,
-                acoes: '5'
-            },
-            {
-                tagnome: 'Desenvolvimento',
-                tagdescricao: 'Projeto em estado de coding',
-                tagtipo: 'Fluxo',
-                tagprioridade: '3',
-                tagcor: '#aaffaa',
-                tagdark: false,
-                acoes: '5'
-            }],
+            items: null,
             search: null,
             dialog: false,
         };
@@ -101,6 +48,17 @@ export default {
 
         },
     },
+
+    created() {
+        // FILTRAR POR AMBIENTE NO FUTURO
+        const res = axios.get(
+            '/tag',
+        );
+        res.then((item) => {
+            console.log(item, 'KKK');
+            this.items = item.data;
+        });
+    }
 }
 </script>
 
@@ -137,6 +95,7 @@ export default {
                 item-key="name"
                 class="elevation-1 table-header"
                 :search="search"
+                v-if="items"
                 >
                 <template v-slot:item.tagcor="{ item }">
                     <v-btn class="elevation-0 pa-2 circulo"
@@ -149,7 +108,7 @@ export default {
                 <v-card-title class="text-h5 primary" >
                     <v-icon>mdi-tag</v-icon> Nova Tag
                 </v-card-title>
-                <tag-form></tag-form>
+                <tag-form @sucesso="dialog = false"></tag-form>
             </v-dialog>
         </template>
         <template v-slot:side>

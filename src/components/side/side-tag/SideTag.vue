@@ -60,6 +60,25 @@
             </div>
         </div>
         <br/>
+        <v-divider></v-divider>
+        <div class="flex-center">
+            <div>
+                Ações
+            </div>
+        </div>
+        <br/>
+        <div class="flex-center">
+            <div>
+                <div class="flex-center">
+                    <v-btn @click="$_editar">EDITAR</v-btn>
+                </div>
+                <br/>
+                 <div class="flex-center">
+                    <v-btn @click="$_deletar">DELETAR</v-btn>
+                </div>
+                <br/>
+            </div>
+        </div>
     </div>
 </template>
 
