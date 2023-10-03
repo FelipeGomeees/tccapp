@@ -11,7 +11,7 @@
         </div>
         <br/>
         <div class="flex-center">
-            <v-btn class="elevation-0 pa-2 tag" dark
+            <v-btn class="elevation-0 pa-2 tag" :dark="$_dark(dados.tagdark)"
             :color="dados.tagcor" rounded>{{dados.tagnome}}</v-btn>
         </div>
         <br/>
@@ -70,10 +70,10 @@
         <div class="flex-center">
             <div>
                 <div class="flex-center">
-                    <v-btn @click="$_editar">EDITAR</v-btn>
+                    <v-btn @click="$_setSession">EDITAR</v-btn>
                 </div>
                 <br/>
-                 <div class="flex-center">
+                 <div class="flex-center"> 
                     <v-btn @click="$_deletar">DELETAR</v-btn>
                 </div>
                 <br/>
@@ -86,6 +86,7 @@
 // import CoreDialog from '@/components/dialog/SolicitacaoDialog.vue';
 import CoreIconStack from '@/components/bigiconstack/CoreIconStack.vue'
 import moment from 'moment'
+import axios from 'axios'
 
 export default {
     name: 'SideTarefas',
@@ -117,11 +118,29 @@ export default {
     methods: {
         $_formataData(data) {
             return moment(data).format('DD/MM/YYYY');
+        },
+
+        $_deletar() {
+            console.log(this.$props.dados.id, 'DASDASD')
+            const res = axios.delete(
+                `/tag/${this.$props.dados.id}`,
+            );
+            res.then(() => {
+                console.log('aa');
+            });
+        },
+
+        $_setSession() {
+            sessionStorage.setItem('edit', this.$props.dados.id);
+            this.$emit('editar');
+        },
+
+        $_dark(dark) {
+            return (dark === "0") ? true : false;
         }
     }
 } 
 </script>
-
 
 <style scoped>
     .flex-center {

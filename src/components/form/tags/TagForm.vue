@@ -75,16 +75,28 @@ export default {
         }
         const newFormulario = { ...this.formulario, tagdark: (this.formulario.tagdark) ? 0 : 1};
         const dados = newFormulario;
-        const res = axios.post(
-            '/tag',
-            { dados },
-        );
-        res.then((item) => {
-          this.$emit('sucesso', item);
-        }).catch(() => {
-          //
-        })
-        this.$emit('finalizar');
+        const put = sessionStorage.getItem('edit');
+        if (put) {
+            const res = axios.put(
+                `/tag/${put}`,
+                { dados },
+            );
+            res.then((item) => {
+              this.$emit('sucesso', item);
+            }).catch(() => {
+              //
+            })
+        } else {
+          const res = axios.post(
+              '/tag',
+              { dados },
+          );
+          res.then((item) => {
+            this.$emit('sucesso', item);
+          }).catch(() => {
+            //
+          })
+        }
       },
     }
 }

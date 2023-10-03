@@ -3,6 +3,7 @@
 import CoreScreen from '@/components/always/CoreScreen.vue';
 import TagForm from '@/components/form/tags/TagForm.vue';
 import SideTag from '@/components/side/side-tag/SideTag.vue';
+import ShowMore from '@/components/show-more/ShowMore.vue'
 import axios from 'axios';
 
 export default {
@@ -12,19 +13,15 @@ export default {
         CoreScreen,
         TagForm,
         SideTag,
+        ShowMore,
     },
 
     data() {
         return {
             headers: [
-                {
-                    text: 'Nome',
-                    align: 'start',
-                    sortable: false,
-                    value: 'tagnome',
-                },
-                { text: 'Descrição', value: 'tagdescricao' },
-                { text: 'Tipo', value: 'tagtipo' },
+                { text: 'Nome', align: 'start',value: 'tagnome' },
+                { text: 'Descrição', align: 'start', value: 'tagdescricao' },
+                { text: 'Tipo', value: 'tatdescricao' },
                 { text: 'Prioridade', value: 'tagprioridade' },
                 { text: 'Cor', value: 'tagcor', align: 'center' },
             ],
@@ -47,19 +44,19 @@ export default {
 
         $_load() {
          // FILTRAR POR AMBIENTE NO FUTURO
-        this.loading = true;
-        const res = axios.get(
-            '/tag/resumo',
-        );
-        res.then((item) => {
-            this.items = item.data;
-            this.loading = false;
-        });
-    },
+            this.loading = true;
+            const res = axios.get(
+                '/tag/resumo',
+            );
+            res.then((item) => {
+                this.items = item.data;
+                this.loading = false;
+            });
+        },
 
         $_reload() {
-
             this.$_load();
+            this.dialog = false;
         },
     },
 
@@ -105,6 +102,9 @@ export default {
                 v-if="!loading"
                  @click:row="$_selectItem"
                 >
+                <template v-slot:item.tagdescricao="{ item }">
+                    <show-more :msg="item.tagdescricao"></show-more>
+                </template>
                 <template v-slot:item.tagcor="{ item }">
                     <v-btn class="elevation-0 pa-2 circulo"
                     :color="item.tagcor" rounded>
@@ -116,11 +116,11 @@ export default {
                 <v-card-title class="text-h5 primary" >
                     <v-icon>mdi-tag</v-icon> Nova Tag
                 </v-card-title>
-                <tag-form @sucesso="dialog = false; $_reload"></tag-form>
+                <tag-form @sucesso="$_reload"></tag-form>
             </v-dialog>
         </template>
         <template v-slot:side>
-            <side-tag :dados="selecionado" v-if="selecionado"/>
+            <side-tag :dados="selecionado" @editar="dialog = true" v-if="selecionado"/>
         </template>
     </core-screen>
 </template>
