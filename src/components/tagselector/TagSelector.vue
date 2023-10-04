@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="d-flex">
-            <v-autocomplete label="Descritivas" 
+            <v-autocomplete label="Pesquisa Tags" 
              :items="items"
-             item-text="name"
+             item-text="tagnome"
              return-object
              v-model="selecionados"
             outlined
@@ -17,9 +17,10 @@
         <span style="color: #999999">Tags Salvas</span>
         <div class="tag-filler" v-if="itemsAdicionados.length">
             <div v-for="(item, index) in itemsAdicionados" :key="index" class="tag-container">
-                <v-btn :color="item.color" :dark="item.dark" rounded class="elevation-0 pa-2 tag" height="19px"
+                <v-btn :color="item.tagcor" :dark="item.tagdark === '0' ? true : false"  
+                rounded class="elevation-0 pa-2 tag" height="19px"
                 @click="$_returnTag(item)">
-                    {{item.name}}
+                    {{item.tagnome}}
                 </v-btn>
             </div>
         </div>
@@ -32,24 +33,13 @@
 </template>
 
 <script>
+import axios from 'axios';
 
 export default {
-    name: 'UserSelector',
+    name: 'TagSelector',
     data() {
         return {
-            items: [{
-                name: 'Node',
-                color: '#ccc',
-                dark: true,
-            },{
-                name: 'Vue',
-                color: '#ccc',
-                dark: true,
-            },{
-                name: 'Desenvolvimento',
-                color: '#ccc',
-                dark: true,
-            }],
+            items: [],
             itemsAdicionados: [],
             selecionados: null,
         }
@@ -61,7 +51,7 @@ export default {
                 this.itemsAdicionados.push(el);
                 this.items = this.items.filter((item) => {
                     console.log(el, item, 'a');
-                    return item.name != el.name;
+                    return item.tagnome != el.tagnome;
                 })
             });
             this.selecionados = [];
@@ -70,8 +60,34 @@ export default {
         $_returnTag(item) {
             this.items.push(item);
             this.itemsAdicionados = this.itemsAdicionados.filter((el) => {
-                return el.name != item.name;
+                return el.tagnome != item.tagnome;
             })
+        },
+
+        $_load() {
+         // FILTRAR POR AMBIENTE NO FUTURO
+            this.loading = true;
+            const res = axios.get(
+                '/tag',
+            );
+            res.then((item) => {
+                this.items = item.data;
+                this.loading = false;
+            });
+        },
+    },
+
+    created() {
+       this.$_load();
+    },
+
+    watch: {
+        itemsAdicionados() {
+            const itemsEmit = [];
+            for (let i = 0;i < this.itemsAdicionados.length; i += 1) {
+                itemsEmit.push(this.itemsAdicionados[i].id);
+            }
+            this.$emit('salvo', itemsEmit);
         }
     }
 }

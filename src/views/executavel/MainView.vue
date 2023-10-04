@@ -1,16 +1,18 @@
 <script>
 /* eslint-disable vue/valid-v-slot */
 import CoreScreen from '@/components/always/CoreScreen.vue';
-import TagForm from '@/components/form/tags/TagForm.vue';
+import ExecutavelForm from '@/components/form/executavel/ExecutavelForm.vue';
 import SideExecutavel from '@/components/side/side-executavel/SideExecutavel.vue';
 import ShowMore from '@/components/show-more/ShowMore.vue'
+import axios from 'axios';
+
 
 export default {
     name: 'ContatoView',
     components: {
         // CoreDialog,
         CoreScreen,
-        TagForm,
+        ExecutavelForm,
         SideExecutavel,
         ShowMore,
     },
@@ -29,49 +31,7 @@ export default {
                 { text: 'Criado em', value: 'exedatacriacao' },
                 { text: 'Versão', value: 'exeversao', align: 'center' },
             ],
-            items: [
-            {
-                exenome: 'Desenvolvimento',
-                exedescricao: 'Projeto em estado de coding',
-                exeurl: 'https://github.com/vuejs',
-                exedatacriacao: '26-03-2002 14:32',
-                exeversao: '1.2',
-            },
-            {
-                exenome: 'Desenvolvimento',
-                exedescricao: 'Projeto em estado de coding',
-                exeurl: 'https://github.com/vuejs',
-                exedatacriacao: '26-03-2002 14:32',
-                exeversao: '1.2',
-            },
-            {
-                exenome: 'Desenvolvimento',
-                exedescricao: 'Projeto em estado de coding',
-                exeurl: 'https://github.com/vuejs',
-                exedatacriacao: '26-03-2002 14:32',
-                exeversao: '1.2',
-            },
-            {
-                exenome: 'Desenvolvimento',
-                exedescricao: 'Projeto em estado de coding',
-                exeurl: 'https://github.com/vuejs',
-                exedatacriacao: '26-03-2002 14:32',
-                exeversao: '1.2',
-            },
-            {
-                exenome: 'Desenvolvimento',
-                exedescricao: 'Projeto em estado de coding',
-                exeurl: 'https://github.com/vuejs',
-                exedatacriacao: '26-03-2002 14:32',
-                exeversao: '1.2',
-            },
-            {
-                exenome: 'Desenvolvimento',
-                exedescricao: 'Projeto em estado de coding',
-                exeurl: 'https://github.com/vuejs',
-                exedatacriacao: '26-03-2002 14:32',
-                exeversao: '1.2',
-            }],
+            items: [],
             search: null,
             dialog: false,
         };
@@ -82,14 +42,28 @@ export default {
             this.$router.push({ path: url })
         },
 
-        OpenDetail(bool) {
-            console.log(bool);
-            this.detail = bool;
+        $_selectItem(e) {
+            this.selecionado = e;
         },
 
-        ShowProfile() {
-
+        $_load() {
+            this.loading = true;
+            const res = axios.get(
+                '/executavel',
+            );
+            res.then((item) => {
+                this.items = item.data;
+                this.loading = false;
+            });
         },
+
+        $_reload() {
+            this.$_load();
+        },
+    },
+
+    created() {
+       this.$_load();
     },
 }
 </script>
@@ -117,7 +91,7 @@ export default {
                     label="Pesquisa"
                     class="mx-4"
                     ></v-text-field>
-                    <v-btn color="primary" @click="dialog = !dialog">Nova Tag</v-btn>
+                    <v-btn color="primary" @click="dialog = !dialog">Novo Executavel</v-btn>
                 </div>
             </div>
             <div class="table">
@@ -138,9 +112,9 @@ export default {
             </div>
             <v-dialog width="840px" v-model="dialog">
                 <v-card-title class="text-h5 primary" >
-                    <v-icon x-large>mdi-tag</v-icon> Nova Tag
+                    <v-icon x-large>mdi-tag</v-icon> Novo Executavel
                 </v-card-title>
-                <tag-form></tag-form>
+                <executavel-form></executavel-form>
             </v-dialog>
         </template>
         <template v-slot:side>

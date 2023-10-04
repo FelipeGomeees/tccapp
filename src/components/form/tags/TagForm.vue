@@ -36,7 +36,7 @@
           </div>
         </div>
         <div class="actions">
-          <v-btn color="primary" @click="$_criarTarefa">Finalizar</v-btn>
+          <v-btn color="primary" @click="$_criarTag">Finalizar</v-btn>
         </div>
       </v-form>
     </v-card>
@@ -62,7 +62,7 @@ export default {
     },
 
     methods: {
-      $_criarTarefa() {
+      $_criarTag() {
         // Fluxo','Categoria','Geral
         switch (this.formulario.tagidtagtipo) {
           case 'Fluxo': this.formulario.tagidtagtipo = 5;

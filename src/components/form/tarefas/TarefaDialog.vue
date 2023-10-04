@@ -98,7 +98,7 @@ export default {
         e1: 1,
         formAtual: 0,
         formulario: {
-          taridambiente: sessionStorage.getItem('ambiente').toString(),
+          taridambiente: sessionStorage.getItem('ambiente').toString,
           tarnome: null,
           tardescricao: null,
           taridexecutavel: null,
