@@ -15,20 +15,20 @@
         </div>
         <br/>
         <b class="flex-center">
-            Ocelog
+           {{dados.exenome}}
         </b>
         <div class="flex-center">
-            Software de Gerenciamento de Tarefas 
+           {{dados.exedescricao}}
         </div>
         <v-divider></v-divider>
         <div class="flex-between lista-margin">
             <div>URL</div>
-            <a>https://github.com/vuejs</a>
+            <a>{{dados.exeurl}}</a>
         </div>
         <v-divider></v-divider>
         <div class="flex-between lista-margin">
             <div>Versão</div>
-            <div>1.2</div>
+            <div>{{dados.exeversao}}</div>
         </div>
         <v-divider></v-divider>
         <div class="flex-center">
@@ -40,7 +40,7 @@
             <core-icon-stack :items="usersMenor" class="flex-center"></core-icon-stack>
         </v-card-text>
         <div class="flex-center">
-            <v-icon>mdi-calendar-heart</v-icon> 17 de Março de 2023
+            <v-icon>mdi-calendar-heart</v-icon> {{$_formataData(dados.exedatacriacao)}}
         </div>
         <br/>
         <v-divider></v-divider>
@@ -86,11 +86,19 @@
 <script>
 // import CoreDialog from '@/components/dialog/SolicitacaoDialog.vue';
 import CoreIconStack from '@/components/bigiconstack/CoreIconStack.vue'
+import moment from 'moment'
+import axios from 'axios'
 
 export default {
     name: 'SideTarefas',
     components: {
         CoreIconStack
+    },
+
+    props: {
+        dados: {
+            type: Object,
+        }
     },
 
     data() {
@@ -118,6 +126,31 @@ export default {
                 color: '#ccc',
                 dark: true,
             }],
+        }
+    },
+
+    methods: {
+        $_formataData(data) {
+            return moment(data).format('DD/MM/YYYY');
+        },
+
+        $_deletar() {
+            console.log(this.$props.dados.id, 'DASDASD')
+            const res = axios.delete(
+                `/tag/${this.$props.dados.id}`,
+            );
+            res.then(() => {
+                console.log('aa');
+            });
+        },
+
+        $_setSession() {
+            sessionStorage.setItem('edit', this.$props.dados.id);
+            this.$emit('editar');
+        },
+
+        $_dark(dark) {
+            return (dark === "0") ? true : false;
         }
     }
 } 

@@ -34,6 +34,8 @@ export default {
             items: [],
             search: null,
             dialog: false,
+            selecionado: null,
+            loading: true,
         };
     },
 
@@ -59,6 +61,7 @@ export default {
 
         $_reload() {
             this.$_load();
+            this.dialog = false;
         },
     },
 
@@ -101,6 +104,8 @@ export default {
                 item-key="name"
                 class="elevation-1 table-header"
                 :search="search"
+                v-if="!loading"
+                @click:row="$_selectItem"
                 >
                 <template v-slot:item.exedescricao="{ item }">
                     <show-more :msg="item.exedescricao"></show-more>
@@ -114,11 +119,11 @@ export default {
                 <v-card-title class="text-h5 primary" >
                     <v-icon x-large>mdi-tag</v-icon> Novo Executavel
                 </v-card-title>
-                <executavel-form></executavel-form>
+                <executavel-form @sucesso="$_reload"></executavel-form>
             </v-dialog>
         </template>
         <template v-slot:side>
-            <side-executavel/>
+            <side-executavel :dados="selecionado" @editar="dialog = true" v-if="selecionado"/>
         </template>
     </core-screen>
 </template>

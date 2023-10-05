@@ -74,7 +74,8 @@ export default {
           exedescricao: '',
           exeversao: null,
           exeurl: null,
-        }
+        },
+        tags: null,
       }
     },
 
@@ -99,15 +100,32 @@ export default {
               { dados },
           );
           res.then((item) => {
-            this.$emit('sucesso', item);
+            console.log(item, 'item')
+            this.tags.forEach((tag) => {
+              const tagDados = {
+                  taeidtag: tag,
+                  taeidexecutavel: item.data[0].id,
+                  taeidusuarioambiente: item.data[0].exeidusuarioambiente,
+              }
+              const resTag = axios.post(
+                  '/tagexecutavel',
+                  { dados: tagDados },
+              );
+              resTag.then((itemTag) => {
+                console.log(itemTag, 'itemTag');
+                this.$emit('sucesso', item);
+              }).catch(() => {
+                //
+              });
+            });
           }).catch(() => {
-            //
-          })
+             //
+          });
         }
       },
 
       $_modelaTags(tags) {
-        console.log(tags, 'tags');
+        this.tags = tags;
       },
     }
 }
