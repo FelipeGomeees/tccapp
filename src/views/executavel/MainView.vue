@@ -45,13 +45,14 @@ export default {
         },
 
         $_selectItem(e) {
+            sessionStorage.removeItem('edit');
             this.selecionado = e;
         },
 
         $_load() {
             this.loading = true;
             const res = axios.get(
-                '/executavel',
+                '/executavel/detalhado',
             );
             res.then((item) => {
                 this.items = item.data;

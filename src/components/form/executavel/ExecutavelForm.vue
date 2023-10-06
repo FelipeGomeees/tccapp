@@ -90,7 +90,29 @@ export default {
                 { dados },
             );
             res.then((item) => {
-              this.$emit('sucesso', item);
+            console.log(item, 'item')
+            this.tags.forEach((tag) => {
+              const deleteTag = axios.delete(
+                  `/tagexecutavel/all/${item.id}`,
+              );
+              deleteTag.then(() => {
+                const tagDados = {
+                  taeidtag: tag,
+                  taeidexecutavel: item.data[0].id,
+                  taeidusuarioambiente: item.data[0].exeidusuarioambiente,
+                }
+                const resTag = axios.post(
+                  '/tagexecutavel',
+                  { dados: tagDados },
+                );
+                resTag.then((itemTag) => {
+                  console.log(itemTag, 'itemTag');
+                  this.$emit('sucesso', item);
+                }).catch(() => {
+                  //
+                });
+              })
+            });
             }).catch(() => {
               //
             })

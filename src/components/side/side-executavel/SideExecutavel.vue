@@ -51,11 +51,11 @@
         </div>
         <br/>
         <div class="flex-center">
-            <div class="tag-filler">
-                <div v-for="(item, index) in items" :key="index" class="tag-container">
-                    <v-btn :color="item.color" :dark="item.dark" rounded class="elevation-0 pa-2 tag" height="19px"
+            <div class="tag-filler" v-if="dados.tags">
+                <div v-for="(item, index) in dados.tags" :key="index" class="tag-container">
+                    <v-btn :color="item.tagcor" :dark="item.tagdark === '0' ? true : false" rounded class="elevation-0 pa-2 tag" height="19px"
                     @click="$_returnTag(item)">
-                        {{item.name}}
+                        {{item.tagnome}}
                     </v-btn>
                 </div>
             </div>
@@ -71,7 +71,7 @@
         <div class="flex-center">
             <div>
                 <div class="flex-center">
-                    <v-btn @click="$_editar">EDITAR</v-btn>
+                    <v-btn @click="$_setSession">EDITAR</v-btn>
                 </div>
                 <br/>
                  <div class="flex-center">
@@ -103,29 +103,6 @@ export default {
 
     data() {
         return {
-
-            usersMenor: [
-                {
-                    usenome: 'davi.machado',
-                    useapelido: 'Davi Machado',
-                    usestackoverflow: '@...',
-                    usegoogledrive: null,
-                    usegithub: '@...',
-                },
-            ],
-            items: [{
-                name: 'Node',
-                color: '#ccc',
-                dark: true,
-            },{
-                name: 'Vue',
-                color: '#ccc',
-                dark: true,
-            },{
-                name: 'Desenvolvimento',
-                color: '#ccc',
-                dark: true,
-            }],
         }
     },
 

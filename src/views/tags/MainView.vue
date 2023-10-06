@@ -39,6 +39,7 @@ export default {
         },
 
         $_selectItem(e) {
+            sessionStorage.removeItem('edit');
             this.selecionado = e;
         },
 
