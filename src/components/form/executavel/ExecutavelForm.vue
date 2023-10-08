@@ -90,16 +90,15 @@ export default {
                 { dados },
             );
             res.then((item) => {
-            console.log(item, 'item')
+            axios.delete(
+              `/tagexecutavel/all/${put}`,
+            );
             this.tags.forEach((tag) => {
-              const deleteTag = axios.delete(
-                  `/tagexecutavel/all/${item.id}`,
-              );
-              deleteTag.then(() => {
+                const idUsuarioAmbiente = sessionStorage.getItem('usuarioambiente')
                 const tagDados = {
                   taeidtag: tag,
-                  taeidexecutavel: item.data[0].id,
-                  taeidusuarioambiente: item.data[0].exeidusuarioambiente,
+                  taeidexecutavel: put,
+                  taeidusuarioambiente: idUsuarioAmbiente,
                 }
                 const resTag = axios.post(
                   '/tagexecutavel',
@@ -108,13 +107,13 @@ export default {
                 resTag.then((itemTag) => {
                   console.log(itemTag, 'itemTag');
                   this.$emit('sucesso', item);
-                }).catch(() => {
-                  //
-                });
-              })
+                })
             });
             }).catch(() => {
               //
+            }).finally(() => {
+              this.formAtual = 0;
+              this.el = 1;
             })
         } else {
           const res = axios.post(

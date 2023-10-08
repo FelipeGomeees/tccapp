@@ -114,7 +114,7 @@ export default {
         $_deletar() {
             console.log(this.$props.dados.id, 'DASDASD')
             const res = axios.delete(
-                `/tag/${this.$props.dados.id}`,
+                `/executavel/${this.$props.dados.id}`,
             );
             res.then(() => {
                 console.log('aa');
