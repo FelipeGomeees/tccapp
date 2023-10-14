@@ -1,89 +1,41 @@
 <script>
 /* eslint-disable vue/valid-v-slot */
 import CoreScreen from '@/components/always/CoreScreen.vue';
-import TagForm from '@/components/form/tags/TagForm.vue';
 import SideUsuario from '@/components/side/side-usuario/SideUsuario.vue';
+import ShowMore from '@/components/show-more/ShowMore.vue'
+import axios from 'axios';
+
 
 export default {
     name: 'ContatoView',
     components: {
         // CoreDialog,
         CoreScreen,
-        TagForm,
         SideUsuario,
+        ShowMore,
     },
 
     data() {
         return {
             headers: [
+                { text: 'Avatar', align: 'center', value: true },
                 {
-                    text: 'Nome',
+                    text: 'Apelido',
                     align: 'start',
                     sortable: false,
-                    value: 'tagnome',
+                    value: 'usaapelido',
                 },
-                { text: 'Descrição', value: 'tagdescricao' },
-                { text: 'Tipo', value: 'tagtipo' },
-                { text: 'Prioridade', value: 'tagprioridade' },
-                { text: 'Cor', value: 'tagcor', align: 'center' },
+                { text: 'Nome', align: 'center',value: 'usunome' },
+                { text: 'Email', value: 'usuemail', align: 'center' },
+                { text: 'Descrição', value: 'usadescricao' },
+                { text: 'Entrou em', value: 'usadataprimeiroacesso' },
             ],
-            items: [
-            {
-                tagnome: 'Desenvolvimento',
-                tagdescricao: 'Projeto em estado de coding',
-                tagtipo: 'Fluxo',
-                tagprioridade: '3',
-                tagcor: '#0077',
-                tagdark: true,
-                acoes: '5'
-            },
-            {
-                tagnome: 'Em Andamento',
-                tagdescricao: 'Projeto em estado de coding',
-                tagtipo: 'Fluxo',
-                tagprioridade: '3',
-                tagcor: '#aaffaa',
-                tagdark: false,
-                acoes: '5'
-            },
-            {
-                tagnome: 'Desenvolvimento',
-                tagdescricao: 'Projeto em estado de coding',
-                tagtipo: 'Fluxo',
-                tagprioridade: '3',
-                tagcor: '#aaffaa',
-                tagdark: false,
-                acoes: '5'
-            },
-            {
-                tagnome: 'Desenvolvimento',
-                tagdescricao: 'Projeto em estado de coding',
-                tagtipo: 'Fluxo',
-                tagprioridade: '3',
-                tagcor: '#aaffaa',
-                tagdark: false,
-                acoes: '5'
-            },
-            {
-                tagnome: 'Desenvolvimento',
-                tagdescricao: 'Projeto em estado de coding',
-                tagtipo: 'Fluxo',
-                tagprioridade: '3',
-                tagcor: '#aaffaa',
-                tagdark: false,
-                acoes: '5'
-            },
-            {
-                tagnome: 'Desenvolvimento',
-                tagdescricao: 'Projeto em estado de coding',
-                tagtipo: 'Fluxo',
-                tagprioridade: '3',
-                tagcor: '#aaffaa',
-                tagdark: false,
-                acoes: '5'
-            }],
+            items: [],
             search: null,
             dialog: false,
+            selecionado: null,
+            loading: true,
+            chave: null,
         };
     },
 
@@ -92,14 +44,44 @@ export default {
             this.$router.push({ path: url })
         },
 
-        OpenDetail(bool) {
-            console.log(bool);
-            this.detail = bool;
+        $_selectItem(e) {
+            sessionStorage.removeItem('edit');
+            this.selecionado = e;
         },
 
-        ShowProfile() {
-
+        $_load() {
+            this.loading = true;
+            const res = axios.get(
+                '/usuarioambiente/detalhado',
+            );
+            res.then((item) => {
+                this.items = item.data;
+                this.loading = false;
+            });
         },
+
+        $_geraChave() {
+            const dados = {
+                id: sessionStorage.getItem('ambiente'),
+            }
+            const res = axios.post(
+                '/chaveambiente/invite',
+                { dados },
+            );
+            res.then((dados) => {
+                console.log(dados);
+                this.chave = dados.data[0].chachave;
+            });
+        },
+
+        $_reload() {
+            this.$_load();
+            this.dialog = false;
+        },
+    },
+
+    created() {
+       this.$_load();
     },
 }
 </script>
@@ -113,7 +95,7 @@ export default {
                 </div>
                 <br/>
                 <div class="d-flex">
-                    <span>Gerencie e administre estatisticas sobre as tags utilizadas no seu ambiente.</span>
+                    <span>Gerencie permissões e situações dos colaboradores.</span>
                 </div>
                 <br/>
                 <v-divider></v-divider>
@@ -127,7 +109,7 @@ export default {
                     label="Pesquisa"
                     class="mx-4"
                     ></v-text-field>
-                    <v-btn color="primary" @click="dialog = !dialog">Nova Tag</v-btn>
+                    <v-btn color="primary" @click="dialog = !dialog">Gerar Convite</v-btn>
                 </div>
             </div>
             <div class="table">
@@ -137,23 +119,40 @@ export default {
                 item-key="name"
                 class="elevation-1 table-header"
                 :search="search"
+                v-if="!loading"
+                @click:row="$_selectItem"
                 >
-                <template v-slot:item.tagcor="{ item }">
-                    <v-btn class="elevation-0 pa-2 circulo"
-                    :color="item.tagcor" rounded>
-                    </v-btn>
+                <template v-slot:item.avatar>
+                    <h2>HEEEEEEEEEEEEE</h2>
+                </template>
+                <template v-slot:item.usadescricao="{ item }">
+                    <show-more :msg="item.usadescricao"></show-more>
                 </template>
                 </v-data-table>
             </div>
-            <v-dialog width="840px" v-model="dialog">
-                <v-card-title class="text-h5 primary" >
-                    <v-icon>mdi-tag</v-icon> Nova Tag
-                </v-card-title>
-                <tag-form></tag-form>
+            <v-dialog width="445px" v-model="dialog">
+                <v-card>
+                    <v-card-title class="text-h5 primary" >
+                        <v-icon x-large>mdi-key-variant</v-icon> Gerar Chave
+                    </v-card-title>
+                    <p class="sub">
+                        Compartilhe a chave com um usuario para adiciona-lo ao ambiente,
+                        o prazo de expiração é de duas horas.
+                    </p>
+                    <v-card-text>
+                        <v-text-field append-icon="mdi-content-copy" outlined readonly v-model="chave"
+                        label="Chave">
+                        </v-text-field>
+                    </v-card-text>
+                    <div class="d-flex justify-center">
+                        <v-btn color="primary" @click="$_geraChave">Nova Chave</v-btn>
+                    </div>
+                    <br/>
+                </v-card>
             </v-dialog>
         </template>
         <template v-slot:side>
-            <side-usuario/>
+            <side-usuario :dados="selecionado" @editar="dialog = true" v-if="selecionado"/>
         </template>
     </core-screen>
 </template>
@@ -195,5 +194,9 @@ export default {
 
     .v-data-table >>> .v-data-table-header {
          background-color: #ffb765;
+    }
+
+    .sub {
+        padding: 25px;
     }
 </style>

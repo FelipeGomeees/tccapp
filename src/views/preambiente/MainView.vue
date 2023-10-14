@@ -244,8 +244,7 @@ export default {
             }
             console.log(dados, 'dados');
             const res = axios.get(
-                '/usuarioambiente/recente',
-                { params: { id: this.token.tokidusuario } },
+            `/usuarioambiente/recente/${this.token.tokidusuario}`,
             );
             res.then((data) => {
                 this.ambientesRecentes = data.data;

@@ -13,20 +13,20 @@
             <core-icon-stack :items="usersMenor" class="flex-center"></core-icon-stack>
         </v-card-text>
         <div class="flex-center">
-            <h4>{{usersMenor[0].useapelido}}</h4>
+            <h4>{{dados.usaapelido}}</h4>
         </div>
         <div class="flex-center">
-            <span>{{usersMenor[0].usenome}}</span>
+            <span>{{dados.usunome}}</span>
         </div>
         <br/>
         <div class="flex-center">
-            <show-more :msg="usersMenor[0].usedescricao"></show-more>
+           {{dados.usadescricao}}
         </div>
         <br/>
         <v-divider></v-divider>
         <div class="flex-between lista-margin">
             <v-icon>mdi-email</v-icon>
-            <a>fe@gmail.com</a>
+            <a>{{dados.usuemail}}</a>
         </div>
         <v-divider></v-divider>
         <div class="flex-between lista-margin">
@@ -36,16 +36,17 @@
         <v-divider></v-divider>
         <div class="flex-between lista-margin">
             <v-icon>mdi-stack-overflow</v-icon>
-            <h4>https://stackoverflow.com/users/16287/drew-dormann</h4>
+            <a>https://stackoverflow.com/users/16287/drew-dormann</a>
         </div>
         <v-divider></v-divider>
         <div class="flex-center">
             <div>
-                Criada
+                Se juntou em:
             </div>
         </div>
         <div class="flex-center">
-            <v-icon>mdi-calendar-heart</v-icon> 17 de Março de 2023
+            <v-icon>mdi-calendar-heart</v-icon> 
+            {{$_formataData(dados.usadataprimeiroacesso)}}
         </div>
         <br/>
         <v-divider></v-divider>
@@ -66,19 +67,44 @@
             </div>
         </div>
         <br/>
+        <v-divider></v-divider>
+        <div class="flex-center">
+            <div>
+                Ações
+            </div>
+        </div>
+        <br/>
+        <div class="flex-center">
+            <div>
+                <div class="flex-center">
+                    <v-btn @click="$_editaPermissoes">PERMISSÕES</v-btn>
+                </div>
+                <br/>
+                 <div class="flex-center">
+                    <v-btn @click="$_deletar">EXPULSAR</v-btn>
+                </div>
+                <br/>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 // import CoreDialog from '@/components/dialog/SolicitacaoDialog.vue';
 import CoreIconStack from '@/components/bigiconstack/CoreIconStack.vue'
-import ShowMore from '@/components/show-more/ShowMore.vue'
+import moment from 'moment'
+import axios from 'axios'
 
 export default {
-    name: 'SideTarefas',
+    name: 'SideUsuario',
     components: {
         CoreIconStack,
-        ShowMore,
+    },
+
+    props: {
+        dados: {
+            type: Object,
+        }
     },
 
     data() {
@@ -107,7 +133,32 @@ export default {
                 dark: true,
             }],
         }
+    },
+
+    methods: {
+    $_formataData(data) {
+        return moment(data).format('DD/MM/YYYY');
+    },
+
+    $_deletar() {
+        console.log(this.$props.dados.id);
+        const res = axios.delete(
+            `/usuarioambiente/${this.$props.dados.id}`,
+        );
+        res.then(() => {
+            console.log('aa');
+        });
+    },
+
+    $_editaPermissoes() {
+        sessionStorage.setItem('edit', this.$props.dados.id);
+        this.$emit('editar');
+    },
+
+    $_dark(dark) {
+        return (dark === "0") ? true : false;
     }
+}
 } 
 </script>
 

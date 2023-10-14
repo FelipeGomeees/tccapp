@@ -8,7 +8,7 @@
               chips
               color="blue-grey lighten-2"
               label="Select"
-              item-text="name"
+              item-text="usaapelido"
               multiple
               return-object
             >
@@ -26,11 +26,11 @@
               </template>
               <template v-slot:item="data">
                   <v-list-item-avatar :color="data.item.color">
-                    F
+                    {{item.usaapelido[0]}}
                     <!-- <img :src="data.item.avatar"> -->
                   </v-list-item-avatar>
                   <v-list-item-content>
-                    <v-list-item-title>{{data.item.name}}</v-list-item-title>
+                    <v-list-item-title>{{data.item.usaapelido}}</v-list-item-title>
                     <v-list-item-subtitle>{{data.item.group}}</v-list-item-subtitle>
                   </v-list-item-content>
               </template>
@@ -45,9 +45,9 @@
                 <v-btn :color="item.color" :dark="item.dark" rounded class="elevation-0 pa-2 tag" height="38px"
                 @click="$_returnTag(item)">
                   <v-avatar left class="avatar">
-                    <v-img>F</v-img>
+                    <v-img>{{item.usaapelido[0]}}</v-img>
                   </v-avatar>
-                    {{item.name}}
+                    {{item.usaapelido}}
                 </v-btn>
             </div>
         </div>
@@ -62,22 +62,14 @@
 <script>
 
 export default {
-    name: 'TagSelector',
+    name: 'UserSelector',
+    props: {
+      dados: Array,
+    },
+
     data() {
         return {
-            items: [{
-                name: 'Felipe Gomes',
-                color: '#072',
-                dark: true,
-            },{
-                name: 'Fernanda Takano',
-                color: '#0a4',
-                dark: true,
-            },{
-                name: 'Davi Machado',
-                color: '#55e',
-                dark: true,
-            }],
+            items: null,
             itemsAdicionados: [],
             selecionados: null,
         }
@@ -101,7 +93,11 @@ export default {
                 return el.name != item.name;
             })
         }
-    }
+    },
+
+    created() {
+      this.items = this.$props.dados;
+    }, 
 }
 </script>
 

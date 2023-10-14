@@ -33,13 +33,17 @@
 </template>
 
 <script>
-import axios from 'axios';
 
 export default {
     name: 'TagSelector',
+
+    props: {
+        dados: Array,
+    },
+
     data() {
         return {
-            items: [],
+            items: null,
             itemsAdicionados: [],
             selecionados: null,
         }
@@ -63,23 +67,12 @@ export default {
                 return el.tagnome != item.tagnome;
             })
         },
-
-        $_load() {
-         // FILTRAR POR AMBIENTE NO FUTURO
-            this.loading = true;
-            const res = axios.get(
-                '/tag',
-            );
-            res.then((item) => {
-                this.items = item.data;
-                this.loading = false;
-            });
-        },
     },
 
-    created() {
-       this.$_load();
-    },
+    mounted() {
+        console.log(this.$props);
+      this.items = this.$props.dados;
+    }, 
 
     watch: {
         itemsAdicionados() {

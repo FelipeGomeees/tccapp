@@ -36,6 +36,8 @@
         <div class="d-flex linha">
           <div class="executavel space">
             <v-autocomplete prepend-inner-icon="mdi-cog" label="Executavel" outlined 
+            :items="complete.executaveis"
+            item-text="exenome"
             v-model="formulario.taridexecutavel"/>
           </div>
           <div class="tarefa-pai">
@@ -47,16 +49,26 @@
             <v-stepper-content step="2">
               <div class="d-flex linha">
                 <div class="tag-fluxo space">
-                  <v-autocomplete label="Fluxo" outlined/>
+                  <v-autocomplete label="Fluxo" outlined 
+                  :items="complete.tags"
+                  item-text="tagnome"
+                  item-value="id"
+                  v-model="formulario.taridexecutavel"/>
                 </div>
                 <div class="tag-categoria">
-                  <v-autocomplete label="Categoria" outlined/>
+                  <v-autocomplete label="Categoria" outlined
+                  :items="complete.tags"
+                  item-text="tagnome"
+                  item-value="id"
+                  v-model="formulario.taridexecutavel"/>
                 </div>
               </div>
-              <tag-selector></tag-selector>
+              <tag-selector v-if="complete.tags"
+              :dados="complete.tags"></tag-selector>
             </v-stepper-content>
             <v-stepper-content step="3">
-              <user-selector></user-selector>
+              <user-selector v-if="complete.usuarioambiente"
+              :dados="complete.usuarioambiente"></user-selector>
               <br/>
               <div class="d-flex justify-space-around">
                 <div class="data-final">
@@ -107,6 +119,11 @@ export default {
           taridtarefapai: null,
           tarvisibilidade: null,
           tarpedirconvite: null,
+        },
+        complete: {
+          executaveis: null,
+          tags: null,
+          usuarioambiente: null,
         }
       }
     },
@@ -123,6 +140,44 @@ export default {
         })
         this.$emit('finalizar');
       },
+    },
+
+    created() {
+      const idAmb = sessionStorage.getItem('ambiente');
+      const resExecutavel = axios.get(
+          `/executavel/${idAmb}`,
+      );
+      resExecutavel.then((item) => {
+          console.log(item);
+          this.complete.executaveis = item.data;
+      });
+      const resTag = axios.get(
+          `/tag/${idAmb}`,
+      );
+      resTag.then((item) => {
+          console.log(item);
+          this.complete.tags = item.data;
+      });
+      const dados = {
+          where: { usaidambiente: idAmb },
+      };
+      const resUsuarioAmbiente = axios.get(
+          '/usuarioambiente',
+          { params: dados },
+      );
+      resUsuarioAmbiente.then((item) => {
+          console.log(item);
+          this.complete.usuarioambiente = item.data;
+      });
+      this.loading = false;
+
+            //       const dados = {
+            //     where: { usaidambiente: item.idambiente, usaidusuario: idusuario },
+            // };
+            // const res = axios.get(
+            //     '/usuarioambiente',
+            //     { params: dados },
+            // );
     }
 }
 </script>
