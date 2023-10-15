@@ -26,7 +26,7 @@
               </template>
               <template v-slot:item="data">
                   <v-list-item-avatar :color="data.item.color">
-                    {{item.usaapelido[0]}}
+                    {{data.item.usaapelido[0]}}
                     <!-- <img :src="data.item.avatar"> -->
                   </v-list-item-avatar>
                   <v-list-item-content>
@@ -98,6 +98,16 @@ export default {
     created() {
       this.items = this.$props.dados;
     }, 
+
+    watch: {
+        itemsAdicionados() {
+            const itemsEmit = [];
+            for (let i = 0;i < this.itemsAdicionados.length; i += 1) {
+                itemsEmit.push(this.itemsAdicionados[i].id);
+            }
+            this.$emit('atualizado', itemsEmit);
+        }
+    }
 }
 </script>
 

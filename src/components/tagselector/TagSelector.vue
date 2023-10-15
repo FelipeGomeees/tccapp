@@ -80,7 +80,7 @@ export default {
             for (let i = 0;i < this.itemsAdicionados.length; i += 1) {
                 itemsEmit.push(this.itemsAdicionados[i].id);
             }
-            this.$emit('salvo', itemsEmit);
+            this.$emit('atualizado', itemsEmit);
         }
     }
 }

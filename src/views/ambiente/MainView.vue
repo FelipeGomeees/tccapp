@@ -3,6 +3,7 @@ import CoreTaskCard from '@/components/cards/CoreTaskCard.vue'
 import CoreScreen from '@/components/always/CoreScreen.vue'
 import FormTarefa from '@/components/form/tarefas/TarefaDialog.vue'
 import SideAmbiente from '@/components/side/side-ambiente/SideAmbiente.vue';
+import axios from 'axios'
 
 export default {
     name: 'ContatoView',
@@ -20,11 +21,26 @@ export default {
             bufferValue: 100,
             modoLista: false,
 
+            tarefas: null,
+
             dialogTarefa: false,
+            loading: true,
         };
     },
 
     methods: {
+        $_load() {
+            this.loading = true;
+            const idUsuarioAmbiente = sessionStorage.getItem('usuarioambiente');
+            const res = axios.get(
+                `/tarefa/detalhado/${idUsuarioAmbiente }`,
+            );
+            res.then((item) => {
+                this.tarefas = item.data;
+                this.loading = false;
+            });
+        },
+
         NavigateTo(url) {
             this.$router.push({ path: url })
         },
@@ -33,6 +49,10 @@ export default {
             console.log('a');
             this.detail = bool;
         },
+    },
+
+    created() {
+       this.$_load();
     },
 }
 </script>
@@ -63,8 +83,8 @@ export default {
                 </div>
                 <v-btn color="primary" @click="dialogTarefa = !dialogTarefa">Nova Tarefa</v-btn>
             </div>
-            <div class="task-container">
-                <div v-for="(item, index) in 10" :key="index">
+            <div class="task-container" v-if="!loading">
+                <div v-for="(item, index) in tarefas" :key="index">
                     <core-task-card @click.native="OpenDetail(true)"></core-task-card>
                 </div>
             </div>

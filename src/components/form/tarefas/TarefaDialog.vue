@@ -38,6 +38,7 @@
             <v-autocomplete prepend-inner-icon="mdi-cog" label="Executavel" outlined 
             :items="complete.executaveis"
             item-text="exenome"
+            item-value="id"
             v-model="formulario.taridexecutavel"/>
           </div>
           <div class="tarefa-pai">
@@ -53,6 +54,7 @@
                   :items="complete.tags"
                   item-text="tagnome"
                   item-value="id"
+                  readonly
                   v-model="formulario.taridexecutavel"/>
                 </div>
                 <div class="tag-categoria">
@@ -60,15 +62,16 @@
                   :items="complete.tags"
                   item-text="tagnome"
                   item-value="id"
+                  readonly
                   v-model="formulario.taridexecutavel"/>
                 </div>
               </div>
               <tag-selector v-if="complete.tags"
-              :dados="complete.tags"></tag-selector>
+              :dados="complete.tags" @atualizado="$_salvaTags"></tag-selector>
             </v-stepper-content>
             <v-stepper-content step="3">
               <user-selector v-if="complete.usuarioambiente"
-              :dados="complete.usuarioambiente"></user-selector>
+              :dados="complete.usuarioambiente" @atualizado="$_salvaUsuarios"></user-selector>
               <br/>
               <div class="d-flex justify-space-around">
                 <div class="data-final">
@@ -109,17 +112,25 @@ export default {
         dialog: false,
         e1: 1,
         formAtual: 0,
+
+
         formulario: {
-          taridambiente: sessionStorage.getItem('ambiente').toString,
+          taridambiente: sessionStorage.getItem('ambiente').toString(),
           tarnome: null,
           tardescricao: null,
           taridexecutavel: null,
           tardataabertura: null,
           tardataprazo: null,
           taridtarefapai: null,
-          tarvisibilidade: null,
-          tarpedirconvite: null,
+          tarvisibilidade: false,
+          tarpedirconvite: false,
         },
+        tags: null,
+        colaboradores: null,
+        meta: {
+          responsavel: sessionStorage.getItem('usuarioambiente').toString(),
+        },
+
         complete: {
           executaveis: null,
           tags: null,
@@ -130,7 +141,7 @@ export default {
 
     methods: {
       $_criarTarefa() {
-        const dados = this.formulario;
+        const dados = { tarefa: this.formulario, tags: this.tags, colaboradores: this.colaboradores, meta: this.meta };
         const res = axios.post(
             '/tarefa',
             { dados },
@@ -139,6 +150,14 @@ export default {
           console.log(item);
         })
         this.$emit('finalizar');
+      },
+
+      $_salvaUsuarios(e) {
+        this.colaboradores = e;
+      },
+
+      $_salvaTags(e) {
+        this.tags = e;
       },
     },
 
@@ -170,15 +189,9 @@ export default {
           this.complete.usuarioambiente = item.data;
       });
       this.loading = false;
+    },
 
-            //       const dados = {
-            //     where: { usaidambiente: item.idambiente, usaidusuario: idusuario },
-            // };
-            // const res = axios.get(
-            //     '/usuarioambiente',
-            //     { params: dados },
-            // );
-    }
+
 }
 </script>
 
