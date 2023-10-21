@@ -16,7 +16,7 @@
         </div>
         <br/>
         <div class="flex-center justify-space-around">
-            <div>{{dados.tatdescricao}}</div>
+            <div>{{$_voltaTipo(dados.tagtipo)}}</div>
             <div>Prioridade {{dados.tagprioridade}}</div>
         </div>
         <br/>
@@ -137,7 +137,16 @@ export default {
 
         $_dark(dark) {
             return (dark === "0") ? true : false;
-        }
+        },
+
+        $_voltaTipo(tipo) {
+            switch (tipo) {
+                case 2: return 'Estado';
+                case 1: return 'Tipo';
+                case 0: return 'Geral';
+                default: 4
+            }
+        },
     }
 } 
 </script>
