@@ -2,13 +2,12 @@
     <v-card class="elevation-6 card" width="100%" max-width="400px" height="120px">
         <v-card-title class="flex-between pa-3">
             <div>
-                <div>Input sem validação</div>
+                <div>{{dados.tarefa.tarnome}}</div>
                 <!-- <v-icon>mdi-source-branch</v-icon> 
                 <div>Fix</div> -->
             </div>
-            <div>
-                <v-btn color="#65cc5e" rounded class="elevation-0 pa-2 tag" height="19px"></v-btn>
-                <v-btn color="yellow" rounded class="elevation-0 pa-2 tag" height="19px"></v-btn>
+            <div v-for="tag in dados.tags" :key="tag.id">
+                <v-btn :color="tag.tagcor" rounded class="elevation-0 pa-2 tag" height="19px"></v-btn>
             </div>
         </v-card-title>
         <v-card-subtitle class="flex">
@@ -17,7 +16,7 @@
                     mdi-github
                 </v-icon>
                 <div>
-                    /pServidorWeb
+                    {{dados.tarefa.exenome}}
                 </div>
             </div>
         </v-card-subtitle>
@@ -28,10 +27,10 @@
                     mdi-calendar-heart
                 </v-icon>
                 <div>
-                    17-03-2023 - 20-03-2023
+                    {{$_formataData(dados.tarefa.tardataabertura)}} - {{$_formataData(dados.tarefa.tardataprazo)}}
                 </div>
             </div>
-            <core-icon-stack :items="users"></core-icon-stack>
+            <core-icon-stack :items="dados.colaboradores"></core-icon-stack>
         </v-card-text>
         <v-card-text class="d-flex justify-space-between" v-else>
             <div class="flex-center ua">
@@ -54,6 +53,7 @@
 
 <script>
 import CoreIconStack from '@/components/iconstack/CoreIconStack.vue'
+import moment from 'moment'
 
 export default {
     components: {
@@ -63,6 +63,9 @@ export default {
     props: {
         v2: {
             type: Boolean,
+        },
+        dados: {
+            type: Object,
         }
     },
 
@@ -134,6 +137,12 @@ export default {
                 },
             ],
         }
+    },
+
+    methods: {
+        $_formataData(data) {
+            return moment(data).format('DD/MM/YYYY');
+        },
     }
 }
 </script>

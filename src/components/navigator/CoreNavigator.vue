@@ -28,6 +28,7 @@
           <core-navigator-item icon="mdi-cube-outline" label="Objetos" :subitems="objetos"/>
           <core-navigator-item icon="mdi-note-edit" label="Gerencial" :subitems="adm"/>
           <core-navigator-item icon="mdi-forum-outline" label="Forum" url="/forum"/>
+          <core-navigator-item icon="mdi-printer" label="Relatório" :subitems="relatorio"/>
           <core-navigator-item icon="mdi-account-clock" label="Usuario" :subitems="subatividade"/>
           <core-navigator-item icon="mdi-exit-run" label="Sair"/>
         </v-list>
@@ -49,7 +50,12 @@
         subtarefa: [{label: 'Designações', url: "/ambiente"},{ label: 'Cadastro', url: "/cadastro/tarefa"},{label: 'Detalhes', url: "/tarefa"}],
         subatividade: [{label: 'Perfil', url: '/perfil'}, {label: 'Histórico'},{ label: 'Notificações'}],
         // subforum: [{label: 'Tarefa', url: '/perfil'}, {label: 'Histórico'},{ label: 'Notificações'}],
-        objetos: [{label: 'Tags', url: '/tags'}, {label: 'Executaveis', url: '/executavel' },{ label: 'Arquivos'}],
+        objetos: [{label: 'Tags', url: '/tags'}, {label: 'Executaveis', url: '/executavel' }, {label: 'Clientes', url: '/cliente'},
+        { label: 'Arquivos'}], 
+        relatorio: [
+        {label: 'Tarefas por Cliente', url: '/tarefacliente'},
+        {label: 'Tarefas por Colaborador', url: '/tarefacolaborador' },
+        {label: 'Situação Tarefas', url: '/situacao'}], 
         adm: [{label: 'Usuarios', url: '/usuario'}],
         nome: '',
       }

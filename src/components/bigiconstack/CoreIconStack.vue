@@ -4,7 +4,7 @@
             <div v-for="item in $items" :key="item.useapelido">
                 <v-avatar color="#ffb765" class="avatar" size="52px"
                  @click="showCard = !showCard; userInfo = item">   
-                    {{(item.useapelido.slice(0, 2))}}
+                    {{(item.usaapelido.slice(0, 2))}}
                 </v-avatar>
             </div>
             <div v-if="items.length > 5">
@@ -17,7 +17,7 @@
             <div v-for="item in $items" :key="item.useapelido">
                 <v-avatar color="#ffb765" class="avatar" :size="size"
                  @click="showCard = !showCard; userInfo = item">   
-                    {{(item.useapelido.slice(0, 2))}}
+                    {{(item.usaapelido.slice(0, 2))}}
                 </v-avatar>
             </div>
             <div v-if="items.length > 5">
@@ -30,18 +30,18 @@
             <v-card-title class="card-title">
                 <div class="title-labels">
                     <v-avatar color="#ffb765">
-                        {{(userInfo.useapelido.slice(0, 2))}}
+                        {{(userInfo.usaapelido.slice(0, 2))}}
                     </v-avatar>
                     <div class="nomes">
-                        <span>{{userInfo.useapelido}}<br/></span>
-                        <h5 class="true-name">#{{userInfo.usenome}}</h5>
+                        <span>{{userInfo.usaapelido}}<br/></span>
+                        <h5 class="true-name">#{{userInfo.usunome}}</h5>
                     </div>
                 </div>
                 <v-icon @click="showCard = !showCard" class="close">mdi-close</v-icon>
             </v-card-title>
             <v-divider></v-divider>
             <v-card-subtitle class="sub">
-                <div class="social-icons">
+                <div class="social-icons" v-if="false">
                     <v-icon v-if="userInfo.usegithub">mdi-github</v-icon>
                     <v-icon v-if="userInfo.usegoogledrive">mdi-google-drive</v-icon>
                     <v-icon v-if="userInfo.usestackoverflow">mdi-stack-overflow</v-icon>
@@ -79,7 +79,7 @@ export default {
     computed: {
         $items() {
             return this.$props.items.slice(0, 5);
-        }
+        },
     }
 }
 </script>

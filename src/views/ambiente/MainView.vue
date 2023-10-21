@@ -20,6 +20,7 @@ export default {
             progress: 10,
             bufferValue: 100,
             modoLista: false,
+            selecionado: null,
 
             tarefas: null,
 
@@ -32,11 +33,13 @@ export default {
         $_load() {
             this.loading = true;
             const idUsuarioAmbiente = sessionStorage.getItem('usuarioambiente');
+            const idAmbiente = sessionStorage.getItem('ambiente');
             const res = axios.get(
-                `/tarefa/detalhado/${idUsuarioAmbiente }`,
+                `/tarefa/detalhado/${idUsuarioAmbiente}/${idAmbiente}`,
             );
             res.then((item) => {
                 this.tarefas = item.data;
+                console.log(item.data);
                 this.loading = false;
             });
         },
@@ -85,7 +88,8 @@ export default {
             </div>
             <div class="task-container" v-if="!loading">
                 <div v-for="(item, index) in tarefas" :key="index">
-                    <core-task-card @click.native="OpenDetail(true)"></core-task-card>
+                    <core-task-card @click.native="selecionado = item; OpenDetail(true);" 
+                    :dados="item"></core-task-card>
                 </div>
             </div>
             <h3 class="d-flex justify-center" v-if="false">
@@ -101,7 +105,8 @@ export default {
             </v-dialog>
         </template>
         <template v-slot:side>
-            <side-ambiente v-show="detail" @close="detail = false"/>
+            <side-ambiente v-show="detail" :dados="selecionado"
+             @close="detail = false"/>
         </template>
     </core-screen>
 </template>

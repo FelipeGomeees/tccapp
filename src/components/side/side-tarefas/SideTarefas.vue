@@ -10,7 +10,7 @@
             </div>
         </div>
         <v-card-text>
-            <core-icon-stack :items="usersMenor" class="flex-center"></core-icon-stack>
+            <core-icon-stack :items="dados.colaboradores" class="flex-center"></core-icon-stack>
         </v-card-text>
         <v-divider></v-divider>
         <div class="flex-center">
@@ -19,7 +19,7 @@
             </div>
         </div>
         <v-card-text>
-            <core-icon-stack :items="usersMenor" class="flex-center"></core-icon-stack>
+            <core-icon-stack :items="dados.colaboradores" class="flex-center"></core-icon-stack>
         </v-card-text>
         <v-divider></v-divider>
         <div class="flex-center">
@@ -28,7 +28,7 @@
             </div>
         </div>
         <v-card-text>
-            <core-icon-stack :items="users" class="flex-center"></core-icon-stack>
+            <core-icon-stack :items="dados.colaboradores" class="flex-center"></core-icon-stack>
         </v-card-text>
         <v-divider></v-divider>
         <p class="flex-center">Sua função</p>
@@ -74,9 +74,15 @@ export default {
         CoreIconStack
     },
 
+    props: {
+        dados: {
+            type: Object,
+        }
+    },
+
     data() {
         return {
-            
+            iniciado: true,
             users: [
                 {
                     usenome: 'felipe.dsn',

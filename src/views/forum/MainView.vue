@@ -4,6 +4,9 @@ import CardForum from '@/components/cardforum/CoreCardForum.vue'
 import CoreScreen from '@/components/always/CoreScreen.vue';
 import SideForum from '@/components/side/side-forum/SideForum.vue'
 import CommentField from '@/components/comment-field/CommentFIeld.vue'
+import axios from 'axios';
+// import moment from 'moment';
+
 
 export default {
     name: 'ContatoView',
@@ -17,9 +20,8 @@ export default {
 
     data() {
         return {
-            detail: false,
-            progress: 10,
-            bufferValue: 100,
+            tipo: null,
+            dados: null,
         };
     },
 
@@ -28,15 +30,36 @@ export default {
             this.$router.push({ path: url })
         },
 
-        OpenDetail(bool) {
-            console.log(bool);
-            this.detail = bool;
-        },
-
-        ShowProfile() {
-
+        $_load() {
+            // let res = null;
+            // const tipoForum = sessionStorage.getItem('forum');
+            // if (tipoForum === 'tarefa') {
+            //     res = axios.get(
+            //         `/forum/tarefa/${idtarefa}`,
+            //     );     
+            // } else if (tipoForum === 'executavel') {
+            //     res = axios.get(
+            //         `/forum/tarefa/${idtarefa}`,
+            //     );   
+            // } else if (tipoForum === 'tag') {
+                
+            // }
+            const idForum = sessionStorage.getItem('idforum');
+            const tabela = sessionStorage.getItem('tabelaforum');
+            const res = axios.get(
+                `/forum/${tabela}/${idForum}`,
+            );     
+            console.log(res, 'res');
+            res.then((forum) => {
+                this.dados = forum.data[0];
+                console.log(this.dados);
+            });
         },
     },
+
+    created() {
+        this.$_load();
+    }
 }
 </script>
 
@@ -65,9 +88,14 @@ export default {
                         <v-icon>mdi-calendar-heart</v-icon> Criado em: 27 de Março de 2023 as 14:32
                     </div>
                 </div>
-                <br/>
                 <v-divider></v-divider>
-                <h4>Comentários (2)</h4>
+                <br/>
+                <div class="expand">
+                    <!-- <btn>Comentário</btn> -->
+                    <comment-field hidden :label="'Participe da discussão'"/>
+                    <br/>
+                </div>  
+                <h4>Comentários (7)</h4>
                 <br/>
                     <card-forum principal></card-forum>
                     <br/>
@@ -86,10 +114,6 @@ export default {
                     <card-forum></card-forum>  
                     <br/>
                     <br/>
-                <div class="expand">
-                    <!-- <btn>Comentário</btn> -->
-                    <comment-field hidden :label="'Participe da discussão'"/>
-                </div>  
             </div>
         </template>
         <template v-slot:side>

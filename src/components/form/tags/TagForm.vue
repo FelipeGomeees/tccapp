@@ -16,8 +16,8 @@
           <div>
           <div class="d-flex linha">
               <div class="executavel space">
-                <v-autocomplete prepend-inner-icon="mdi-cog" label="Tipo" outlined :items="['Fluxo','Categoria','Geral']"
-                v-model="formulario.tagidtagtipo"
+                <v-autocomplete prepend-inner-icon="mdi-cog" label="Tipo" outlined :items="['Estado','Tipo','Geral']"
+                v-model="formulario.tagtipo"
                 />
               </div>
               <div class="executavel space">
@@ -56,7 +56,7 @@ export default {
           tagcor: '#faa',
           tagdark: false,
           tagprioridade : null,
-          tagidtagtipo: null,
+          tagtipo: null,
         }
       }
     },
@@ -64,12 +64,12 @@ export default {
     methods: {
       $_criarTag() {
         // Fluxo','Categoria','Geral
-        switch (this.formulario.tagidtagtipo) {
-          case 'Fluxo': this.formulario.tagidtagtipo = 5;
+        switch (this.formulario.tagtipo) {
+          case 'Estado': this.formulario.tagtipo = 2;
           break;
-          case 'Categoria': this.formulario.tagidtagtipo = 6;
+          case 'Tipo': this.formulario.tagtipo = 1;
           break;
-          case 'Geral': this.formulario.tagidtagtipo = 4;
+          case 'Geral': this.formulario.tagtipo = 0;
           break;
           default: 4
         }

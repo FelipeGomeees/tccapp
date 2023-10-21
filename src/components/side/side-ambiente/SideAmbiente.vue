@@ -1,7 +1,7 @@
 <template>
     <v-card class="card-detalhe">
         <v-card-title class="flex-center">
-            Input Sem Validação
+            {{dados.tarefa.tarnome}}
             <v-icon class="close" @click.native="$emit('close')">
                 mdi-close
             </v-icon>
@@ -11,43 +11,38 @@
                 mdi-github
             </v-icon>
             <div>
-                /pServidorWeb
+                {{dados.tarefa.exenome}}
             </div>
         </div>
-        <div class="flex-center">
-            <div class="tags-container">
-            <v-btn color="gray" rounded class="elevation-0 pa-2 tag" height="19px">
-                VUE 3
-            </v-btn>
-            <v-btn color="gray" rounded class="elevation-0 pa-2 tag" height="19px">
-                NUXT
-            </v-btn>
+        <div class="container">
+            <div class="tags-container" v-for="tag in dados.exectags" :key="tag.id">
+                <v-btn color="gray" 
+                rounded class="elevation-0 pa-2 tag" height="19px">
+                    {{tag.tagnome}}
+                </v-btn>
             </div>
         </div>
         <v-divider></v-divider>
         <v-card-text>
-            Input do formulario de recebimento não aparenta conter
-            nenhum tipo de validação, evitar para desenvolvimento, urgente.
+            {{dados.tarefa.tardescricao}}
         </v-card-text>
         <v-divider></v-divider>
         <v-card-text class="datas">
             <div>
-                <v-icon>mdi-calendar-heart</v-icon> Criado em:<br/> 27/03/23 as 14:32
+                <v-icon>mdi-calendar-heart</v-icon> Criado em:<br/> 
+                {{$_formataData(dados.tarefa.tardataabertura)}}
             </div>
             <div>
-                <v-icon>mdi-calendar-heart</v-icon> Entrega até:<br/> 30/03/23 as 23:59
+                <v-icon>mdi-calendar-heart</v-icon> Entrega até:<br/>
+                {{$_formataData(dados.tarefa.tardataprazo)}}
             </div>
         </v-card-text>
         <v-divider></v-divider>
         <br>
-        <div class="tags-container">
-            <v-btn color="#65cc5e" rounded class="elevation-0 pa-2 tag" height="19px">
-                Em Desenvolvimento
-            </v-btn>
-        </div>
-        <div class="tags-container">
-            <v-btn color="yellow" rounded class="elevation-0 pa-2 tag" height="19px">
-                Correção
+        <div class="tags-container" v-for="tag in dados.tags" :key="tag.id">
+            <v-btn :color="tag.tagcor" :dark="tag.tagdark === '0' ? true : false"
+            rounded class="elevation-0 pa-2 tag" height="19px">
+                {{tag.tagnome}}
             </v-btn>
         </div>
         <v-divider></v-divider>
@@ -81,10 +76,10 @@
         <v-divider></v-divider>
         <br/>
         <div class="flex-center">
-            <v-btn>Expandir Informações</v-btn>
+            <v-btn @click="$_abreTarefa(dados.tarefa.idtarefa)">Expandir Informações</v-btn>
         </div>
         <div class="flex-center">
-            <core-dialog></core-dialog>
+            <core-dialog v-if="dados.tarefa.tarpedirconvite"></core-dialog>
         </div>
         <br/>
     </v-card>
@@ -93,12 +88,26 @@
 <script>
 // import CoreDialog from '@/components/dialog/SolicitacaoDialog.vue';
 import CoreDialog from '@/components/dialog/SolicitacaoDialog.vue';
+import moment from 'moment';
 
 export default {
     name: 'SideTarefas',
+    props: {
+        dados: Object,
+    },
     components: {
         CoreDialog,
     },
+    methods: {
+        $_formataData(data) {
+            return moment(data).format('DD/MM/YYYY');
+        },
+
+        $_abreTarefa(id) {
+            sessionStorage.setItem('tarefa', id);
+            this.$router.push('/tarefa');
+        },
+    }
 } 
 </script>
 
@@ -123,7 +132,6 @@ export default {
     }
 
     .tags-container {
-        width: 100%;
         text-align: center;
     }
 
@@ -136,5 +144,11 @@ export default {
         top: 20px;
         right: 20px;
         cursor: pointer;
+    }
+
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 </style>

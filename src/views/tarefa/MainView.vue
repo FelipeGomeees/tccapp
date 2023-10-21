@@ -3,6 +3,9 @@
 import CoreScreen from '@/components/always/CoreScreen.vue'
 import TagList from '@/components/taglist/TagList.vue'
 import SideTarefas from '@/components/side/side-tarefas/SideTarefas.vue'
+import PrintTarefa from '@/components/print/tarefa/PrintTarefa.vue'
+import axios from 'axios'
+import moment from 'moment'
 
 export default {
     name: 'ContatoView',
@@ -10,6 +13,7 @@ export default {
         CoreScreen,
         TagList,
         SideTarefas,
+        PrintTarefa,
     },
 
     data() {
@@ -25,7 +29,9 @@ export default {
             tagsProjeto: [
                 { descricao: 'VUE', cor: '#eee' },
                 { descricao: 'nuxt', cor: '#eee' },
-            ]
+            ],
+
+            dados: null,
         };
     },
 
@@ -39,17 +45,37 @@ export default {
             this.detail = bool;
         },
 
-        ShowProfile() {
+        $_formataData(data) {
+            return moment(data).format('DD/MM/YYYY');
+        },
 
+        $_load() {
+            const idtarefa = sessionStorage.getItem('tarefa');
+            const res = axios.get(
+                `/tarefa/detalhado/${idtarefa}`,
+            );
+            res.then((tarefa) => {
+                this.dados = tarefa.data[0];
+            });
+        },
+
+        $_abrirForum() {
+            sessionStorage.setItem('idforum', this.dados.tarefa.id);
+            sessionStorage.setItem('tabelaforum', 'tarefa');
+            this.$router.push('/forum');
         },
     },
+
+    created() {
+    this.$_load();
+    }
 }
 </script>
 
 <template>
-    <core-screen>
+    <core-screen v-if="dados">
         <template v-slot:main>
-            <div v-if="!idtarefa">
+            <!-- <div v-if="!idtarefa">
                 <v-text-field
                 outlined
                 dense
@@ -61,23 +87,19 @@ export default {
                 <h4>
                     Utilize o ID de uma tarefa para acessar seus detalhes
                 </h4>
-            </div>
+            </div> -->
             <div class="header">
-                <h2># 2456 | Input sem validação</h2>
-                <v-icon>mdi-connection</v-icon>
+                <h2># {{dados.tarefa.id}} | {{dados.tarefa.tarnome}}</h2>
+                <v-icon v-if="dados.tarefa.tartarefapai">mdi-connection</v-icon>
             </div>
-            <tag-list :data="tagsHeader" criavel></tag-list>
+            <tag-list :data="dados.tags" criavel></tag-list>
             <div class="flex-between">
                 <div>
-                    <v-icon>mdi-calendar-heart</v-icon> Criado em: 27 de Março de 2023 as 14:32
+                    <v-icon>mdi-calendar-heart</v-icon> Criado em: {{$_formataData(dados.tarefa.tardataabertura)}}
                 </div>
             </div>
             <div class="tag-filtro">
-                Input do formulario de recebimento não aparenta conter nenhum tipo de validação, 
-                evitar para desenvolvimento, urgente.
-                <br/><br/>
-                Cliente #5646 relatou que o input de CPF do modulo de contabilidade está sem validações numericas relativos
-                a regras de negocio padrões do banco.
+                {{dados.tarefa.tardescricao}}
             </div>
             <div class="header">
                 <h3>Informações do Projeto</h3>
@@ -87,18 +109,18 @@ export default {
                     <v-icon>
                         mdi-github
                     </v-icon>
-                        /pServidorWeb
+                        {{dados.tarefa.exenome}}
                 </div>
                 <div>
-                    <tag-list :data="tagsProjeto"></tag-list>
+                    <tag-list :data="dados.exectags" projeto></tag-list>
                 </div>
-                <p>Plataforma base para os executáveis do projeto</p>
+                <p>{{dados.tarefa.exedescricao}}</p>
             </div> 
             <div class="d-flex justify-space-between">
                 <div class="header">
                     <h3>Ultimos Comentários</h3><h4>(2)</h4>
                 </div>
-                <a>
+                <a @click="$_abrirForum">
                     Ver todos ->
                 </a>
             </div>
@@ -129,7 +151,10 @@ export default {
             </div>
         </template>
         <template v-slot:side>
-            <side-tarefas/>
+            <side-tarefas :dados="dados"/>
+        </template>
+        <template v-slot:print>
+            <print-tarefa :dados="dados"/>
         </template>
     </core-screen>
 </template>

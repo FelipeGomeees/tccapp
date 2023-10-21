@@ -17,7 +17,7 @@ export default {
 
 
 <template>
-    <v-container fluid fill-height>
+    <v-container fluid fill-height class="container">
         <v-layout justify-center>
             <div class="coluna-principal">
                 <slot name="main">
@@ -27,6 +27,10 @@ export default {
                 <slot name="side">
                 </slot>
             </v-card>
+            <div class="print">
+                <slot name="print">
+                </slot>
+            </div>
             <v-dialog v-model="show" transition="dialog-bottom-transition">
                 <v-card>
                     <slot name="side">
@@ -100,4 +104,26 @@ export default {
         right: 25px;
         z-index: 20001;
     }
+
+    .print {
+        display: none;
+    }
+
+   @media print {
+        .print {
+            align-items: left;
+            padding: 5px;
+            margin: 0px;
+            display: block;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 100vw;
+            height: 100%;
+        }
+
+        .coluna-principal, .card-lateral {
+            display: none;
+        }
+   }
 </style>

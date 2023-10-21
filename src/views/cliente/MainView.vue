@@ -1,31 +1,39 @@
 <script>
 /* eslint-disable vue/valid-v-slot */
 import CoreScreen from '@/components/always/CoreScreen.vue';
-import TagForm from '@/components/form/tags/TagForm.vue';
-import SideTag from '@/components/side/side-tag/SideTag.vue';
+import ClienteForm from '@/components/form/cliente/ClienteForm.vue';
+import SideCliente from '@/components/side/side-cliente/SideCliente.vue';
 import ShowMore from '@/components/show-more/ShowMore.vue'
 import axios from 'axios';
+import moment from 'moment';
+
+
 
 export default {
     name: 'ContatoView',
     components: {
         // CoreDialog,
         CoreScreen,
-        TagForm,
-        SideTag,
+        ClienteForm,
+        SideCliente,
         ShowMore,
     },
 
     data() {
         return {
             headers: [
-                { text: 'Nome', align: 'start',value: 'tagnome' },
-                { text: 'Descrição', align: 'start', value: 'tagdescricao' },
-                { text: 'Tipo', value: 'tagtipo' },
-                { text: 'Prioridade', value: 'tagprioridade' },
-                { text: 'Cor', value: 'tagcor', align: 'center' },
+                {
+                    text: 'Nome',
+                    align: 'start',
+                    sortable: false,
+                    value: 'clinome',
+                },
+                { text: 'Observação', align: 'center',value: 'cliobservacao' },
+                { text: 'CPF', value: 'clicpf' },
+                // { text: 'Contato', value: 'contato' },
+                { text: 'Criado em', value: 'clidatacriacao', align: 'center' },
             ],
-            items: null,
+            items: [],
             search: null,
             dialog: false,
             selecionado: null,
@@ -34,6 +42,9 @@ export default {
     },
 
     methods: {
+        $_formataData(data) {
+            return moment(data).format('DD/MM/YYYY');
+        },
         NavigateTo(url) {
             this.$router.push({ path: url })
         },
@@ -44,14 +55,12 @@ export default {
         },
 
         $_load() {
-         // FILTRAR POR AMBIENTE NO FUTURO
-            const idAmb = sessionStorage.getItem('ambiente');
             this.loading = true;
             const res = axios.get(
-                `/tag/${idAmb}`,
+                '/cliente/detalhado',
             );
             res.then((item) => {
-                console.log(item);
+                console.log(item.data, 'cliente');
                 this.items = item.data;
                 this.loading = false;
             });
@@ -74,11 +83,11 @@ export default {
         <template v-slot:main>
             <div class="coluna-card">
                 <div class="header">
-                    <h2># Tags</h2>
+                    <h2># Clientes</h2>
                 </div>
                 <br/>
                 <div class="d-flex">
-                    <span>Gerencie e administre estatisticas sobre as tags utilizadas no seu ambiente.</span>
+                    <span>Administre clientes fisicos e juridicos atualmente cadastrados</span>
                 </div>
                 <br/>
                 <v-divider></v-divider>
@@ -92,7 +101,7 @@ export default {
                     label="Pesquisa"
                     class="mx-4"
                     ></v-text-field>
-                    <v-btn color="primary" @click="dialog = !dialog">Nova Tag</v-btn>
+                    <v-btn color="primary" @click="dialog = !dialog">Novo Cliente</v-btn>
                 </div>
             </div>
             <div class="table">
@@ -103,27 +112,28 @@ export default {
                 class="elevation-1 table-header"
                 :search="search"
                 v-if="!loading"
-                 @click:row="$_selectItem"
+                @click:row="$_selectItem"
                 >
-                <template v-slot:item.tagdescricao="{ item }">
-                    <show-more :msg="item.tagdescricao"></show-more>
+                <template v-slot:item.cliobservacao="{ item }">
+                    <show-more :msg="item.cliobservacao"></show-more>
                 </template>
-                <template v-slot:item.tagcor="{ item }">
-                    <v-btn class="elevation-0 pa-2 circulo"
-                    :color="item.tagcor" rounded>
-                    </v-btn>
+                <template v-slot:item.clicontato="{ item }">
+                    <a>{{item.clicontato}}</a>
+                </template>
+                <template v-slot:item.clidatacriacao="{ item }">
+                    {{$_formataData(item.clidatacriacao)}}
                 </template>
                 </v-data-table>
             </div>
             <v-dialog width="840px" v-model="dialog">
                 <v-card-title class="text-h5 primary" >
-                    <v-icon>mdi-tag</v-icon> Nova Tag
+                    <v-icon x-large>mdi-tag</v-icon> Novo Cliente
                 </v-card-title>
-                <tag-form @sucesso="$_reload"></tag-form>
+                <cliente-form @sucesso="$_reload"></cliente-form>
             </v-dialog>
         </template>
         <template v-slot:side>
-            <side-tag :dados="selecionado" @editar="dialog = true" v-if="selecionado"/>
+            <side-cliente :dados="selecionado" @editar="dialog = true" v-if="selecionado"/>
         </template>
     </core-screen>
 </template>

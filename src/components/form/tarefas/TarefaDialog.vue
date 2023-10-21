@@ -35,6 +35,13 @@
         v-model="formulario.tardescricao"/>
         <div class="d-flex linha">
           <div class="executavel space">
+            <v-autocomplete prepend-inner-icon="mdi-account-circle" label="Cliente" outlined 
+            :items="complete.executaveis"
+            item-text="clinome"
+            item-value="id"
+            v-model="formulario.taridcliente"/>
+          </div>
+          <div class="executavel space">
             <v-autocomplete prepend-inner-icon="mdi-cog" label="Executavel" outlined 
             :items="complete.executaveis"
             item-text="exenome"
@@ -50,19 +57,17 @@
             <v-stepper-content step="2">
               <div class="d-flex linha">
                 <div class="tag-fluxo space">
-                  <v-autocomplete label="Fluxo" outlined 
-                  :items="complete.tags"
+                  <v-autocomplete label="Estado" outlined 
+                  :items="complete.tagsestado"
                   item-text="tagnome"
                   item-value="id"
-                  readonly
                   v-model="formulario.taridexecutavel"/>
                 </div>
                 <div class="tag-categoria">
-                  <v-autocomplete label="Categoria" outlined
-                  :items="complete.tags"
+                  <v-autocomplete label="Tipo" outlined
+                  :items="complete.tagstipo"
                   item-text="tagnome"
                   item-value="id"
-                  readonly
                   v-model="formulario.taridexecutavel"/>
                 </div>
               </div>
@@ -124,9 +129,9 @@ export default {
           taridtarefapai: null,
           tarvisibilidade: false,
           tarpedirconvite: false,
+          taridcliente: null,
         },
         tags: null,
-        colaboradores: null,
         meta: {
           responsavel: sessionStorage.getItem('usuarioambiente').toString(),
         },
@@ -171,7 +176,7 @@ export default {
           this.complete.executaveis = item.data;
       });
       const resTag = axios.get(
-          `/tag/${idAmb}`,
+          `/tag/divido/${idAmb}`,
       );
       resTag.then((item) => {
           console.log(item);

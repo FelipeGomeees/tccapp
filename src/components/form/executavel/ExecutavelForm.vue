@@ -42,7 +42,8 @@
              </div>
            </v-stepper-content>
             <v-stepper-content step="2">
-              <tag-selector @salvo="$_modelaTags"></tag-selector>
+              <tag-selector @atualizado="$_modelaTags" v-if="dadosTags"
+              :dados="dadosTags"></tag-selector>
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
@@ -76,6 +77,7 @@ export default {
           exeurl: null,
         },
         tags: null,
+        dadosTags: null,
       }
     },
 
@@ -94,9 +96,9 @@ export default {
               `/tagexecutavel/all/${put}`,
             );
             this.tags.forEach((tag) => {
-                const idUsuarioAmbiente = sessionStorage.getItem('usuarioambiente')
+                const idUsuarioAmbiente = sessionStorage.getItem('usuarioambiente');
                 const tagDados = {
-                  taeidtag: tag,
+                  taeidtag: tag.id,
                   taeidexecutavel: put,
                   taeidusuarioambiente: idUsuarioAmbiente,
                 }
@@ -121,7 +123,6 @@ export default {
               { dados },
           );
           res.then((item) => {
-            console.log(item, 'item')
             this.tags.forEach((tag) => {
               const tagDados = {
                   taeidtag: tag,
@@ -146,8 +147,20 @@ export default {
       },
 
       $_modelaTags(tags) {
+        console.log(tags, 'tags');
         this.tags = tags;
       },
+    },
+
+    created() {
+        const idAmb = sessionStorage.getItem('ambiente');
+        const resTag = axios.get(
+            `/tag/${idAmb}`,
+        );
+        resTag.then((item) => {
+            console.log(item);
+            this.dadosTags = item.data;
+        });
     }
 }
 </script>

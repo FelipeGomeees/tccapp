@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div class="icon-container">
-            <div v-for="item in $items" :key="item.useapelido">
+        <div class="icon-container" v-if="items">
+            <div v-for="item in items" :key="item.usaapelido">
                 <v-avatar color="#ffb765" class="avatar" size="28px"
                  @click="showCard = !showCard; userInfo = item">   
-                    {{(item.useapelido.slice(0, 2))}}
+                    {{(item.usaapelido.slice(0, 2))}}
                 </v-avatar>
             </div>
             <div v-if="items.length > 5">
@@ -17,21 +17,21 @@
             <v-card-title class="card-title">
                 <div class="title-labels">
                     <v-avatar color="#ffb765">
-                        {{(userInfo.useapelido.slice(0, 2))}}
+                        {{(userInfo.usaapelido.slice(0, 2))}}
                     </v-avatar>
                     <div class="nomes">
-                        <span>{{userInfo.useapelido}}<br/></span>
-                        <h5 class="true-name">#{{userInfo.usenome}}</h5>
+                        <span>{{userInfo.usaapelido}}<br/></span>
+                        <h5 class="true-name">#{{userInfo.usunome}}</h5> <!-- AQUI VAI NOME -->
                     </div>
                 </div>
                 <v-icon @click="showCard = !showCard" class="close">mdi-close</v-icon>
             </v-card-title>
             <v-divider></v-divider>
             <v-card-subtitle class="sub">
-                <div class="social-icons">
-                    <v-icon v-if="userInfo.usegithub">mdi-github</v-icon>
-                    <v-icon v-if="userInfo.usegoogledrive">mdi-google-drive</v-icon>
-                    <v-icon v-if="userInfo.usestackoverflow">mdi-stack-overflow</v-icon>
+                <div class="social-icons" v-if="false">
+                    <v-icon v-if="userInfo.usagithub">mdi-github</v-icon>
+                    <v-icon v-if="userInfo.usagoogledrive">mdi-google-drive</v-icon>
+                    <v-icon v-if="userInfo.usastackoverflow">mdi-stack-overflow</v-icon>
                 </div>
                 <a>
                     Detalhes

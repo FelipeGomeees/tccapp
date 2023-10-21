@@ -7,7 +7,9 @@ export default function AxiosSetup() {
     axios.interceptors.response.use((response) => {
         return response;
       }, function (error) {
+        console.log(error);
         if (error.response.status === 401) {
+          console.log(error);
             // sessionStorage.removeItem('token');
         }
         return Promise.reject(error);
