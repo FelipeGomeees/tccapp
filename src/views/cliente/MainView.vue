@@ -26,9 +26,9 @@ export default {
                     text: 'Nome',
                     align: 'start',
                     sortable: false,
-                    value: 'clinome',
+                    value: 'cliente.clinome',
                 },
-                { text: 'Observação', align: 'center',value: 'cliobservacao' },
+                { text: 'Observação', align: 'center', value: 'obs' },
                 { text: 'CPF', value: 'clicpf' },
                 // { text: 'Contato', value: 'contato' },
                 { text: 'Criado em', value: 'clidatacriacao', align: 'center' },
@@ -114,14 +114,14 @@ export default {
                 v-if="!loading"
                 @click:row="$_selectItem"
                 >
-                <template v-slot:item.cliobservacao="{ item }">
-                    <show-more :msg="item.cliobservacao"></show-more>
+                <template v-slot:item.obs="{ item }">
+                    <show-more :msg="item.cliente.cliobservacao"></show-more>
                 </template>
                 <template v-slot:item.clicontato="{ item }">
-                    <a>{{item.clicontato}}</a>
+                    <a>{{item.cliente.clicontato}}</a>
                 </template>
                 <template v-slot:item.clidatacriacao="{ item }">
-                    {{$_formataData(item.clidatacriacao)}}
+                    {{$_formataData(item.cliente.clidatacriacao)}}
                 </template>
                 </v-data-table>
             </div>
