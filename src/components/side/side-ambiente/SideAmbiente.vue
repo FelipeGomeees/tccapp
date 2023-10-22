@@ -27,7 +27,7 @@
             {{dados.tarefa.tardescricao}}
         </v-card-text>
         <v-divider></v-divider>
-        <v-card-text class="datas">
+        <v-card-text class="d-flex justify-space-around">
             <div>
                 <v-icon>mdi-calendar-heart</v-icon> Criado em:<br/> 
                 {{$_formataData(dados.tarefa.tardataabertura)}}
@@ -35,6 +35,10 @@
             <div>
                 <v-icon>mdi-calendar-heart</v-icon> Entrega até:<br/>
                 {{$_formataData(dados.tarefa.tardataprazo)}}
+            </div>
+            <div>
+                <v-icon>mdi-account</v-icon> Para:<br/>
+                {{dados.cliente.clinome}}
             </div>
         </v-card-text>
         <v-divider></v-divider>

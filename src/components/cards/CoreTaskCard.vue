@@ -1,25 +1,30 @@
 <template>
-    <v-card class="elevation-6 card" width="100%" max-width="400px" height="120px">
-        <v-card-title class="flex-between pa-3">
-            <div>
-                <div>{{dados.tarefa.tarnome}}</div>
+    <v-card class="elevation-6 card" width="100%" >
+        <v-card-title>
+            <div class="detalhes-nomes">
+                <div class="nome">{{dados.tarefa.tarnome}}</div>
                 <!-- <v-icon>mdi-source-branch</v-icon> 
                 <div>Fix</div> -->
-            </div>
-            <div v-for="tag in dados.tags" :key="tag.id">
-                <v-btn :color="tag.tagcor" rounded class="elevation-0 pa-2 tag" height="19px"></v-btn>
-            </div>
-        </v-card-title>
-        <v-card-subtitle class="flex">
-            <div class="flex-center">
-                <v-icon class="margin">
-                    mdi-github
-                </v-icon>
-                <div>
-                    {{dados.tarefa.exenome}}
+                <div class="flex-center exe">
+                        <v-icon class="margin">
+                            mdi-github
+                        </v-icon>
+                        <div>
+                            {{dados.tarefa.exenome}}
+                        </div>
                 </div>
             </div>
-        </v-card-subtitle>
+            <div class="detalhes">
+                <div v-for="tag in dados.tags" :key="tag.id">
+                    <v-btn v-if="tag.tagtipo === 2"
+                    :color="tag.tagcor" rounded class="elevation-0 pa-2 tag" height="19px">
+                    </v-btn>
+                    <v-btn v-if="tag.tagtipo === 1" 
+                    :color="tag.tagcor" rounded class="elevation-0 pa-2 tag" height="19px">
+                    </v-btn>
+                </div>
+            </div>
+        </v-card-title>
         <v-divider></v-divider>
         <v-card-text class="d-flex justify-space-between pa-2" v-if="!v2">
             <div class="flex-center margin">
@@ -71,71 +76,6 @@ export default {
 
     data() {
         return {
-             users: [
-                {
-                    usenome: 'felipe.dsn',
-                    useapelido: 'Felipe Gomes',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: '@...',
-                },
-                {
-                    usenome: 'fefstak',
-                    useapelido: 'Fernanda Takano',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: '@...',
-                },
-                {
-                    usenome: 'davi.machado',
-                    useapelido: 'Davi Machado',
-                    usestackoverflow: '@...',
-                    usegoogledrive: null,
-                    usegithub: '@...',
-                },
-                {
-                    usenome: '@guilherme.faccat',
-                    useapelido: 'Guilherme',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: '@...',
-                },
-                {
-                    usenome: 'ana.root',
-                    useapelido: 'Ana Laura',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: '@...',
-                },
-                {
-                    usenome: 'wesley.t',
-                    useapelido: 'Wesley Tales',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: '@...',
-                },
-                {
-                    usenome: 'isabel.rainha',
-                    useapelido: 'Isabel Rainha',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: '@...',
-                },
-                {
-                    usenome: 'amancio.mt',
-                    useapelido: 'Matheus Amancio',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: null,
-                },
-                {
-                    usenome: 'fernando.pfl',
-                    useapelido: 'Fernando Porfilio',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: '@...',
-                },
-            ],
         }
     },
 
@@ -147,7 +87,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .flex-center {
         display: flex;
         align-items: center;
@@ -160,5 +100,25 @@ export default {
     .flex-between {
         display: flex;
         justify-content: space-between;
+    }
+
+    .detalhes-nomes {
+        width: 82%;
+        height: 66px;
+        height: 70px;
+    }
+
+    .nome {
+        width: 100%;
+    }
+
+    .exe {
+        width: 100%;
+        font-weight: 400;
+        font-size: 15px;
+    }
+
+    .detalhes {
+        width: 18%;
     }
 </style>

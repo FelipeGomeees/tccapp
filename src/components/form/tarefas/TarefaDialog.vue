@@ -34,11 +34,11 @@
         <v-textarea prepend-inner-icon="mdi-text-box" label="Descrição" outlined
         v-model="formulario.tardescricao"/>
         <div class="d-flex linha">
-          <div class="executavel space">
+          <div class="executavel space" v-if="complete.clientes">
             <v-autocomplete prepend-inner-icon="mdi-account-circle" label="Cliente" outlined 
-            :items="complete.executaveis"
+            :items="complete.clientes"
+            item-value="idcliente"
             item-text="clinome"
-            item-value="id"
             v-model="formulario.taridcliente"/>
           </div>
           <div class="executavel space">
@@ -58,21 +58,23 @@
               <div class="d-flex linha">
                 <div class="tag-fluxo space">
                   <v-autocomplete label="Estado" outlined 
-                  :items="complete.tagsestado"
+                  v-if="complete.tags"
+                  :items="complete.tags.estado"
                   item-text="tagnome"
                   item-value="id"
-                  v-model="formulario.taridexecutavel"/>
+                  v-model="tagestado"/>
                 </div>
                 <div class="tag-categoria">
                   <v-autocomplete label="Tipo" outlined
-                  :items="complete.tagstipo"
+                  v-if="complete.tags"
+                  :items="complete.tags.tipo"
                   item-text="tagnome"
                   item-value="id"
-                  v-model="formulario.taridexecutavel"/>
+                  v-model="tagtipo"/>
                 </div>
               </div>
               <tag-selector v-if="complete.tags"
-              :dados="complete.tags" @atualizado="$_salvaTags"></tag-selector>
+              :dados="complete.tags.geral" @atualizado="$_salvaTags"></tag-selector>
             </v-stepper-content>
             <v-stepper-content step="3">
               <user-selector v-if="complete.usuarioambiente"
@@ -132,6 +134,9 @@ export default {
           taridcliente: null,
         },
         tags: null,
+        tagsSelecionado: null,
+        tagestado: null,
+        tagtipo: null,
         meta: {
           responsavel: sessionStorage.getItem('usuarioambiente').toString(),
         },
@@ -140,13 +145,15 @@ export default {
           executaveis: null,
           tags: null,
           usuarioambiente: null,
+          clientes: null,
         }
       }
     },
 
     methods: {
       $_criarTarefa() {
-        const dados = { tarefa: this.formulario, tags: this.tags, colaboradores: this.colaboradores, meta: this.meta };
+        const dados = { tarefa: this.formulario, tags: [...this.tagsSelecionado, this.tagtipo, this.tagestado], 
+        colaboradores: this.colaboradores, meta: this.meta };
         const res = axios.post(
             '/tarefa',
             { dados },
@@ -162,7 +169,7 @@ export default {
       },
 
       $_salvaTags(e) {
-        this.tags = e;
+        this.tagsSelecionado = e;
       },
     },
 
@@ -172,14 +179,13 @@ export default {
           `/executavel/${idAmb}`,
       );
       resExecutavel.then((item) => {
-          console.log(item);
           this.complete.executaveis = item.data;
       });
       const resTag = axios.get(
           `/tag/divido/${idAmb}`,
       );
       resTag.then((item) => {
-          console.log(item);
+          console.log(item, 'ZZZZZZZZZZZZZZ');
           this.complete.tags = item.data;
       });
       const dados = {
@@ -190,8 +196,14 @@ export default {
           { params: dados },
       );
       resUsuarioAmbiente.then((item) => {
-          console.log(item);
           this.complete.usuarioambiente = item.data;
+      });
+      const resCliente = axios.get(
+          '/cliente/detalhado',
+          { params: dados },
+      );
+      resCliente.then((item) => {
+          this.complete.clientes = item.data;
       });
       this.loading = false;
     },

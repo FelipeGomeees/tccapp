@@ -81,7 +81,7 @@ export default {
         display: none;
     }
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1628px) {
         .coluna-principal {
             overflow: hidden;
             width: 100%;

@@ -67,27 +67,28 @@ export default {
                 <h2># Designações</h2>
             </div>
             <br/>
-            <div class="search">
+            <v-divider></v-divider>
+            <!-- <div class="search">
                 <v-text-field outlined append-icon="mdi-magnify"
                 dense>
                 </v-text-field>
-                <v-card class="pa-2" @click="modoLista = !modoLista">
-                        <v-icon v-if="modoLista">mdi-view-list</v-icon> 
-                        <v-icon v-else>mdi-card-multiple-outline</v-icon> 
-                        Exibição
-                    </v-card>
-                <v-card class="pa-2">
-                    <v-icon>mdi-filter</v-icon> Filtros
-                </v-card>
-            </div>
+            </div> -->
             <div class="tag-filtro">
                 <div class="d-flex">
                     <v-icon>mdi-calendar-heart</v-icon> Criadas em 17 de Março de 2023
                 </div>
-                <v-btn color="primary" @click="dialogTarefa = !dialogTarefa">Nova Tarefa</v-btn>
+                <div class="acoes">
+                    <v-btn color="white" v-if="modoLista" @click="modoLista = !modoLista">
+                        <v-icon>mdi-view-list</v-icon></v-btn>
+                    <v-btn color="white" v-else @click="modoLista = !modoLista">
+                        <v-icon>mdi-card-multiple-outline</v-icon></v-btn>
+                    <v-btn color="primary"><v-icon>mdi-filter</v-icon></v-btn>
+                    <v-btn color="primary"><v-icon>mdi-printer</v-icon></v-btn>
+                    <v-btn color="primary" @click="dialogTarefa = !dialogTarefa">Nova Tarefa</v-btn>
+                </div>
             </div>
             <div class="task-container" v-if="!loading">
-                <div v-for="(item, index) in tarefas" :key="index">
+                <div v-for="(item, index) in tarefas" :key="index" class="card">
                     <core-task-card @click.native="selecionado = item; OpenDetail(true);" 
                     :dados="item"></core-task-card>
                 </div>
@@ -183,12 +184,21 @@ export default {
         margin: 0px 4px 0px 4px;
     }
 
+    .card {
+        width: 48%;
+    }
+
     .task-container {
         display: flex;
         flex-wrap: wrap;
+        box-sizing: border-box;
     }
 
     .task-container > * {
         margin: 4px;
+    }
+
+    .acoes * {
+        margin-left: 5px;
     }
 </style>

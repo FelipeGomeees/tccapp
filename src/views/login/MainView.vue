@@ -1,7 +1,7 @@
 <template>
     <v-container fluid fill-height>
         <v-layout align-center justify-center>
-            <!-- <v-img src="./ocelog-bg.png"
+            <!-- <v-img src="./taskfy-bg.png"
             class="back-img">
             </v-img> -->
             <v-card class="elevation-8 card" width="500">
