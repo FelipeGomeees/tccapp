@@ -1,11 +1,14 @@
 <template>
     <v-container fluid fill-height>
-        <v-layout align-center justify-center>
+        <v-layout align-center justify-center column>
             <!-- <v-img src="./taskfy-bg.png"
             class="back-img">
             </v-img> -->
+            <div class="logo">
+                <img src="../../../public/img/TaskerL.png" alt="">
+            </div>
             <v-card class="elevation-8 card" width="500">
-                <h2 class="titulo">Boas Vindas</h2>
+                <h2 class="titulo">Boas Vindas ao Tasker!</h2>
                 <p class="subtitulo">Realize seu login ou conecte-se a plataforma</p>
                 <br/>
                 <v-text-field 
@@ -117,7 +120,7 @@ export default {
     }
 
     a {
-        color: #ffb765;
+        color: #ff9d1c;
     }
 
     .container-inferior {
@@ -147,10 +150,31 @@ export default {
         background: rgba(255, 255, 255, 0.3);
         backdrop-filter: blur(6px);
         z-index: 3;
+        animation: logo 1.2s ease-out;
     }
 
     .align {
         justify-content: center;
         align-items: center;
+    }
+
+    .logo {
+        width: 300px;
+        height: 100px;
+    }
+
+    .logo img {
+        max-width: 100%;
+        max-height: 100%; 
+        animation: logo 1.2s ease-out;
+    }
+
+    @keyframes logo {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 100;
+        }
     }
 </style>

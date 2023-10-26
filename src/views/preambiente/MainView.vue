@@ -282,7 +282,7 @@ export default {
     }
 
     a {
-        color: #ffb765;
+        color: #ff9d1c;
     }
 
     .border {
@@ -336,6 +336,7 @@ export default {
         justify-content: center;
         align-items: center;
         padding: 10px;
+        transition:  1.2s;
     }
 
     .dialog {

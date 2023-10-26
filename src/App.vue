@@ -1,9 +1,9 @@
 <template>
   <v-app>
-    <core-navigator class="nav"
+    <core-navigator class="d-print-none"
     v-if="$route.fullPath !='/' && $route.fullPath !='/cadastro' && $route.fullPath !='/preambiente'">
     </core-navigator>
-    <core-app-bar class="nav"
+    <core-app-bar class="d-print-none"
     v-if="$route.fullPath !='/' && $route.fullPath !='/cadastro' && $route.fullPath !='/preambiente'">
     </core-app-bar>
     <v-main class="imagem">
@@ -24,7 +24,7 @@ export default {
   },
 
   data: () => ({
-    //
+    
   }),
 };
 </script>
@@ -34,10 +34,10 @@ export default {
   background-image: linear-gradient(#fff, #e5e5e5);
 }
 
-.nav {
-  @media print {
-    display: none;
-  }
-}
+/* @media print {
+  @page { margin: 0; }
+  body { margin: 1.6cm; }
+} */
+
 
 </style>

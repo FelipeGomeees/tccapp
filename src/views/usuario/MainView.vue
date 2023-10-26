@@ -193,7 +193,7 @@ export default {
     }
 
     .v-data-table >>> .v-data-table-header {
-         background-color: #ffb765;
+         background-color: #ff9d1c;
     }
 
     .sub {

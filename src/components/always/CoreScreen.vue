@@ -1,6 +1,12 @@
 <script>
 export default {
     name: 'CoreScreen',
+    props: {
+        hasFill: Boolean,
+        hasPrint: Boolean,
+        hasPrincipal: Boolean,
+        hasSide: Boolean,
+    },
     data() {
         return {
             show: false,
@@ -17,17 +23,21 @@ export default {
 
 
 <template>
-    <v-container fluid fill-height class="container">
+    <v-container fluid fill-height>
         <v-layout justify-center>
-            <div class="coluna-principal">
+            <div class="coluna-fill" v-if="hasFill">
+                <slot name="fill">
+                </slot>
+            </div>
+            <div class="coluna-principal" v-if="hasPrincipal">
                 <slot name="main">
                 </slot>
             </div>
-            <v-card class="hidden-on-mobile card-lateral">
+            <v-card class="hidden-on-mobile card-lateral" v-if="hasSide">
                 <slot name="side">
                 </slot>
             </v-card>
-            <div class="print">
+            <div class="print" v-if="hasPrint">
                 <slot name="print">
                 </slot>
             </div>
@@ -64,6 +74,20 @@ export default {
         width: 60%;
         margin-right: 410px;
         margin-left: 6%;
+    }
+
+     .coluna-fill {
+        width: 100%;
+        margin-left: 410px;
+        margin-right: 410px;
+    }
+
+    @media print {
+        .coluna-fill {
+            width: 100vw;
+            margin-left: 0px;
+            margin-right: 0px;
+        }
     }
 
     .coluna-principal > * {

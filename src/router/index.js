@@ -98,6 +98,24 @@ const routes = [
     name: 'cliente',
     component: () => import(/* webpackChunkName: "about" */ '../views/cliente/MainView.vue')
   },
+
+  {
+    path: '/clientetipo',
+    name: 'Estado Tarefa Clientes',
+    component: () => import(/* webpackChunkName: "about" */ '../views/relatorio/clientetipo/MainView.vue')
+  },
+
+  {
+    path: '/clienteperiodo',
+    name: 'Tarefas por Periodo',
+    component: () => import(/* webpackChunkName: "about" */ '../views/relatorio/clienteperiodo/MainView.vue')
+  },
+
+  {
+    path: '/situacaotarefa',
+    name: 'situacaotarefa',
+    component: () => import(/* webpackChunkName: "about" */ '../views/relatorio/situacaotarefa/MainView.vue')
+  },
 ]
 
 const router = new VueRouter({

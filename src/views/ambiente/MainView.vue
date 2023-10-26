@@ -61,7 +61,7 @@ export default {
 </script>
 
 <template>
-    <core-screen>
+    <core-screen hasPrincipal hasSide>
         <template v-slot:main>
             <div class="header">
                 <h2># Designações</h2>

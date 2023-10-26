@@ -1,16 +1,16 @@
 <template>
-    <v-navigation-drawer app
+    <v-navigation-drawer :app="!print"
         permanent
         v-if="!this.$vuetify.breakpoint.mobile"
         class="navigator"
+        ref="navigator"
       >
         <v-list color="primary" width="250px">
           <v-list-item link class="lista">
             <v-list-item-content>
-              <v-list-item-title class="text-h6  ">
-                {{nome}}
+              <v-list-item-title class="text-h6  logo">
+                <img src="../../../public/img/TaskerL.png" alt="">
               </v-list-item-title>
-              <v-list-item-subtitle>#6124</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -53,26 +53,28 @@
         objetos: [{label: 'Tags', url: '/tags'}, {label: 'Executaveis', url: '/executavel' }, {label: 'Clientes', url: '/cliente'},
         { label: 'Arquivos'}], 
         relatorio: [
-        {label: 'Tarefas por Cliente', url: '/tarefacliente'},
-        {label: 'Tarefas por Colaborador', url: '/tarefacolaborador' },
-        {label: 'Situação Tarefas', url: '/situacao'}], 
+        {label: 'Estado Tarefa Clientes', url: '/clientetipo'},
+        {label: 'Tarefas por Periodo', url: '/clienteperiodo' },
+        {label: 'Situação Tarefas', url: '/situacaotarefa'}], 
         adm: [{label: 'Usuarios', url: '/usuario'}],
         nome: '',
+        print: false,
       }
     },
+    
 
-    created() {
-      const usuario = JSON.parse(sessionStorage.getItem('usuario'));
-      this.nome = usuario.nome;
+    mounted() {
+      console.log(this.$refs.navigator.$props, 'refs');
+      this.$root.$on('prepara-print', () => {
+            this.print = !this.print;
+      });
+      // const usuario = JSON.parse(sessionStorage.getItem('usuario'));
+      // this.nome = usuario.nome;
     }
   }
 </script>
 
 <style scoped>
-.border {
-  border: 1px solid red;
-}
-
 .navigator {
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(6px);
@@ -81,4 +83,16 @@
 .lista {
   border-radius: 50px;
 }
+
+    .logo {
+        width: 300px;
+        height: 50px;
+    }
+
+    .logo img {
+        max-width: 100%;
+        max-height: 100%; 
+        animation: logo 1.2s ease-out;
+        filter: brightness(0) invert(1);
+    }
 </style>
