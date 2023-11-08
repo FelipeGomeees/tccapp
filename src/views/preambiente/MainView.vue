@@ -2,7 +2,7 @@
     <v-container fluid fill-height :class="{['bg-color-1']: !ambientSelection, ['bg-color-2']: ambientSelection}">
         <v-layout align-center justify-center>
             <v-card class="elevation-8 card" width="500" v-if="ambientSelection === 'entrar'">
-                <h2 class="titulo">Boas Vindas de volta <a>USU</a></h2>
+                <h2 class="titulo">Boas Vindas de volta <a>Felipe</a></h2>
                 <p class="subtitulo">Seus ultimos ambientes:</p>
                 <br/>
                 <ambient-img :dados="ambientesRecentes" @click="NavigateTo('/home');"/>
@@ -28,7 +28,7 @@
                         <div class="linha"></div>
                         <br/>
                         <div class="quadrado">
-                            <v-img src="@/assets/logo.png"></v-img>
+                            <v-img src="../../../public/img/logo.png"></v-img>
                         </div>
                         <p>{{ambienteConvidado[0].ambnome}}</p>
                         <br/>
@@ -57,6 +57,7 @@
                     <v-file-input
                         accept="image/*"
                         label="Logotipo do Ambiente"
+                        ref="logo"
                     ></v-file-input>
                 </div>
                 <br/>
@@ -75,7 +76,7 @@
                     <v-combobox v-model="combo" :items="templates" 
                     placeholder="Template Inicial (Não Obrigatório)">
                     </v-combobox>
-                    <v-btn @click="miniAccord = !miniAccord">
+                    <v-btn @click="miniAccord = !miniAccord" v-if="false">
                         <v-icon v-if="miniAccord">mdi-grid-large</v-icon>
                         <v-icon v-else>mdi-grid</v-icon>
                     </v-btn>
@@ -197,11 +198,23 @@ export default {
                 ambicone: '',
                 usuario: this.token.tokidusuario,
             };
+            console.log(ambientBody, 'UAAAAAAAAAAAAAAAAA');
             const res = axios.post(
                 '/ambiente/novo',
-                { dados: ambientBody },
+                { 
+                    dados: ambientBody,
+                },
             );
             res.then(() => {
+                // const resLogo = axios.post(
+                //     '/ambiente/logo',
+                //     { 
+                //         logo: this.$refs.logo.value,
+                //     },
+                // );
+                // resLogo.then(() => {
+
+                // });
                 this.NavigateTo('/home');
             });
         },
@@ -347,4 +360,6 @@ export default {
         height: 1px;
         background-color: black;
     }
+
+
 </style>

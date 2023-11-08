@@ -7,8 +7,10 @@
       </template>
       <v-list>
         <v-list-item
+        class="itemForum"
           v-for="(item, index) in items"
           :key="index"
+          @click="$emit(item.title.toLowerCase())"
         >
           <v-list-item-title>{{ item.title }}</v-list-item-title>
         </v-list-item>
@@ -22,7 +24,7 @@ export default {
         return {
             items: [
                 { title: 'Responder' },
-                { title: 'Ocultar' },
+                { title: 'Visibilidade' },
             ],
 
             menu: false,
@@ -30,3 +32,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+  .itemForum {
+    cursor: pointer;
+  }
+</style>

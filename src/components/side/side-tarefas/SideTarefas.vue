@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <v-card class="card-detalhe">
         <v-card-title class="flex-center">
             Detalhes da Equipe
         </v-card-title>
@@ -12,7 +12,7 @@
         <v-card-text>
             <core-icon-stack :items="dados.colaboradores" class="flex-center"></core-icon-stack>
         </v-card-text>
-        <v-divider></v-divider>
+        <!-- <v-divider></v-divider>
         <div class="flex-center">
             <div>
                 Contatos
@@ -20,7 +20,7 @@
         </div>
         <v-card-text>
             <core-icon-stack :items="dados.colaboradores" class="flex-center"></core-icon-stack>
-        </v-card-text>
+        </v-card-text> -->
         <v-divider></v-divider>
         <div class="flex-center">
             <div>
@@ -31,47 +31,43 @@
             <core-icon-stack :items="dados.colaboradores" class="flex-center"></core-icon-stack>
         </v-card-text>
         <v-divider></v-divider>
-        <p class="flex-center">Sua função</p>
-        <div class="flex-center">
-            <v-icon>mdi-xml</v-icon> 
-        </div>
-        <p class="flex-center"> Colaborador</p>
+        <p class="flex-center">Estado Atual</p>
+            <div class="tag" v-if="dados">
+                <tag-list type1 :data="dados.tags"></tag-list>
+            </div>
+        <br/>
         <v-divider></v-divider>
         <p class="flex-center">Ações</p>
-        <h2 class="flex-center" v-if="false">00:00</h2>
-        <br/>
         <div class="hidden-on-mobile">
-            <div class="flex-center" v-if="!iniciado">
-                <v-btn color="#73d169" style="color: black"> FINALIZAR </v-btn>
+            <div class="flex-center">
+                <v-btn color="green"> CONCLUIR </v-btn>
             </div>
             <br/>
             <div class="flex-center">
-                <v-btn color="#ffb765"> SOLICITAR SAIDA </v-btn>
+                <v-btn color="primary"> FINALIZAR </v-btn>
             </div>
-        </div>
-        <div class="flex-center hidden-on-desktop">
-            <div class="flex-center" style="margin-right: 10px" v-if="!iniciado">
-                <v-btn color="#73d169" style="color: black" dark><v-icon>mdi-play</v-icon></v-btn>
-            </div>
-            <div class="flex-center" v-else>
-                <v-btn color="primary"><v-icon>mdi-pause</v-icon></v-btn>
-            </div>
+            <br/>
             <div class="flex-center">
-                <v-btn color="#ffb765" style="color: white"><v-icon>mdi-close</v-icon></v-btn>
+                <v-btn> SOLICITAR SAIDA </v-btn>
             </div>
         </div>
         <br/>
-    </div>
+        <v-dialog v-model="dialog">
+            
+        </v-dialog>
+    </v-card>
 </template>
 
 <script>
 // import CoreDialog from '@/components/dialog/SolicitacaoDialog.vue';
 import CoreIconStack from '@/components/bigiconstack/CoreIconStack.vue'
+import TagList from '@/components/taglist/TagList.vue'
 
 export default {
     name: 'SideTarefas',
     components: {
-        CoreIconStack
+        CoreIconStack,
+        TagList,
     },
 
     props: {
@@ -82,6 +78,7 @@ export default {
 
     data() {
         return {
+            dialog: false,
             iniciado: true,
             users: [
                 {
@@ -173,7 +170,7 @@ export default {
                 },
             ],
         }
-    }
+    },
 } 
 </script>
 
@@ -195,5 +192,9 @@ export default {
         .hidden-on-desktop {
             display: none;
         }
+    }
+
+    .tag {
+        text-align: center;
     }
 </style>

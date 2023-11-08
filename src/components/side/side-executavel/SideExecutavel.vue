@@ -1,8 +1,11 @@
 <template>
-    <div>
+    <v-card class="card-detalhe">
         <v-card-title class="flex-center">
             Detalhes do Executavel
         </v-card-title>
+            <v-icon class="close" @click.native="$emit('close')">
+                mdi-close
+            </v-icon>
         <v-divider></v-divider>
         <div class="flex-center">
             <div>
@@ -11,7 +14,7 @@
         </div>
         <br/>
         <div class="flex-center">
-            <v-icon>mdi-gitlab</v-icon>
+            <v-icon x-large>mdi-github</v-icon>
         </div>
         <br/>
         <b class="flex-center">
@@ -40,7 +43,7 @@
             <core-icon-stack :items="usersMenor" class="flex-center"></core-icon-stack>
         </v-card-text>
         <div class="flex-center">
-            <v-icon>mdi-calendar-heart</v-icon> {{$_formataData(dados.exedatacriacao)}}
+            <v-icon>mdi-calendar</v-icon> {{$_formataData(dados.exedatacriacao)}}
         </div>
         <br/>
         <v-divider></v-divider>
@@ -68,19 +71,18 @@
             </div>
         </div>
         <br/>
-        <div class="flex-center">
+        <div class="d-flex justify-space-around">
+            <div></div>
             <div>
-                <div class="flex-center">
-                    <v-btn @click="$_setSession">EDITAR</v-btn>
-                </div>
-                <br/>
-                 <div class="flex-center">
-                    <v-btn @click="$_deletar">DELETAR</v-btn>
-                </div>
-                <br/>
+                <v-btn @click="$_setSession">EDITAR</v-btn>
             </div>
+            <div> 
+                <v-btn @click="$_deletar" color="error">DELETAR</v-btn>
+            </div>
+            <div></div>
         </div>
-    </div>
+        <br/>
+    </v-card>
 </template>
 
 <script>
@@ -108,7 +110,7 @@ export default {
 
     methods: {
         $_formataData(data) {
-            return moment(data).format('DD/MM/YYYY');
+            return moment(data).format('DD/MM/YYYY HH:mm');
         },
 
         $_deletar() {
@@ -191,5 +193,12 @@ export default {
     }
     .padding {
         padding: 0px 10px 0px 10px;
+    }
+
+    .close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
     }
 </style>

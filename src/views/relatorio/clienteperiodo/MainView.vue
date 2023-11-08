@@ -67,12 +67,15 @@ export default {
     <core-screen hasFill>
         <template v-slot:fill>
             <div class="all">
+                <div class="logo">
+                    <img src="../../../../public/img/TaskerL.png" alt="">
+                </div>
                 <div class="header">
-                    <h2 class="d-flex"><div class="d-print-none"># </div> Relatório de Estado Tarefas por Cliente </h2>
+                    <h2 class="d-flex"><div class="d-print-none"></div> Relatório de Tipos de Tarefa</h2>
                 </div>
                 <br/>
                 <div class="d-flex d-print-none">
-                    <span>Relatório com informações sobre as tarefas destinadas a um cliente específico</span>
+                    <span>Relatório com a quantidade de tarefas em cada tipo, por cliente</span>
                 </div>
                 <div class="d-flex header d-print-none">
                     <b>Periodo: 18/10/2023 a 24/10/2023</b>
@@ -80,17 +83,19 @@ export default {
                 <br class="d-print-none"/>
                 <v-divider class="d-print-none"></v-divider>
                 <br/>
-                <div class="d-flex justify-end d-print-none">
-                    <v-text-field
-                    outlined
-                    dense
-                    append-icon="mdi-magnify"
-                    v-model="search"
-                    label="Pesquisa"
-                    class="mx-4"
-                    ></v-text-field>
-                    <v-btn color="primary" @click="$_print" class="btn-print"><v-icon>mdi-printer</v-icon></v-btn>
-                    <v-btn color="primary"><v-icon>mdi-filter</v-icon></v-btn>
+                <div class="acoes">
+                    <div class="d-flex justify-end d-print-none">
+                        <v-text-field
+                        outlined
+                        dense
+                        append-icon="mdi-magnify"
+                        v-model="search"
+                        label="Pesquisa"
+                        class="mx-4"
+                        ></v-text-field>
+                        <v-btn color="primary" @click="$_print" class="btn-print"><v-icon>mdi-printer</v-icon></v-btn>
+                        <v-btn color="primary"><v-icon>mdi-filter</v-icon></v-btn>
+                    </div>
                 </div>
             </div>
             <div class="table">
@@ -165,8 +170,54 @@ export default {
         text-align: center;
     }
 
-    .footer {
+    .logo {
         display: none;
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        width: 100px;
+        height: 100px;
+        filter: grayscale(100);
+    }
+
+     .logo img {
+        max-width: 100%;
+        max-height: 100%; 
+        animation: logo 1.2s ease-out;
+    }
+
+        .header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .header > h2 {
+        color: #ffffff;
+        transform: translateY(11px);
+        background-color: #ff9d1c;
+        padding-left: 12px;
+        padding-right: 12px;
+       box-shadow: -15px 5px #a5a5a5;
+    }
+
+    .acoes {
+        width: 100%;
+        display: flex;
+        justify-content: right;
+    }
+
+    .acoes > div {
+        width: 50%;
+    }
+
+    .btn-print {
+        margin-right: 10px;
+    }
+
+    .footer {
+        visibility:hidden;
     }
 
     @media print {
@@ -200,16 +251,20 @@ export default {
             justify-content: center;
         }
 
-        .btn-print {
-            margin-right: 100px;
+        .acoes {
+            width: 500px;
         }
 
         .footer {
             display: block;
+            visibility: visible;
             position: absolute;
             bottom: 1px;
             width: 98%;
+        }
 
+        .logo {
+            display: block;
         }
     }
 </style>

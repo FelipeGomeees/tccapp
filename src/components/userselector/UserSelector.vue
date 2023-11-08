@@ -7,10 +7,11 @@
               outlined
               chips
               color="blue-grey lighten-2"
-              label="Select"
+              label="Pesquisa Usuários"
               item-text="usaapelido"
               multiple
               return-object
+              height="52px"
             >
               <template v-slot:selection="data">
                 <v-chip

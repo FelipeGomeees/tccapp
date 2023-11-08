@@ -1,8 +1,11 @@
 <template>
-    <div>
+     <v-card class="card-detalhe">
         <v-card-title class="flex-center">
             Detalhes da Tag
         </v-card-title>
+            <v-icon class="close" @click.native="$emit('close')">
+                mdi-close
+            </v-icon>
         <v-divider></v-divider>
         <div class="flex-center">
             <div>
@@ -15,11 +18,13 @@
             :color="dados.tagcor" rounded>{{dados.tagnome}}</v-btn>
         </div>
         <br/>
+        <v-divider></v-divider>
         <div class="flex-center justify-space-around">
-            <div>{{$_voltaTipo(dados.tagtipo)}}</div>
-            <div>Prioridade {{dados.tagprioridade}}</div>
+            <div><b>Categoria:</b> {{$_voltaTipo(dados.tagtipo)}}</div>
+            <div><b>Prioridade:</b> {{dados.tagprioridade}}</div>
         </div>
         <br/>
+                <v-divider></v-divider>
         <div class="flex-center">
             "{{dados.tagdescricao}}"
         </div>
@@ -34,11 +39,11 @@
             <core-icon-stack :items="usersMenor" class="flex-center"></core-icon-stack>
         </v-card-text>
         <div class="flex-center">
-            <v-icon>mdi-calendar-heart</v-icon> {{$_formataData(dados.tagdatacriacao)}}
+            <v-icon>mdi-calendar</v-icon> {{$_formataData(dados.tagdatacriacao)}}
         </div>
         <br/>
-        <v-divider></v-divider>
-        <div class="flex-center">
+        <!-- <v-divider></v-divider> -->
+        <!-- <div class="flex-center">
             <div>
                 Detalhes
             </div>
@@ -59,7 +64,7 @@
                 </div>
             </div>
         </div>
-        <br/>
+        <br/> -->
         <v-divider></v-divider>
         <div class="flex-center">
             <div>
@@ -67,19 +72,18 @@
             </div>
         </div>
         <br/>
-        <div class="flex-center">
+        <div class="d-flex justify-space-around">
+            <div></div>
             <div>
-                <div class="flex-center">
-                    <v-btn @click="$_setSession">EDITAR</v-btn>
-                </div>
-                <br/>
-                 <div class="flex-center"> 
-                    <v-btn @click="$_deletar">DELETAR</v-btn>
-                </div>
-                <br/>
+                <v-btn @click="$_setSession">EDITAR</v-btn>
             </div>
+            <div> 
+                <v-btn @click="$_deletar" color="error">DELETAR</v-btn>
+            </div>
+            <div></div>
         </div>
-    </div>
+        <br/>
+    </v-card>
 </template>
 
 <script>
@@ -117,7 +121,7 @@ export default {
 
     methods: {
         $_formataData(data) {
-            return moment(data).format('DD/MM/YYYY');
+            return moment(data).format('DD/MM/YYYY HH:mm');
         },
 
         $_deletar() {
@@ -187,7 +191,10 @@ export default {
         padding: 5px;
         width: 50%;
     }
-    .wrapper-stats {
-        
+    .close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
     }
 </style>

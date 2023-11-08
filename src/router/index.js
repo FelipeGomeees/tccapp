@@ -64,11 +64,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/deposito/MainView.vue')
   },
   {
-    path: '/dashboard',
-    name: 'dashboard',
-    component: () => import(/* webpackChunkName: "about" */ '../views/dashboard/MainView.vue')
-  },
-  {
     path: '/forum',
     name: 'forum',
     component: () => import(/* webpackChunkName: "about" */ '../views/forum/MainView.vue')

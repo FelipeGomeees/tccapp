@@ -28,31 +28,31 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-text class="d-flex justify-space-around">
-            <div>
-                <v-icon>mdi-calendar-heart</v-icon> Criado em:<br/> 
-                {{$_formataData(dados.tarefa.tardataabertura)}}
+            <div class="to-center">
+                <div class="d-flex"><v-icon>mdi-calendar-month</v-icon><div>Criado em:</div></div>
+                <div>{{$_formataData(dados.tarefa.tardataabertura)}}</div>
             </div>
-            <div>
-                <v-icon>mdi-calendar-heart</v-icon> Entrega até:<br/>
-                {{$_formataData(dados.tarefa.tardataprazo)}}
+            <div class="to-center">
+                <div class="d-flex"><v-icon>mdi-calendar-check</v-icon><div>Entregue até:</div></div>
+                <div>{{$_formataData(dados.tarefa.tardataprazo)}}</div>
             </div>
-            <div>
-                <v-icon>mdi-account</v-icon> Para:<br/>
-                {{dados.cliente.clinome}}
+            <div class="to-center">
+                <div class="d-flex"><v-icon>mdi-account </v-icon><div>Para:</div></div>
+                <div>{{dados.cliente[0].clinome}}</div>
             </div>
         </v-card-text>
         <v-divider></v-divider>
         <br>
-        <div class="tags-container" v-for="tag in dados.tags" :key="tag.id">
-            <v-btn :color="tag.tagcor" :dark="tag.tagdark === '0' ? true : false"
+        <div class="d-flex justify-center">
+            <v-btn :color="tag.tagcor" :dark="tag.tagdark === '0' ? true : false" v-for="tag in dados.tags" :key="tag.id"
             rounded class="elevation-0 pa-2 tag" height="19px">
                 {{tag.tagnome}}
             </v-btn>
         </div>
-        <v-divider></v-divider>
+        <!-- <v-divider></v-divider>
         <br/>
-        <div class="flex-center"> Ações rápidas</div>
-        <v-card
+        <div class="flex-center"> Ações rápidas</div> -->
+        <!-- <v-card
             class="mx-auto"
             max-width="400"
             tile
@@ -76,12 +76,13 @@
             <v-list-item-subtitle>Alterações feitas até o momento</v-list-item-subtitle>
         </v-list-item-content>
         </v-list-item>
-        </v-card>
+        </v-card> -->
         <v-divider></v-divider>
         <br/>
         <div class="flex-center">
             <v-btn @click="$_abreTarefa(dados.tarefa.idtarefa)">Expandir Informações</v-btn>
         </div>
+        <br/>
         <div class="flex-center">
             <core-dialog v-if="dados.tarefa.tarpedirconvite"></core-dialog>
         </div>
@@ -140,7 +141,7 @@ export default {
     }
 
     .tag {
-        margin-bottom: 10px;
+        margin: 0px 10px 10px 10px;
     }
 
     .close {
@@ -154,5 +155,10 @@ export default {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
+    }
+
+    .to-center {
+        text-align: center;
+        margin-top: 10px;
     }
 </style>

@@ -29,7 +29,7 @@
         <v-card-text class="d-flex justify-space-between pa-2" v-if="!v2">
             <div class="flex-center margin">
                 <v-icon>
-                    mdi-calendar-heart
+                    mdi-calendar
                 </v-icon>
                 <div>
                     {{$_formataData(dados.tarefa.tardataabertura)}} - {{$_formataData(dados.tarefa.tardataprazo)}}
@@ -40,7 +40,7 @@
         <v-card-text class="d-flex justify-space-between" v-else>
             <div class="flex-center ua">
                 <v-icon>
-                    mdi-calendar-heart
+                    mdi-calendar
                 </v-icon>
                 <div>
                     17-03-2023 - 20-03-2023

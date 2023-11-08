@@ -5,6 +5,7 @@ import ExecutavelForm from '@/components/form/executavel/ExecutavelForm.vue';
 import SideExecutavel from '@/components/side/side-executavel/SideExecutavel.vue';
 import ShowMore from '@/components/show-more/ShowMore.vue'
 import axios from 'axios';
+import moment from 'moment';
 
 
 export default {
@@ -23,10 +24,10 @@ export default {
                 {
                     text: 'Nome',
                     align: 'start',
-                    sortable: false,
+                    sortable: true,
                     value: 'exenome',
                 },
-                { text: 'Descrição', align: 'center',value: 'exedescricao' },
+                { text: 'Descrição', align: 'left',value: 'exedescricao' },
                 { text: 'URL', value: 'exeurl' },
                 { text: 'Criado em', value: 'exedatacriacao' },
                 { text: 'Versão', value: 'exeversao', align: 'center' },
@@ -60,6 +61,10 @@ export default {
             });
         },
 
+        $_formataData(data) {
+            return moment(data).format('DD/MM/YYYY HH:mm');
+        },
+
         $_reload() {
             this.$_load();
             this.dialog = false;
@@ -73,20 +78,18 @@ export default {
 </script>
 
 <template>
-    <core-screen>
+    <core-screen hasPrincipal hasSide :detail="!!selecionado">
         <template v-slot:main>
-            <div class="coluna-card">
-                <div class="header">
-                    <h2># Executaveis</h2>
-                </div>
-                <br/>
-                <div class="d-flex">
-                    <span>Gerencia informaçoes sobre os projetos e executáveis presentes no seu ambiente.</span>
-                </div>
-                <br/>
-                <v-divider></v-divider>
-                <br/>
-                <div class="d-flex justify-end">
+            <div class="header">
+                <h2># Executaveis</h2>
+            </div>
+            <br/>
+            <div class="d-flex">
+                <span>Gerencia informaçoes sobre os projetos e executáveis presentes no seu ambiente.</span>
+            </div>
+            <v-divider></v-divider>
+            <div class="d-flex justify-end">
+                <div class="input">
                     <v-text-field
                     outlined
                     dense
@@ -94,9 +97,10 @@ export default {
                     v-model="search"
                     label="Pesquisa"
                     class="mx-4"
-                    ></v-text-field>
-                    <v-btn color="primary" @click="dialog = !dialog">Novo Executavel</v-btn>
+                    ></v-text-field>     
                 </div>
+                <v-btn color="primary form-icon"><v-icon>mdi-filter</v-icon></v-btn>
+                <v-btn color="primary" @click="dialog = !dialog">Novo Executavel</v-btn>
             </div>
             <div class="table">
                 <v-data-table
@@ -107,18 +111,27 @@ export default {
                 :search="search"
                 v-if="!loading"
                 @click:row="$_selectItem"
+                :footer-props="{
+                'items-per-page-text':'Quantidade por página'
+                     }"
                 >
-                <template v-slot:item.exedescricao="{ item }">
-                    <show-more :msg="item.exedescricao"></show-more>
-                </template>
-                <template v-slot:item.exeurl="{ item }">
-                    <a>{{item.exeurl}}</a>
-                </template>
+                    <template v-slot:item.exedescricao="{ item }">
+                        <show-more :msg="item.exedescricao"></show-more>
+                    </template>
+                    <template v-slot:item.exedatacriacao="{ item }">
+                        {{$_formataData(item.exedatacriacao)}}
+                    </template>
+                    <template v-slot:item.exeurl="{ item }">
+                        <a>{{item.exeurl}}</a>
+                    </template>
+                    <template v-slot:footer.page-text="items"> 
+                        {{ items.pageStart }} - {{ items.pageStop }} de {{ items.itemsLength }} 
+                    </template>
                 </v-data-table>
             </div>
             <v-dialog width="840px" v-model="dialog">
-                <v-card-title class="text-h5 primary" >
-                    <v-icon x-large>mdi-tag</v-icon> Novo Executavel
+                <v-card-title class="text-h5 primary " >
+                    <v-icon class="form-icon">mdi-tag</v-icon> Novo Executavel
                 </v-card-title>
                 <executavel-form @sucesso="$_reload"></executavel-form>
             </v-dialog>
@@ -153,6 +166,20 @@ export default {
         width: 100%;
     }
 
+            .header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .header > h2 {
+        color: #ffffff;
+        transform: translateY(11px);
+        background-color: #ff9d1c;
+        padding-left: 12px;
+        padding-right: 12px;
+       box-shadow: -15px 5px #a5a5a5;
+    }
+
     .header {
         display: flex;
         align-items: center;
@@ -166,5 +193,13 @@ export default {
 
     .v-data-table >>> .v-data-table-header {
          background-color: #ff9d1c;
+    }
+
+        .input {
+        width: 400px;
+    }
+
+    .form-icon {
+        margin-right: 15px;
     }
 </style>

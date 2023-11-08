@@ -47,10 +47,14 @@
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
-        <div class="actions">
-          <v-btn @click="e1 -= 1; formAtual -= 1" v-if="formAtual !== 0">Voltar</v-btn>
-          <v-btn color="primary" @click="e1 += 1; formAtual += 1" v-if="formAtual !== 1">Próximo</v-btn>
-          <v-btn v-else color="primary" @click="$_criarExecutavel">Finalizar</v-btn>
+        <br/>
+        <div class="d-flex justify-space-between">
+          <v-btn>Cancelar</v-btn>
+          <div>
+            <v-btn class="space" @click="e1 -= 1; formAtual -= 1" v-if="formAtual !== 0">Voltar</v-btn>
+            <v-btn color="primary" @click="e1 += 1; formAtual += 1" v-if="formAtual !== 1">Próximo</v-btn>
+            <v-btn v-else color="primary" @click="$_criarExecutavel">Finalizar</v-btn>
+          </div>
         </div>
       </v-form>
     </v-card>

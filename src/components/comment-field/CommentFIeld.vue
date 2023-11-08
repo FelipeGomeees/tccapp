@@ -40,7 +40,7 @@
             </v-tooltip>
           </div>
           <div v-if="comentario">
-            <v-btn color="primary" @click="$_enviar" height="36px">Enviar</v-btn>
+            <v-btn color="primary" @click="$_enviar" height="36px" v-if="!slim">Enviar</v-btn>
           </div>
         </div>
     </div>
@@ -63,6 +63,9 @@ export default {
       hidden: {
         type: Boolean,
         default: false,
+      },
+      config: {
+        type: Object,
       }
     },
 
@@ -71,14 +74,13 @@ export default {
           const dados = {
             foridusuarioambiente: sessionStorage.getItem('usuarioambiente').toString(),
             forcomentario: this.comentario,
-            fortipoforum: null,
-            foridtipoforum: null,
+            fortipoforum: this.$props.config.fortipoforum,
+            foridtipoforum: this.$props.config.foridtipoforum,
             fordatacriacao: null,
             fordataedicao: null,
-            forreacaopositiva: null,
-            forreacaonegativa: null,
-            forestrela: null,
-            foridforum: null,
+            forreacaopositiva: 0,
+            forreacaonegativa: 0,
+            foridforum: this.$props.config.foridforum,
           }
           const res = axios.post(
               '/forum',

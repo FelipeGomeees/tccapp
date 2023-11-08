@@ -2,11 +2,15 @@
     <div class="flex">
         <div v-for="(item, index) in data" :key="index">
             <v-btn color="grey" rounded class="elevation-0 pa-2 tag" height="19px"
-            dark v-if="projeto">
+            dark v-if="projeto && !type1">
                 {{item.tagnome}}
             </v-btn>
-                        <v-btn :color="item.tagcor" rounded class="elevation-0 pa-2 tag" height="19px"
-            :dark="item.tagdark === '0' ? true : false" v-else>
+             <v-btn :color="item.tagcor" rounded class="elevation-0 pa-2 tag" height="19px"
+            :dark="item.tagdark === '0' ? true : false" v-else-if="!type1">
+                {{item.tagnome}}
+            </v-btn>
+            <v-btn :color="item.tagcor" rounded class="elevation-0 pa-2 tag" height="19px"
+            :dark="item.tagdark === '0' ? true : false" v-else-if="type1 && item.tagtipo === 2">
                 {{item.tagnome}}
             </v-btn>
         </div>
@@ -26,6 +30,7 @@ export default {
         criavel: Boolean,
         coluna: Boolean,
         projeto: Boolean,
+        type1: Boolean,
     }
 }
 </script>

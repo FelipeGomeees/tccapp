@@ -2,8 +2,8 @@
 /* eslint-disable vue/valid-v-slot */
 import CoreScreen from '@/components/always/CoreScreen.vue';
 import SideUsuario from '@/components/side/side-usuario/SideUsuario.vue';
-import ShowMore from '@/components/show-more/ShowMore.vue'
 import axios from 'axios';
+import moment from 'moment';
 
 
 export default {
@@ -12,23 +12,22 @@ export default {
         // CoreDialog,
         CoreScreen,
         SideUsuario,
-        ShowMore,
     },
 
     data() {
         return {
             headers: [
-                { text: 'Avatar', align: 'center', value: true },
                 {
                     text: 'Apelido',
                     align: 'start',
-                    sortable: false,
+                    sortable: true,
                     value: 'usaapelido',
                 },
-                { text: 'Nome', align: 'center',value: 'usunome' },
-                { text: 'Email', value: 'usuemail', align: 'center' },
+                { text: 'Nome', align: 'start',value: 'usunome' },
+                { text: 'Email', value: 'usuemail', align: 'start' },
                 { text: 'Descrição', value: 'usadescricao' },
                 { text: 'Entrou em', value: 'usadataprimeiroacesso' },
+                { text: 'Ultimo Acesso', value: 'usadataultimoacesso' },
             ],
             items: [],
             search: null,
@@ -60,6 +59,10 @@ export default {
             });
         },
 
+        $_formataData(data) {
+            return moment(data).format('DD/MM/YYYY HH:mm');
+        },
+
         $_geraChave() {
             const dados = {
                 id: sessionStorage.getItem('ambiente'),
@@ -87,9 +90,8 @@ export default {
 </script>
 
 <template>
-    <core-screen>
+    <core-screen hasPrincipal hasSide :detail="!!selecionado">
         <template v-slot:main>
-            <div class="coluna-card">
                 <div class="header">
                     <h2># Usuarios</h2>
                 </div>
@@ -101,17 +103,19 @@ export default {
                 <v-divider></v-divider>
                 <br/>
                 <div class="d-flex justify-end">
-                    <v-text-field
-                    outlined
-                    dense
-                    append-icon="mdi-magnify"
-                    v-model="search"
-                    label="Pesquisa"
-                    class="mx-4"
-                    ></v-text-field>
+                    <div class="input">
+                        <v-text-field
+                        outlined
+                        dense
+                        append-icon="mdi-magnify"
+                        v-model="search"
+                        label="Pesquisa"
+                        class="mx-4"
+                        ></v-text-field>     
+                    </div>
+                    <v-btn color="primary form-icon"><v-icon>mdi-filter</v-icon></v-btn>
                     <v-btn color="primary" @click="dialog = !dialog">Gerar Convite</v-btn>
                 </div>
-            </div>
             <div class="table">
                 <v-data-table
                 :headers="headers"
@@ -121,12 +125,18 @@ export default {
                 :search="search"
                 v-if="!loading"
                 @click:row="$_selectItem"
+                :footer-props="{
+                'items-per-page-text':'Quantidade por página'
+                     }"
                 >
-                <template v-slot:item.avatar>
-                    <h2>HEEEEEEEEEEEEE</h2>
+                <template v-slot:item.usadataprimeiroacesso="{ item }">
+                    <div>{{$_formataData(item.usadataprimeiroacesso)}}</div>
                 </template>
-                <template v-slot:item.usadescricao="{ item }">
-                    <show-more :msg="item.usadescricao"></show-more>
+                <template v-slot:item.usadataultimoacesso="{ item }">
+                    <div>{{$_formataData(item.usadataultimoacesso)}}</div>
+                </template>
+                <template v-slot:footer.page-text="items"> 
+                    {{ items.pageStart }} - {{ items.pageStop }} de {{ items.itemsLength }} 
                 </template>
                 </v-data-table>
             </div>
@@ -183,9 +193,16 @@ export default {
 
     .header {
         display: flex;
-        align-items: center;
-        color: #30343f;
+        justify-content: space-between;
+    }
+
+    .header > h2 {
+        color: #ffffff;
         transform: translateY(11px);
+        background-color: #ff9d1c;
+        padding-left: 12px;
+        padding-right: 12px;
+       box-shadow: -15px 5px #a5a5a5;
     }
 
     .table {
@@ -194,6 +211,14 @@ export default {
 
     .v-data-table >>> .v-data-table-header {
          background-color: #ff9d1c;
+    }
+
+    .input {
+        width: 400px;
+    }
+
+    .form-icon {
+        margin-right: 15px;
     }
 
     .sub {

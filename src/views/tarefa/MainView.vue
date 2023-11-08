@@ -3,7 +3,7 @@
 import CoreScreen from '@/components/always/CoreScreen.vue'
 import TagList from '@/components/taglist/TagList.vue'
 import SideTarefas from '@/components/side/side-tarefas/SideTarefas.vue'
-import PrintTarefa from '@/components/print/tarefa/PrintTarefa.vue'
+import CardForum from '@/components/cardforum/CoreCardForum.vue'
 import axios from 'axios'
 import moment from 'moment'
 
@@ -13,7 +13,7 @@ export default {
         CoreScreen,
         TagList,
         SideTarefas,
-        PrintTarefa,
+        CardForum,
     },
 
     data() {
@@ -46,7 +46,7 @@ export default {
         },
 
         $_formataData(data) {
-            return moment(data).format('DD/MM/YYYY');
+            return moment(data).format('DD/MM/YYYY HH:mm');
         },
 
         $_load() {
@@ -60,7 +60,7 @@ export default {
         },
 
         $_abrirForum() {
-            sessionStorage.setItem('idforum', this.dados.tarefa.id);
+            sessionStorage.setItem('idforum', this.dados.tarefa.idtarefa);
             sessionStorage.setItem('tabelaforum', 'tarefa');
             this.$router.push('/forum');
         },
@@ -73,7 +73,7 @@ export default {
 </script>
 
 <template>
-    <core-screen v-if="dados">
+    <core-screen v-if="dados" hasSide hasPrincipal showAsCard>
         <template v-slot:main>
             <!-- <div v-if="!idtarefa">
                 <v-text-field
@@ -89,20 +89,21 @@ export default {
                 </h4>
             </div> -->
             <div class="header">
-                <h2># {{dados.tarefa.id}} | {{dados.tarefa.tarnome}}</h2>
+                <h2># {{dados.tarefa.idtarefa}} | {{dados.tarefa.tarnome}}</h2>
                 <v-icon v-if="dados.tarefa.tartarefapai">mdi-connection</v-icon>
             </div>
-            <tag-list :data="dados.tags" criavel></tag-list>
+            <tag-list :data="dados.tags"></tag-list>
             <div class="flex-between">
                 <div>
-                    <v-icon>mdi-calendar-heart</v-icon> Criado em: {{$_formataData(dados.tarefa.tardataabertura)}}
+                    <v-icon>mdi-calendar</v-icon><b> Criado em </b>: {{$_formataData(dados.tarefa.tardataabertura)}}
+                    <b class="margem">Para: </b>{{dados.cliente[0].clinome}}
                 </div>
             </div>
-            <div class="tag-filtro">
+            <div class="conteudo">
                 {{dados.tarefa.tardescricao}}
             </div>
             <div class="header">
-                <h3>Informações do Projeto</h3>
+                <h3>Informações do Executavel</h3>
             </div>
             <div class="conteudo projeto">
                 <div>
@@ -118,43 +119,42 @@ export default {
             </div> 
             <div class="d-flex justify-space-between">
                 <div class="header">
-                    <h3>Ultimos Comentários</h3><h4>(2)</h4>
-                </div>
-                <a @click="$_abrirForum">
-                    Ver todos ->
-                </a>
-            </div>
-            <div class="conteudo">
-
-            </div>
-            <div class="d-flex justify-space-between">
-                <div class="header">
-                    <h3>Linha do Tempo</h3>
-                </div>
-                <a>
-                    Ver Completa ->
-                </a>
-            </div>
-            <div class="conteudo">
-                
-            </div>
-            <div class="d-flex justify-space-between">
-                <div class="header">
-                    <h3>Anexos</h3>
+                    <h3>Tarefa Pai</h3>
                 </div>
                 <a>
                     Ver todos
                 </a>
             </div>
             <div class="conteudo">
-                
+                Não informada
+            </div>
+            <!-- <div class="d-flex justify-space-between">
+                <div class="header">
+                    <h3>Informações do Cliente</h3>
+                </div>
+                <a>
+                    Ver Completa ->
+                </a>
+            </div>
+            <div class="conteudo">
+                <span>{{dados.cliente[0].clinome}}</span>
+                <br/>
+                <span>{{dados.cliente[0].cliobservacao}}</span>
+            </div> -->
+            <div class="d-flex">
+                <a class="header container-forum" @click="$_abrirForum">
+                    <h3>Ultimo Comentário</h3>
+                    <a>Abrir Forum ></a>
+                </a>
+            </div>
+            <div>
+                <br/>
+                <card-forum principal :dados="dados.forum[0]"></card-forum>
+                <br/>
             </div>
         </template>
         <template v-slot:side>
             <side-tarefas :dados="dados"/>
-        </template>
-        <template v-slot:print>
-            <print-tarefa :dados="dados"/>
         </template>
     </core-screen>
 </template>
@@ -237,8 +237,19 @@ export default {
     }
 
     .conteudo {
-        min-height: 150px;
-        width: 100%;
+        min-height: 75px;
+        width: 70%;
         border-bottom: 1px solid black;
+    }
+
+    .margem {
+        margin-left: 5px;
+    }
+
+    .container-forum {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+         width: 70%;
     }
 </style>

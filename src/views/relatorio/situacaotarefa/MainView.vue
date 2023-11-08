@@ -67,30 +67,35 @@ export default {
     <core-screen hasFill>
         <template v-slot:fill>
             <div class="all">
+                <div class="logo">
+                    <img src="../../../../public/img/TaskerL.png" alt="">
+                </div>
                 <div class="header">
-                    <h2 class="d-flex"><div class="d-print-none"># </div> Relatório de Situação das Tarefas</h2>
+                    <h2 class="d-flex"><div class="d-print-none"></div> Relatório de Situação das Tarefas</h2>
                 </div>
                 <br/>
                 <div class="d-flex d-print-none">
-                    <span>Relatório com informações gerais das tabelas abertas no ambiente</span>
+                    <span>Relatório com informações gerais das tarefas abertas no ambiente</span>
                 </div>
-                <div class="d-flex header">
+                <div class="d-flex header d-print-none">
                     <b>Periodo: 18/10/2023 a 24/10/2023</b>
                 </div>
                 <br class="d-print-none"/>
                 <v-divider class="d-print-none"></v-divider>
                 <br/>
-                <div class="d-flex justify-end d-print-none">
-                    <v-text-field
-                    outlined
-                    dense
-                    append-icon="mdi-magnify"
-                    v-model="search"
-                    label="Pesquisa"
-                    class="mx-4"
-                    ></v-text-field>
-                    <v-btn color="primary" @click="$_print"><v-icon>mdi-printer</v-icon></v-btn>
-                    <v-btn color="primary"><v-icon>mdi-filter</v-icon></v-btn>
+                <div class="acoes">
+                    <div class="d-flex justify-end d-print-none">
+                        <v-text-field
+                        outlined
+                        dense
+                        append-icon="mdi-magnify"
+                        v-model="search"
+                        label="Pesquisa"
+                        class="mx-4"
+                        ></v-text-field>
+                        <v-btn color="primary" @click="$_print" class="btn-print"><v-icon>mdi-printer</v-icon></v-btn>
+                        <v-btn color="primary"><v-icon>mdi-filter</v-icon></v-btn>
+                    </div>
                 </div>
             </div>
             <div class="table">
@@ -98,6 +103,7 @@ export default {
                     <tr class="cabeçalho">
                         <th class="no-left">Codigo</th>
                         <th>Nome</th>
+                        <th>Cliente</th>
                         <th>Tempo em Aberto</th>
                         <th>Estado</th>
                         <th>Tipo</th>
@@ -106,6 +112,7 @@ export default {
                     <tr class="linha">
                         <td class="no-left">4</td>
                         <td>Conclusão TCC SI 2023</td>
+                        <td>Faccat</td>
                         <td>00:01h:34m</td>
                         <td>DESENVOLVIMENTO</td>
                         <td>PROJETO</td>
@@ -114,6 +121,7 @@ export default {
                     <tr class="linha">
                         <td class="no-left no-bottom">5</td>
                         <td class="no-bottom">Novo App de Carga e Descarga</td>
+                        <td class="no-bottom">Westville C.O</td>
                         <td class="no-bottom">23d:01h:34m</td>
                         <td class="no-bottom">PLANEJAMENTO</td>
                         <td class="no-bottom">PROJETO</td>
@@ -121,12 +129,10 @@ export default {
                     </tr>
                 </table>
             </div>
-            <!-- <v-dialog width="840px" v-model="dialog">
-                <v-card-title class="text-h5 primary" >
-                    <v-icon x-large>mdi-tag</v-icon> Novo Cliente
-                </v-card-title>
-                <cliente-form @sucesso="$_reload"></cliente-form>
-            </v-dialog> -->
+            <div class="footer d-flex justify-space-between">
+                <div>Impresso por: Felipe Gomes</div>
+                <div>Periodo: 18/10/2023 a 24/10/2023</div>
+            </div>
         </template>
         <!-- <template v-slot:side>
             <side-cliente :dados="selecionado" @editar="dialog = true" v-if="selecionado"/>
@@ -154,6 +160,56 @@ export default {
 
     td {
         text-align: center;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+        .logo {
+        display: none;
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        width: 100px;
+        height: 100px;
+        filter: grayscale(100);
+    }
+
+         .logo img {
+        max-width: 100%;
+        max-height: 100%; 
+        animation: logo 1.2s ease-out;
+    }
+
+    .header > h2 {
+        color: #ffffff;
+        transform: translateY(11px);
+        background-color: #ff9d1c;
+        padding-left: 12px;
+        padding-right: 12px;
+       box-shadow: -15px 5px #a5a5a5;
+    }
+
+    .acoes {
+        width: 100%;
+        display: flex;
+        justify-content: right;
+    }
+
+    .acoes > div {
+        width: 50%;
+    }
+
+    .btn-print {
+        margin-right: 10px;
+    }
+
+    .footer {
+        visibility:hidden;
     }
 
     @media print {
@@ -185,6 +241,18 @@ export default {
             width: 100vw;
             display: flex;
             justify-content: center;
+        }
+
+                .logo {
+            display: block;
+        }
+
+        .footer {
+            display: block;
+            visibility: visible;
+            position: absolute;
+            bottom: 1px;
+            width: 98%;
         }
     }
 </style>

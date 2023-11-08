@@ -6,10 +6,13 @@ export default {
         hasPrint: Boolean,
         hasPrincipal: Boolean,
         hasSide: Boolean,
+        detail: Boolean,
+        showAsCard: Boolean,
     },
     data() {
         return {
             show: false,
+            showDetail: false,
         };
     },
 
@@ -17,6 +20,18 @@ export default {
         $_showSideCard() {
             this.show = !this.show;
         }
+    },
+
+    watch: {
+        detail: function() {
+            this.showDetail = this.$props.detail;
+
+            console.log(this.showDetail, this.$props.detail);
+        },
+
+        // showDetail: function() {
+            
+        // }
     }
 }
 </script>
@@ -33,7 +48,13 @@ export default {
                 <slot name="main">
                 </slot>
             </div>
-            <v-card class="hidden-on-mobile card-lateral" v-if="hasSide">
+            <v-dialog class="hidden-on-mobile card-lateral" v-if="hasSide && !showAsCard" v-model="showDetail"
+            max-width="500px"> <!-- MUDAR PARA DIALOG -->
+                <slot name="side">
+                </slot>
+            </v-dialog>
+            <v-card class="hidden-on-mobile card-lateral" v-if="hasSide && showAsCard" v-model="showDetail"
+            max-width="500px"> <!-- MUDAR PARA DIALOG -->
                 <slot name="side">
                 </slot>
             </v-card>
@@ -71,8 +92,8 @@ export default {
     }
 
     .coluna-principal {
-        width: 60%;
-        margin-right: 410px;
+        width: 100%;
+        margin-right: 100px;
         margin-left: 6%;
     }
 

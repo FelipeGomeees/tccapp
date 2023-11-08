@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex justify-center container">
+    <div class="d-flex container">
         <div
         class="d-flex flex-column wrapper"
         v-for="(item,i) in dados"
@@ -7,7 +7,8 @@
         >
             <!-- URL / MOSTRAR SE O CARA É O DONO DO AMBIENTE -->
             <div class="quadrado" @click="$_openAmbiente(item)">
-                <v-img src="@/assets/logo.png"></v-img>
+                <v-img v-if="i === 1" src="../../../public/img/logo.png" width="100px" height="100px" contain></v-img>
+                <v-img v-else src="../../../public/img/vue.png" width="100px" height="100px" contain></v-img>
             </div>
             <p>{{item.ambnome}}</p>
         </div>
@@ -57,8 +58,8 @@ export default {
 
 <style scoped>
     .quadrado {
-        width: 100px;
-        height: 100px;
+        width: 150px;
+        height: 150px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -67,9 +68,7 @@ export default {
     }
 
     .quadrado:hover {
-        border-radius: 50%;
         filter: grayscale(0%);
-        border: 1px solid  #ffb765;
         cursor: pointer;
     }
 
@@ -80,5 +79,11 @@ export default {
 
     .wrapper:hover {
         color: #ffb765;
+    }
+
+    .container  {
+        width: 80%;
+        display: flex;
+        justify-content: space-around;
     }
 </style>

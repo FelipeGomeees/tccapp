@@ -22,10 +22,10 @@
           dense
           class="minimize"
         >
-          <core-navigator-item icon="mdi-cat" label="Home" url="/home" />
+          <core-navigator-item icon="mdi-home" label="Home" url="/home" />
           <core-navigator-item icon="mdi-arrange-bring-forward" label="Tarefas" :subitems="subtarefa"
           />
-          <core-navigator-item icon="mdi-cube-outline" label="Objetos" :subitems="objetos"/>
+          <core-navigator-item icon="mdi-cube-outline" label="Diversos" :subitems="diversos"/>
           <core-navigator-item icon="mdi-note-edit" label="Gerencial" :subitems="adm"/>
           <core-navigator-item icon="mdi-forum-outline" label="Forum" url="/forum"/>
           <core-navigator-item icon="mdi-printer" label="Relatório" :subitems="relatorio"/>
@@ -47,11 +47,10 @@
 
     data() {
       return {
-        subtarefa: [{label: 'Designações', url: "/ambiente"},{ label: 'Cadastro', url: "/cadastro/tarefa"},{label: 'Detalhes', url: "/tarefa"}],
+        subtarefa: [{label: 'Designações', url: "/ambiente"},{label: 'Detalhes', url: "/tarefa"}],
         subatividade: [{label: 'Perfil', url: '/perfil'}, {label: 'Histórico'},{ label: 'Notificações'}],
         // subforum: [{label: 'Tarefa', url: '/perfil'}, {label: 'Histórico'},{ label: 'Notificações'}],
-        objetos: [{label: 'Tags', url: '/tags'}, {label: 'Executaveis', url: '/executavel' }, {label: 'Clientes', url: '/cliente'},
-        { label: 'Arquivos'}], 
+        diversos: [{label: 'Tags', url: '/tags'}, {label: 'Executaveis', url: '/executavel' }, {label: 'Clientes', url: '/cliente'}], 
         relatorio: [
         {label: 'Estado Tarefa Clientes', url: '/clientetipo'},
         {label: 'Tarefas por Periodo', url: '/clienteperiodo' },
@@ -95,4 +94,18 @@
         animation: logo 1.2s ease-out;
         filter: brightness(0) invert(1);
     }
+
+        /* .header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .header > h2 {
+        color: #ffffff;
+        transform: translateY(11px);
+        background-color: #ff9d1c;
+        padding-left: 12px;
+        padding-right: 12px;
+        box-shadow: -15px 5px #434343;
+    } */
 </style>

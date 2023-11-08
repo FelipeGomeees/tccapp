@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex">
-    <v-avatar color='#30343f' class="avatar-dark hidden-on-mobile" size="52px">   
-      1
+    <v-avatar color='#30343f' class="avatar-dark hidden-on-mobile" size="52px" >   
+      <v-img src="https://picsum.photos/200"></v-img>
     </v-avatar>
-    <v-card :class="{['card-resposta']: !principal, ['hidden-on-mobile']: true}">
+    <v-card :class="{['card-resposta']: !principal, ['hidden-on-mobile']: true}" width="700px">
       <div class="esfera" v-if="!principal">
       </div>
       <v-card-subtitle
@@ -11,30 +11,29 @@
       <div class="d-flex justify-space-between fill">
         <div class="d-flex">
           <b>Felipe Gomes </b>
-          <p> | 5 Horas Atrás</p>
-          <p> | Editado 2 horas atrás</p>
+          <p> | {{$_horasAtras(dados.fordatacriacao)}}</p>
+          <p v-if="dados.fordataedicao"> | Editado {{$_horasAtras(dados.fordataedicao)}} atrás</p>
         </div>
-        <forum-menu/>
+        <forum-menu @visibilidade="ocultar = !ocultar"/>
       </div>
       </v-card-subtitle>
-      <v-card-text>
-        Houve um rollback acidental de um dos commits da tarefa <a>#2332</a>, durante a adição do novo input de login (<a>#2411</a>)
+      <v-card-text v-if="!ocultar">
+        {{dados.forcomentario}}
       </v-card-text>
-      <v-card-text>
-        <div class="d-flex">
+      <v-card-text v-if="!ocultar">
+        <div class="d-flex review-wrapper">
           <div v-if="!up" class="review">
-            <v-icon @click="up = true; down = false;" >mdi-thumb-up-outline</v-icon><p>10</p>
+            <v-icon @click="up = true; down = false;" >mdi-thumb-up-outline</v-icon><p>{{dados.forreacaopositiva}}</p>
           </div>
           <div v-else class="review">
-            <v-icon @click="up = false" color="green">mdi-thumb-up</v-icon><p>10</p>
+            <v-icon @click="up = false" color="green">mdi-thumb-up</v-icon><p>{{dados.forreacaonegativa}}</p>
           </div>
           <div v-if="!down" class="review">
-            <v-icon @click="up = false; down = true;" >mdi-thumb-down-outline</v-icon><p>10</p>
+            <v-icon @click="up = false; down = true;" >mdi-thumb-down-outline</v-icon><p>{{dados.forreacaopositiva}}</p>
           </div>
           <div v-else class="review">
-            <v-icon @click="down = false" color="red">mdi-thumb-down</v-icon><p>10</p>
+            <v-icon @click="down = false" color="red">mdi-thumb-down</v-icon><p>{{dados.forreacaonegativa}}</p>
           </div>
-          <v-icon >mdi-star</v-icon><p>10</p>
         </div>
       </v-card-text>
     </v-card>
@@ -44,14 +43,14 @@
         <div class="d-flex justify-space-between fill">
           <div class="d-flex">
             <b>Felipe Gomes </b>
-            <p> | 5 Horas Atrás</p>
-            <p> | Editado 2 horas atrás</p>
+            <p> | {{$_horasAtras(dados.fordatacriacao)}}s</p>
+            <p v-if="dados.fordataedicao" > | Editado {{$_horasAtras(dados.fordataedicao)}} atrás</p>
           </div>
           <v-icon>mdi-arrow-up</v-icon>
         </div>
       </v-card-subtitle>
       <v-card-text>
-        Houve um rollback acidental de um dos commits da tarefa <a>#2332</a>, durante a adição do novo input de login (<a>#2411</a>)
+        {{dados.forcomentario}}
       </v-card-text>
     </v-card>
   </div>
@@ -59,6 +58,8 @@
 
 <script>
 import ForumMenu from '@/components/forum-menu/ForumMenu.vue'
+import moment from 'moment'
+
 export default {
     name: 'CoreAppBar',
 
@@ -69,6 +70,9 @@ export default {
     props: {
       principal: {
         type: Boolean,
+      },
+      dados: {
+        type: Object,
       }
     },
 
@@ -76,7 +80,24 @@ export default {
       return {
         up: false,
         down: false,
+        ocultar: false,
       }
+    },
+
+    methods: {
+      $_horasAtras(data) {
+        const comentario = moment(data);
+        const hora = (moment.duration(comentario.diff(new Date()))).hours();
+        if (hora === 0) {
+          const minuto = (moment.duration(comentario.diff(new Date()))).minutes();
+          if (minuto === 0) {
+            const segundo = (moment.duration(comentario.diff(new Date()))).seconds();
+            return (Number(segundo) === 1) ? `${segundo} segundo atrás` : `${segundo} segundos atrás`;
+          }
+          return (Number(minuto ) === 1) ? `${minuto} minuto atrás` : `${minuto } minutos atrás`;
+        }
+        return (Number(hora) === 1) ? `${hora} hora atrás` : `${hora} horas atrás`;
+      },
     },
 
     computed: {
@@ -150,6 +171,11 @@ export default {
 
     .review {
       display: flex;
+    }
+
+    .review-wrapper {
+      justify-content: right;
+      width: 100%;
     }
 
 

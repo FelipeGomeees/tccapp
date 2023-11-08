@@ -31,11 +31,13 @@
             </div>
           </div>
           <div class="divisor-tag">
+            <b>Modelo:</b>
             <v-btn class="elevation-0 pa-2 tag" :dark="formulario.tagdark" 
             :color="formulario.tagcor" rounded>{{formulario.tagnome}}</v-btn>
           </div>
         </div>
-        <div class="actions">
+        <div class="d-flex justify-space-between">
+          <v-btn>Cancelar</v-btn>
           <v-btn color="primary" @click="$_criarTag">Finalizar</v-btn>
         </div>
       </v-form>
@@ -107,9 +109,6 @@ export default {
 .card {
   padding: 30px;
 }
-.actions {
-  text-align: right;
-}
 .actions > * {
   margin-left: 18px;
   transform: translateY(20px);
@@ -141,7 +140,12 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50%;
+    width: 100%;
+  }
+
+  .divisor-tag > b {
+    transform: translateY(-5px);
+    margin-right: 10px;
   }
 
   .tag {

@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <v-card class="card-detalhe">
         <v-card-title class="flex-center">
-            Detalhes do Executavel
+            Detalhes do Cliente
         </v-card-title>
         <v-divider></v-divider>
         <div class="flex-center">
@@ -11,43 +11,34 @@
         </div>
         <br/>
         <div class="flex-center">
-            <v-icon>mdi-gitlab</v-icon>
+            <v-icon>mdi-account</v-icon>
         </div>
         <br/>
         <b class="flex-center">
-           {{dados.exenome}}
+           {{dados.cliente.clinome}}
         </b>
         <div class="flex-center padding">
-           {{dados.exedescricao}}
+           {{dados.cliente.cliobservacao}}
+        </div>
+        <div class="flex-center padding" v-if="dados.cliente.clicpf">
+           <b class="margem">CPF:</b>{{dados.cliente.clicpf}}
+        </div>
+        <div class="flex-center padding" v-else>
+           <b class="margem">CNPJ:</b>{{dados.cliente.clicnpj}}
         </div>
         <v-divider></v-divider>
-        <div class="flex-between lista-margin">
-            <div>URL</div>
-            <a>{{dados.exeurl}}</a>
+        <div class="flex-between lista-margin" v-for="item in dados.contato" :key="item.id">
+            <div>{{item.clctipocontato}}</div>
+            <a>{{item.clccontato}}</a>
         </div>
-        <v-divider></v-divider>
-        <div class="flex-between lista-margin">
-            <div>Versão</div>
-            <div>{{dados.exeversao}}</div>
-        </div>
-        <v-divider></v-divider>
-        <div class="flex-center">
-            <div>
-                Criação
-            </div>
-        </div>
-        <v-card-text>
-            <core-icon-stack :items="usersMenor" class="flex-center"></core-icon-stack>
-        </v-card-text>
-        <div class="flex-center">
-            <v-icon>mdi-calendar-heart</v-icon> {{$_formataData(dados.exedatacriacao)}}
-        </div>
-        <br/>
         <v-divider></v-divider>
         <div class="flex-center">
             <div>
-                Tags
+                Criado em:
             </div>
+        </div>
+        <div class="flex-center">
+            <v-icon>mdi-calendar-heart</v-icon> {{$_formataData(dados.cliente.clidatacriacao)}}
         </div>
         <br/>
         <div class="flex-center">
@@ -68,31 +59,28 @@
             </div>
         </div>
         <br/>
-        <div class="flex-center">
+        <div class="d-flex justify-space-around">
+            <div></div>
             <div>
-                <div class="flex-center">
-                    <v-btn @click="$_setSession">EDITAR</v-btn>
-                </div>
-                <br/>
-                 <div class="flex-center">
-                    <v-btn @click="$_deletar">DELETAR</v-btn>
-                </div>
-                <br/>
+                <v-btn @click="$_setSession">EDITAR</v-btn>
             </div>
+            <div> 
+                <v-btn @click="$_deletar" color="error">DELETAR</v-btn>
+            </div>
+            <div></div>
         </div>
-    </div>
+        <br/>
+    </v-card>
 </template>
 
 <script>
 // import CoreDialog from '@/components/dialog/SolicitacaoDialog.vue';
-import CoreIconStack from '@/components/bigiconstack/CoreIconStack.vue'
 import moment from 'moment'
 import axios from 'axios'
 
 export default {
     name: 'SideTarefas',
     components: {
-        CoreIconStack
     },
 
     props: {
@@ -108,7 +96,7 @@ export default {
 
     methods: {
         $_formataData(data) {
-            return moment(data).format('DD/MM/YYYY');
+            return moment(data).format('DD/MM/YYYY HH:mm');
         },
 
         $_deletar() {
@@ -191,5 +179,9 @@ export default {
     }
     .padding {
         padding: 0px 10px 0px 10px;
+    }
+
+    .margem {
+        margin-right: 10px;
     }
 </style>

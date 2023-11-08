@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="icon-container" v-if="!stack">
-            <div v-for="item in $items" :key="item.useapelido">
-                <v-avatar color="#ffb765" class="avatar" size="52px"
+            <div v-for="item in $items" :key="item.useapelido" :class="{ concluido: item.coldatafinalizacao, margem: true}">
+                <v-avatar color="#ffb765" :class="{ avatar: true}" size="52px"
                  @click="showCard = !showCard; userInfo = item">   
                     {{(item.usaapelido.slice(0, 2))}}
                 </v-avatar>
@@ -89,7 +89,6 @@ export default {
     .avatar {
         color: #30343f;
         font-weight: 800;
-        margin: 5px;
     }
 
     .avatar-dark {
@@ -145,5 +144,15 @@ export default {
     .social-icons > * {
         margin-left: 5px;
         cursor: pointer;
+    }
+
+    .concluido {
+        box-sizing: border-box;
+        border: 2px solid green;
+        border-radius: 100%;
+    }
+
+    .margem {
+        margin: 0px 5px 0px 5px;
     }
 </style>

@@ -49,7 +49,6 @@ export default {
         },
 
         OpenDetail(bool) {
-            console.log('a');
             this.detail = bool;
         },
     },
@@ -61,7 +60,7 @@ export default {
 </script>
 
 <template>
-    <core-screen hasPrincipal hasSide>
+    <core-screen hasPrincipal hasSide :detail="detail">
         <template v-slot:main>
             <div class="header">
                 <h2># Designações</h2>
@@ -73,17 +72,22 @@ export default {
                 dense>
                 </v-text-field>
             </div> -->
+            
             <div class="tag-filtro">
-                <div class="d-flex">
-                    <v-icon>mdi-calendar-heart</v-icon> Criadas em 17 de Março de 2023
-                </div>
                 <div class="acoes">
+                    <v-text-field
+                        outlined
+                        dense
+                        append-icon="mdi-magnify"
+                        v-model="search"
+                        label="Pesquisar Tarefa"
+                        class="mx-4 input"
+                    ></v-text-field>
                     <v-btn color="white" v-if="modoLista" @click="modoLista = !modoLista">
                         <v-icon>mdi-view-list</v-icon></v-btn>
                     <v-btn color="white" v-else @click="modoLista = !modoLista">
                         <v-icon>mdi-card-multiple-outline</v-icon></v-btn>
                     <v-btn color="primary"><v-icon>mdi-filter</v-icon></v-btn>
-                    <v-btn color="primary"><v-icon>mdi-printer</v-icon></v-btn>
                     <v-btn color="primary" @click="dialogTarefa = !dialogTarefa">Nova Tarefa</v-btn>
                 </div>
             </div>
@@ -97,8 +101,8 @@ export default {
                 Nenhuma tarefa por aqui...
             </h3>    
             <v-dialog v-model="dialogTarefa" max-width="840px">
-                <v-card-title class="text-h5 lighten-2 title">
-                    <v-icon>mdi-calendar-check</v-icon>Nova Tarefa
+                <v-card-title class="text-h5 primary">
+                    <v-icon class="form-icon">mdi-calendar-check</v-icon>Nova Tarefa
                 </v-card-title>
                 <form-tarefa
                 @finalizar="dialogTarefa = false"
@@ -106,7 +110,7 @@ export default {
             </v-dialog>
         </template>
         <template v-slot:side>
-            <side-ambiente v-show="detail" :dados="selecionado"
+            <side-ambiente :dados="selecionado"
              @close="detail = false"/>
         </template>
     </core-screen>
@@ -160,15 +164,19 @@ export default {
     }
 
     .header > h2 {
-        color: #30343f;
+        color: #ffffff;
         transform: translateY(11px);
+        background-color: #ff9d1c;
+        padding-left: 12px;
+        padding-right: 12px;
+        box-shadow: -15px 5px #a5a5a5;
     }
 
     .tag-filtro {
         width: 100%;
         display: flex;
-        justify-content: space-between;
-        padding-right: 25px;
+        justify-content: right;
+        padding-right: 80px;
     }
 
     .search {
@@ -185,7 +193,7 @@ export default {
     }
 
     .card {
-        width: 48%;
+        width: 32%;
     }
 
     .task-container {
@@ -200,5 +208,22 @@ export default {
 
     .acoes * {
         margin-left: 5px;
+    }
+
+    .acoes {
+        display: flex;
+    }
+
+    .data-header {
+        display: flex;
+        align-items: center;
+    }
+
+    .input {
+        width: 400px;
+    }
+
+    .form-icon {
+        margin-right: 5px;
     }
 </style>

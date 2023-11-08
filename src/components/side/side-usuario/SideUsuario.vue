@@ -1,17 +1,23 @@
 <template>
-    <div>
+    <v-card class="card-detalhe">
         <v-card-title class="flex-center">
             Detalhes do Usuario
         </v-card-title>
+            <v-icon class="close" @click.native="$emit('close')">
+                mdi-close
+            </v-icon>
         <v-divider></v-divider>
         <div class="flex-center">
             <div>
                 Dados Pessoais
             </div>
         </div>
-        <v-card-text>
-            <core-icon-stack :items="usersMenor" class="flex-center"></core-icon-stack>
-        </v-card-text>
+        <br/>
+        <div class="flex-center">
+            <v-avatar width="100px" height="100px">
+                <v-img src="https://picsum.photos/200"></v-img>
+            </v-avatar>
+        </div>
         <div class="flex-center">
             <h4>{{dados.usaapelido}}</h4>
         </div>
@@ -20,24 +26,12 @@
         </div>
         <br/>
         <div class="flex-center">
-           {{dados.usadescricao}}
+           "{{dados.usadescricao}}"
         </div>
-        <br/>
-        <v-divider></v-divider>
-        <div class="flex-between lista-margin">
-            <v-icon>mdi-email</v-icon>
+        <div class="flex-center">
             <a>{{dados.usuemail}}</a>
         </div>
-        <v-divider></v-divider>
-        <div class="flex-between lista-margin">
-            <v-icon>mdi-github</v-icon>
-            <a>fe@gmail.com</a>
-        </div>
-        <v-divider></v-divider>
-        <div class="flex-between lista-margin">
-            <v-icon>mdi-stack-overflow</v-icon>
-            <a>https://stackoverflow.com/users/16287/drew-dormann</a>
-        </div>
+        <br/>
         <v-divider></v-divider>
         <div class="flex-center">
             <div>
@@ -45,12 +39,22 @@
             </div>
         </div>
         <div class="flex-center">
-            <v-icon>mdi-calendar-heart</v-icon> 
+            <v-icon>mdi-calendar</v-icon> 
             {{$_formataData(dados.usadataprimeiroacesso)}}
         </div>
         <br/>
-        <v-divider></v-divider>
         <div class="flex-center">
+            <div>
+                Ultimo Acesso:
+            </div>
+        </div>
+        <div class="flex-center">
+            <v-icon>mdi-calendar</v-icon> 
+            {{$_formataData(dados.usadataultimoacesso)}}
+        </div>
+        <br/>
+        <v-divider></v-divider>
+        <!-- <div class="flex-center">
             <div>
                 Tags
             </div>
@@ -65,40 +69,34 @@
                     </v-btn>
                 </div>
             </div>
-        </div>
-        <br/>
-        <v-divider></v-divider>
+        </div> -->
+        <!-- <br/>
+        <v-divider></v-divider> -->
         <div class="flex-center">
             <div>
                 Ações
             </div>
         </div>
         <br/>
-        <div class="flex-center">
-            <div>
-                <div class="flex-center">
-                    <v-btn @click="$_editaPermissoes">PERMISSÕES</v-btn>
-                </div>
-                <br/>
-                 <div class="flex-center">
-                    <v-btn @click="$_deletar">EXPULSAR</v-btn>
-                </div>
-                <br/>
+        <div class="d-flex justify-space-around">
+            <div></div>
+            <div> 
+                <v-btn @click="$_deletar" color="error">DELETAR</v-btn>
             </div>
+            <div></div>
         </div>
-    </div>
+         <br/>
+    </v-card>
 </template>
 
 <script>
 // import CoreDialog from '@/components/dialog/SolicitacaoDialog.vue';
-import CoreIconStack from '@/components/bigiconstack/CoreIconStack.vue'
 import moment from 'moment'
 import axios from 'axios'
 
 export default {
     name: 'SideUsuario',
     components: {
-        CoreIconStack,
     },
 
     props: {
@@ -137,7 +135,7 @@ export default {
 
     methods: {
     $_formataData(data) {
-        return moment(data).format('DD/MM/YYYY');
+        return moment(data).format('DD/MM/YYYY HH:mm');
     },
 
     $_deletar() {
@@ -197,5 +195,12 @@ export default {
     }
     .lista-margin {
         padding: 0px 10px 0px 10px;
+    }
+
+    .close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
     }
 </style>

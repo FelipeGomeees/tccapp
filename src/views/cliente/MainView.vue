@@ -25,11 +25,17 @@ export default {
                 {
                     text: 'Nome',
                     align: 'start',
-                    sortable: false,
+                    sortable: true,
                     value: 'cliente.clinome',
                 },
-                { text: 'Observação', align: 'center', value: 'obs' },
-                { text: 'CPF', value: 'clicpf' },
+                {
+                    text: 'Sobrenome',
+                    align: 'start',
+                    sortable: true,
+                    value: 'cliente.clisobrenome',
+                },
+                { text: 'Observação', align: 'start', value: 'obs', sortable: true },
+                { text: 'CPF / CNPJ', value: 'clicpf',sortable: true },
                 // { text: 'Contato', value: 'contato' },
                 { text: 'Criado em', value: 'clidatacriacao', align: 'center' },
             ],
@@ -43,7 +49,7 @@ export default {
 
     methods: {
         $_formataData(data) {
-            return moment(data).format('DD/MM/YYYY');
+            return moment(data).format('DD/MM/YYYY HH:mm');
         },
         NavigateTo(url) {
             this.$router.push({ path: url })
@@ -79,20 +85,20 @@ export default {
 </script>
 
 <template>
-    <core-screen>
+    <core-screen hasPrincipal hasSide :detail="!!selecionado">
         <template v-slot:main>
-            <div class="coluna-card">
-                <div class="header">
-                    <h2># Clientes</h2>
-                </div>
-                <br/>
-                <div class="d-flex">
-                    <span>Administre clientes fisicos e juridicos atualmente cadastrados</span>
-                </div>
-                <br/>
-                <v-divider></v-divider>
-                <br/>
-                <div class="d-flex justify-end">
+            <div class="header">
+                <h2># Clientes</h2>
+            </div>
+            <br/>
+            <div class="d-flex">
+                <span>Administre clientes fisicos e juridicos atualmente cadastrados</span>
+            </div>
+            <br/>
+            <v-divider></v-divider>
+            <br/>
+            <div class="d-flex justify-end">
+                <div class="input">
                     <v-text-field
                     outlined
                     dense
@@ -100,9 +106,10 @@ export default {
                     v-model="search"
                     label="Pesquisa"
                     class="mx-4"
-                    ></v-text-field>
-                    <v-btn color="primary" @click="dialog = !dialog">Novo Cliente</v-btn>
+                    ></v-text-field>     
                 </div>
+                <v-btn color="primary form-icon"><v-icon>mdi-filter</v-icon></v-btn>
+                <v-btn color="primary" @click="dialog = !dialog">Novo Cliente</v-btn>
             </div>
             <div class="table">
                 <v-data-table
@@ -113,6 +120,9 @@ export default {
                 :search="search"
                 v-if="!loading"
                 @click:row="$_selectItem"
+                :footer-props="{
+                'items-per-page-text':'Quantidade por página'
+                     }"
                 >
                 <template v-slot:item.obs="{ item }">
                     <show-more :msg="item.cliente.cliobservacao"></show-more>
@@ -122,6 +132,17 @@ export default {
                 </template>
                 <template v-slot:item.clidatacriacao="{ item }">
                     {{$_formataData(item.cliente.clidatacriacao)}}
+                </template>
+                <template v-slot:item.clicpf="{ item }">
+                    <div v-if="item.cliente.clicpf">
+                        {{item.cliente.clicpf}}
+                    </div>
+                    <div v-else>
+                        {{item.cliente.clicnpj}}
+                    </div>
+                </template>
+                <template v-slot:footer.page-text="items"> 
+                    {{ items.pageStart }} - {{ items.pageStop }} de {{ items.itemsLength }} 
                 </template>
                 </v-data-table>
             </div>
@@ -173,7 +194,29 @@ export default {
         width: 97%;
     }
 
+            .header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .header > h2 {
+        color: #ffffff;
+        transform: translateY(11px);
+        background-color: #ff9d1c;
+        padding-left: 12px;
+        padding-right: 12px;
+       box-shadow: -15px 5px #a5a5a5;
+    }
+
     .v-data-table >>> .v-data-table-header {
          background-color: #ff9d1c;
+    }
+
+    .input {
+        width: 400px;
+    }
+
+    .form-icon {
+        margin-right: 15px;
     }
 </style>
