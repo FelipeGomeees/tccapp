@@ -8,6 +8,7 @@ export default {
         hasSide: Boolean,
         detail: Boolean,
         showAsCard: Boolean,
+        minify: Boolean,
     },
     data() {
         return {
@@ -44,7 +45,7 @@ export default {
                 <slot name="fill">
                 </slot>
             </div>
-            <div class="coluna-principal" v-if="hasPrincipal">
+            <div :class="{['coluna-principal']: !minify, ['coluna-principal-m']: minify}" v-if="hasPrincipal">
                 <slot name="main">
                 </slot>
             </div>
@@ -93,6 +94,12 @@ export default {
 
     .coluna-principal {
         width: 100%;
+        margin-right: 100px;
+        margin-left: 6%;
+    }
+
+    .coluna-principal-m {
+        width: 50%;
         margin-right: 100px;
         margin-left: 6%;
     }

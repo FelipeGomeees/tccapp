@@ -69,6 +69,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/forum/MainView.vue')
   },
   {
+    path: '/notificacao',
+    name: 'notificacao',
+    component: () => import(/* webpackChunkName: "about" */ '../views/notificacao/MainView.vue')
+  },
+  {
     path: '/preambiente',
     name: 'preambiente',
     component: () => import(/* webpackChunkName: "about" */ '../views/preambiente/MainView.vue')
@@ -96,13 +101,13 @@ const routes = [
 
   {
     path: '/clientetipo',
-    name: 'Estado Tarefa Clientes',
+    name: 'estadotarefacliente',
     component: () => import(/* webpackChunkName: "about" */ '../views/relatorio/clientetipo/MainView.vue')
   },
 
   {
     path: '/clienteperiodo',
-    name: 'Tarefas por Periodo',
+    name: 'tarefasporperiodo',
     component: () => import(/* webpackChunkName: "about" */ '../views/relatorio/clienteperiodo/MainView.vue')
   },
 
@@ -110,6 +115,12 @@ const routes = [
     path: '/situacaotarefa',
     name: 'situacaotarefa',
     component: () => import(/* webpackChunkName: "about" */ '../views/relatorio/situacaotarefa/MainView.vue')
+  },
+
+  {
+    path: '/novaconta',
+    name: 'novaconta',
+    component: () => import(/* webpackChunkName: "about" */ '../views/novaconta/MainView.vue')
   },
 ]
 

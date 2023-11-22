@@ -6,11 +6,11 @@
         <v-divider></v-divider>
         <div class="flex-center">
             <div>
-                Requisitado por
+                Criado por:
             </div>
         </div>
         <v-card-text>
-            <core-icon-stack :items="dados.colaboradores" class="flex-center"></core-icon-stack>
+            <core-icon-stack :items="dados.colaboradores" class="flex-center" contato></core-icon-stack>
         </v-card-text>
         <!-- <v-divider></v-divider>
         <div class="flex-center">
@@ -28,7 +28,11 @@
             </div>
         </div>
         <v-card-text>
-            <core-icon-stack :items="dados.colaboradores" class="flex-center"></core-icon-stack>
+            <core-icon-stack :items="dados.colaboradores" class="flex-center" colaborador v-if="dados.colaboradores.length === 1">
+            </core-icon-stack>
+            <div class="">
+
+            </div>
         </v-card-text>
         <v-divider></v-divider>
         <p class="flex-center">Estado Atual</p>
@@ -38,21 +42,30 @@
         <br/>
         <v-divider></v-divider>
         <p class="flex-center">Ações</p>
-        <div class="hidden-on-mobile">
+        <div class="hidden-on-mobile" v-if="!dados.tarefa.tardatafinalizado">
             <div class="flex-center">
-                <v-btn color="green"> CONCLUIR </v-btn>
+                <v-btn color="green" @click="$_concluirTarefa"> CONCLUIR </v-btn>
             </div>
             <br/>
             <div class="flex-center">
-                <v-btn color="primary"> FINALIZAR </v-btn>
+                <v-btn color="primary" @click="$_finalizarTarefa"> FINALIZAR </v-btn>
             </div>
             <br/>
             <div class="flex-center">
-                <v-btn> SOLICITAR SAIDA </v-btn>
+                <v-btn @click="$_solicitarSaida"> SOLICITAR SAIDA </v-btn>
             </div>
         </div>
+        <div class="hidden-on-mobile" v-else>
+            <div class="flex-center">
+                <b>Esta tarefa está finalizada ou arquivada</b>
+            </div>
+            <br/>
+            <!-- <div class="flex-center">
+                <v-btn @click="$_solicitarSaida"> REEABRIR </v-btn>
+            </div> -->
+        </div>
         <br/>
-        <v-dialog v-model="dialog">
+        <v-dialog v-model="dialog"> 
             
         </v-dialog>
     </v-card>
@@ -62,6 +75,7 @@
 // import CoreDialog from '@/components/dialog/SolicitacaoDialog.vue';
 import CoreIconStack from '@/components/bigiconstack/CoreIconStack.vue'
 import TagList from '@/components/taglist/TagList.vue'
+import axios from 'axios'
 
 export default {
     name: 'SideTarefas',
@@ -81,96 +95,40 @@ export default {
             dialog: false,
             iniciado: true,
             users: [
-                {
-                    usenome: 'felipe.dsn',
-                    useapelido: 'Felipe Gomes',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: '@...',
-                },
-                {
-                    usenome: 'fefstak',
-                    useapelido: 'Fernanda Takano',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: '@...',
-                },
-                {
-                    usenome: 'davi.machado',
-                    useapelido: 'Davi Machado',
-                    usestackoverflow: '@...',
-                    usegoogledrive: null,
-                    usegithub: '@...',
-                },
-                {
-                    usenome: '@guilherme.faccat',
-                    useapelido: 'Guilherme',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: '@...',
-                },
-                {
-                    usenome: 'ana.root',
-                    useapelido: 'Ana Laura',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: '@...',
-                },
-                {
-                    usenome: 'wesley.t',
-                    useapelido: 'Wesley Tales',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: '@...',
-                },
-                {
-                    usenome: 'isabel.rainha',
-                    useapelido: 'Isabel Rainha',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: '@...',
-                },
-                {
-                    usenome: 'amancio.mt',
-                    useapelido: 'Matheus Amancio',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: null,
-                },
-                {
-                    usenome: 'fernando.pfl',
-                    useapelido: 'Fernando Porfilio',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: '@...',
-                },
             ],
-
-            usersMenor: [
-                {
-                    usenome: 'felipe.dsn',
-                    useapelido: 'Felipe Gomes',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: '@...',
-                },
-                {
-                    usenome: 'fefstak',
-                    useapelido: 'Fernanda Takano',
-                    usestackoverflow: '@...',
-                    usegoogledrive: '@...',
-                    usegithub: '@...',
-                },
-                {
-                    usenome: 'davi.machado',
-                    useapelido: 'Davi Machado',
-                    usestackoverflow: '@...',
-                    usegoogledrive: null,
-                    usegithub: '@...',
-                },
-            ],
+            idUseAmb: sessionStorage.getItem('usuarioambiente'),
+            idTarefa: this.$props.dados.tarefa.idtarefa
         }
     },
+
+    methods: {
+            $_solicitarSaida() {
+                const res = axios.post(
+                    `/notificacao/solicitarsaida/${this.idUseAmb}/${this.idTarefa}`,
+                );
+                res.then((data) => {
+                    console.log(data);
+                })
+            },
+
+            $_finalizarTarefa() {
+                const res = axios.put(
+                    `tarefa/finalizar/${this.idTarefa}`,
+                );
+                res.then((data) => {
+                    console.log(data);
+                })
+            },
+
+            $_concluirTarefa() {
+                const res = axios.put(
+                     `colaborador/concluir/${this.idUseAmb}/${this.idTarefa}`,
+                );
+                res.then((data) => {
+                    console.log(data);
+                })
+            },
+        }
 } 
 </script>
 

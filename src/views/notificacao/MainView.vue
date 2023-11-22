@@ -1,10 +1,7 @@
 <script>
 // import CoreDialog from '@/components/dialog/SolicitacaoDialog.vue';
-import CardForum from '@/components/cardforum/CoreCardForum.vue'
+import CardNotificacao from '@/components/cardnotificacao/CoreCardNotificacao.vue'
 import CoreScreen from '@/components/always/CoreScreen.vue';
-import SideTarefas from '@/components/side/side-tarefas/SideTarefas.vue'
-import CommentField from '@/components/comment-field/CommentFIeld.vue'
-import TagList from '@/components/taglist/TagList.vue'
 import axios from 'axios';
 import moment from 'moment';
 // import moment from 'moment';
@@ -14,23 +11,20 @@ export default {
     name: 'ContatoView',
     components: {
         // CoreDialog,
-        CardForum,
+        CardNotificacao,
         CoreScreen,
-        SideTarefas,
-        CommentField,
-        TagList,
     },
 
     data() {
         return {
             tipo: null,
             dados: null,
-            dadosTarefa: null,
             config: {
                 fortipoforum: sessionStorage.getItem('tabelaforum'),
                 foridtipoforum: sessionStorage.getItem('idforum'),
                 foridforum: null,
             },
+             notificacoes: null
         };
     },
 
@@ -44,24 +38,12 @@ export default {
         },
 
         $_load() {
-            const idForum = sessionStorage.getItem('idforum');
-            const tabela = sessionStorage.getItem('tabelaforum');
+            const idUsuAmb= sessionStorage.getItem('usuarioambiente');
             const res = axios.get(
-                `/forum/${tabela}/${idForum}`,
+                `/notificacao/${idUsuAmb}`,
             );   
-            const resTarefa = axios.get(
-                `/tarefa/detalhado/${idForum}`,
-            );
-            res.then((tarefa) => {
-                this.dados = tarefa.data[0];
-            });  
-            res.then((forum) => {
-                this.dados = forum.data;
-                console.log(this.dados);
-            });
-            resTarefa.then((forum) => {
-                this.dadosTarefa = forum.data[0];
-                console.log(this.dadosTarefa);
+            res.then((dados) => {
+                this.notificacoes = dados.data;
             });
         },
     },
@@ -73,35 +55,43 @@ export default {
 </script>
 
 <template>
-    <core-screen hasPrincipal hasSide showAsCard>
+    <core-screen hasPrincipal hasSide showAsCard minify>
         <template v-slot:main>
                 <div class="header">
-                    <h2># {{dadosTarefa.tarefa.idtarefa}} | {{dadosTarefa.tarefa.tarnome}}</h2>
-                    <v-icon>mdi-connection</v-icon>
+                    <h2># Notificações </h2>
                 </div>
                 <br/>
-                 <tag-list :data="dadosTarefa.tags"></tag-list>
-                <div>
-                    <v-icon>mdi-calendar</v-icon><b> Criado em </b>: {{$_formataData(dadosTarefa.tarefa.tardataabertura)}}
+                <br/>
+                <div class="d-flex justify-center">
+                    <span>Gerencia e interaja com as notificações relevantes para você.</span>
                 </div>
-            <div>
+            <div v-if="notificacoes">
                 <v-divider></v-divider>
                 <br/>
-                <div class="expand">
-                    <!-- <btn>Comentário</btn> -->
-                    <comment-field hidden comentario :label="'Participe da discussão'" :config="config"/>
-                    <br/>
-                </div>  
-                <h4>Comentários ({{dados.length}})</h4>
+                  <div class="d-flex justify-center">
+                    <div class="input">
+                        <v-text-field
+                        outlined
+                        dense
+                        append-icon="mdi-magnify"
+                        v-model="search"
+                        label="Pesquisa"
+                        class="mx-4"
+                        ></v-text-field>     
+                    </div>
+                    <v-btn color="primary form-icon"><v-icon>mdi-filter</v-icon></v-btn>
+                    <v-btn color="error" @click="dialog = !dialog">limpar Tudo</v-btn>
+                </div>
+                <!-- <h4>Comentários ({{dados.length}})</h4> -->
                 <br/>
-                    <div v-for="comentario in dados" :key="comentario.id">
-                        <card-forum :principal="!!(!comentario.foridforum)" :dados="comentario"></card-forum>
+                    <div  v-for="notificacao in notificacoes" :key="notificacao.id">
+                        <card-notificacao :dados="notificacao"></card-notificacao>
                         <br/>
                     </div>
             </div>
         </template>
         <template v-slot:side>
-            <side-tarefas :dados="dadosTarefa"/>
+            <!-- <side-tarefas :dados="dadosTarefa"/> -->
         </template>
     </core-screen>
 </template>
@@ -202,6 +192,7 @@ export default {
     .header {
         display: flex;
         align-items: center;
+        justify-content: center;
         color: #30343f;
         transform: translateY(11px);
     }
@@ -229,5 +220,9 @@ export default {
 
     .expand {
         width: 70%;
+    }
+
+    .form-icon {
+        margin-right: 15px;
     }
 </style>

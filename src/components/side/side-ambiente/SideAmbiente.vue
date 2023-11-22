@@ -1,8 +1,16 @@
 <template>
     <v-card class="card-detalhe">
+        <div class="d-flex justify-center finalizado" v-if="dados.tarefa.tardatafinalizado">
+            <v-icon color="#fff">
+                mdi-check-circle-outline
+            </v-icon>
+            <div>
+                FINALIZADO
+            </div>
+        </div>
         <v-card-title class="flex-center">
             {{dados.tarefa.tarnome}}
-            <v-icon class="close" @click.native="$emit('close')">
+            <v-icon :class="{close: true, closefinalizado: dados.tarefa.tardatafinalizado }" @click.native="$emit('close')">
                 mdi-close
             </v-icon>
         </v-card-title>
@@ -84,7 +92,7 @@
         </div>
         <br/>
         <div class="flex-center">
-            <core-dialog v-if="dados.tarefa.tarpedirconvite"></core-dialog>
+            <core-dialog v-if="dados.tarefa.tarpedirconvite && !dados.tarefa.tardatafinalizado"></core-dialog>
         </div>
         <br/>
     </v-card>
@@ -151,6 +159,10 @@ export default {
         cursor: pointer;
     }
 
+    .closefinalizado {
+        top: 40px;
+    }
+
     .container {
         display: flex;
         flex-wrap: wrap;
@@ -160,5 +172,14 @@ export default {
     .to-center {
         text-align: center;
         margin-top: 10px;
+    }
+
+    .finalizado {
+        color: #fff;
+        background-color: rgb(25, 120, 88);
+    }
+
+    .finalizado > div {
+        margin-left: 5px;
     }
 </style>

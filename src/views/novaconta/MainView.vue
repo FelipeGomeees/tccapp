@@ -8,12 +8,18 @@
                 <img src="../../../public/img/TaskerL.png" alt="">
             </div>
             <v-card class="elevation-8 card" width="500">
-                <h2 class="titulo">Boas Vindas ao Tasker!</h2>
-                <p class="subtitulo">Realize seu login ou conecte-se a plataforma</p>
+                <h2 class="titulo">Crie uma conta gratuitamente!</h2>
+                <!-- <p class="subtitulo">E comece a utilizar a plataforma</p> -->
                 <br/>
                 <v-text-field 
                 prepend-icon="mdi-account"
-                v-model="email"
+                v-model="usunome"
+                label="Nome"
+                @keyup.enter="FocusSwap('senha')">
+                </v-text-field>
+                <v-text-field 
+                prepend-icon="mdi-at"
+                v-model="usuemail"
                 label="Email"
                 @keyup.enter="FocusSwap('senha')">
                 </v-text-field>
@@ -21,20 +27,23 @@
                 ref="senha"
                 prepend-icon="mdi-lock"
                 type="password"
-                v-model="senha"
+                v-model="ususenha"
                 label="Senha"
                 @keyup.enter="Login()"></v-text-field>
+                <v-text-field 
+                ref="senha"
+                prepend-icon="mdi-lock"
+                type="password"
+                v-model="ususenha2"
+                label="Repita a Senha"
+                @keyup.enter="Login()"></v-text-field>
                 <div class="container-inferior">
-                    <div class="d-flex align">
-                        <v-checkbox></v-checkbox><span class="texto-menor">Me mantenha logado</span>
-                    </div>
-                    <v-btn @click="Login()" color="#ffb765">Entrar</v-btn>
+                    <v-btn @click="Login()" color="#ffb765">Continuar</v-btn>
                 </div>
                 <br/>
                 <p class="crie uma conta">
                     Ou 
-                    <a @click="NavigateTo('/novaconta')">crie sua conta</a>
-                    gratuitamente
+                    <a @click="NavigateTo('/')">retorne ao login</a>
                 </p>
             </v-card>
             <v-snackbar
@@ -65,9 +74,10 @@ export default {
 
     data() {
         return {
-            usuario: null,
-            senha: null,
-            email: null,
+            usunome: null,
+            ususenha: null,
+            ususenha2: null,
+            usuemail: null,
             snackbar: false,
             text: 'Usuario ou senha inválidos',
             criandoconta: false,
@@ -85,16 +95,17 @@ export default {
 
         Login() {
             const dados = {
-                where: { usuemail: this.email, ususenha: this.senha },
+                usunome: this.usunome,
+                ususenha: this.ususenha,
+                usuemail: this.usuemail,
             }
-            if (!this.email || !this.senha) {
+            if (!this.usuemail || !this.ususenha || !this.ususenha2 || !this.usunome) {
                 this.text = 'Alguns campos não foram preenchidos';
                 this.snackbar = true;
                 return;
             }
-            console.log(dados);
-            const res = axios.get(
-                '/usuario/login',
+            const res = axios.post(
+                '/usuario',
                 { params: dados },
             );
             console.log(dados);
@@ -102,18 +113,11 @@ export default {
                 console.log(data);
                 if (data.data.length > 0) {
                     SetToken(data.data);
-                    this.NavigateTo('/preambiente')
-                } else {
-                     this.text = 'Usuario ou senha inválidos';
-                    this.snackbar = true;
+                    this.NavigateTo('/')
                 }
             })
         },
     },
-
-    created(){
-        sessionStorage.clear();
-    }
 }
 </script>
 
@@ -129,7 +133,7 @@ export default {
 
     .container-inferior {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
     }
 

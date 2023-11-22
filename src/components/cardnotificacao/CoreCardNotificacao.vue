@@ -1,56 +1,36 @@
 <template>
   <div class="d-flex">
-    <v-avatar color='#30343f' class="avatar-dark hidden-on-mobile" size="52px" >   
-      <v-img src="https://picsum.photos/200"></v-img>
-    </v-avatar>
     <v-card :class="{['card-resposta']: !principal, ['hidden-on-mobile']: true}" width="700px">
-      <div class="esfera" v-if="!principal">
-      </div>
       <v-card-subtitle
-      :class="{['sub-resposta']: !principal , sub: principal, ['d-flex']: true}">
+      :class="{
+      ['sub-resposta']: !principal , 
+      tipo1: dados.notidtiponotificacao === 1, 
+      tipo2: dados.notidtiponotificacao === 2, 
+      tipo3: dados.notidtiponotificacao === 3, 
+      sub: principal, ['d-flex']: true
+      }">
       <div class="d-flex justify-space-between fill">
         <div class="d-flex">
-          <b>{{dados.usaapelido}} </b>
-          <p> | {{$_horasAtras(dados.fordatacriacao)}}</p>
+          <v-icon class="margem">{{$_retornaIcone(dados.notidtiponotificacao)}}</v-icon>
+          <b v-if="dados.notidtiponotificacao !== 2"> {{dados.notidusuarioambiente}} </b>
+          <b v-else> Tasker </b>
+          <p> | {{$_horasAtras(dados.notdatanotificacao)}}</p>
           <p v-if="dados.fordataedicao"> | Editado {{$_horasAtras(dados.fordataedicao)}} atrás</p>
         </div>
         <forum-menu @visibilidade="ocultar = !ocultar"/>
       </div>
       </v-card-subtitle>
       <v-card-text v-if="!ocultar">
-        {{dados.forcomentario}}
+        {{dados.notdescricao}}
       </v-card-text>
-      <v-card-text v-if="!ocultar">
-        <div class="d-flex review-wrapper">
-          <div v-if="!up" class="review">
-            <v-icon @click="up = true; down = false;" >mdi-thumb-up-outline</v-icon><p>{{dados.forreacaopositiva}}</p>
-          </div>
-          <div v-else class="review">
-            <v-icon @click="up = false" color="green">mdi-thumb-up</v-icon><p>{{dados.forreacaopositiva}}</p>
-          </div>
-          <div v-if="!down" class="review">
-            <v-icon @click="up = false; down = true;" >mdi-thumb-down-outline</v-icon><p>{{dados.forreacaonegativa}}</p>
-          </div>
-          <div v-else class="review">
-            <v-icon @click="down = false" color="red">mdi-thumb-down</v-icon><p>{{dados.forreacaonegativa}}</p>
-          </div>
+      <v-card-text v-if="dados.notidtiponotificacao === 2" class="d-flex justify-space-between">
+        <div>
+
         </div>
-      </v-card-text>
-    </v-card>
-    <v-card class="hidden-on-desktop">
-      <v-card-subtitle
-      :class="{['sub-resposta-mobile']: !principal, ['sub-mobile']: principal , sub: principal}">
-        <div class="d-flex justify-space-between fill">
-          <div class="d-flex">
-            <b>Felipe Gomes </b>
-            <p> | {{$_horasAtras(dados.fordatacriacao)}}s</p>
-            <p v-if="dados.fordataedicao" > | Editado {{$_horasAtras(dados.fordataedicao)}} atrás</p>
-          </div>
-          <v-icon>mdi-arrow-up</v-icon>
+        <div>
+          <v-btn class="margem">Recusar</v-btn>
+          <v-btn color="primary">Permitir</v-btn>
         </div>
-      </v-card-subtitle>
-      <v-card-text>
-        {{dados.forcomentario}}
       </v-card-text>
     </v-card>
   </div>
@@ -87,23 +67,31 @@ export default {
     methods: {
       $_horasAtras(data) {
         const comentario = moment(data);
-        const hora = (moment.duration(comentario.diff(new Date()))).hours();
+        const hora = (moment.duration(moment(new Date()).diff(comentario))).hours();
         if (hora === 0) {
-          const minuto = (moment.duration(comentario.diff(new Date()))).minutes();
+          const minuto = (moment.duration(moment(new Date()).diff(comentario))).minutes();
           if (minuto === 0) {
-            const segundo = (moment.duration(comentario.diff(new Date()))).seconds();
+            const segundo = (moment.duration(moment(new Date()).diff(comentario))).seconds();
             return (Number(segundo) === 1) ? `${segundo} segundo atrás` : `${segundo} segundos atrás`;
           }
           return (Number(minuto ) === 1) ? `${minuto} minuto atrás` : `${minuto } minutos atrás`;
         }
         return (Number(hora) === 1) ? `${hora} hora atrás` : `${hora} horas atrás`;
       },
+
+      $_retornaIcone(tipo) {
+        switch(tipo) {
+          case 1: return 'mdi-check-circle';
+          case 2: return 'mdi-account-multiple-plus';
+          case 3: return 'mdi-forum';
+        }
+      },
     },
 
     computed: {
       $mobile() {
         return this.$vuetify.breakpoint.mobile ? '50px' : '30px'
-      }
+      },
     }
 }
 </script>
@@ -126,7 +114,7 @@ export default {
     }
 
     .sub {
-      background-color: #ffb765;
+      background-color: #e8ff65;
       height: 50px;
       margin-bottom: 15px;
     }
@@ -136,9 +124,20 @@ export default {
     }
 
     .sub-resposta {
-      background-color: #ffcf65;
       height: 50px;
       margin-bottom: 15px;
+    }
+
+    .tipo2 {
+      background-color: #91f89d;
+    }
+
+    .tipo3 {
+      background-color: #77abff;
+    }
+
+    .tipo1 {
+      background-color: #ffdd8f;
     }
 
     .sub-resposta-mobile {
@@ -176,6 +175,10 @@ export default {
     .review-wrapper {
       justify-content: right;
       width: 100%;
+    }
+
+    .margem {
+      margin-right: 15px;
     }
 
 

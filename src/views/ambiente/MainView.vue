@@ -3,6 +3,7 @@ import CoreTaskCard from '@/components/cards/CoreTaskCard.vue'
 import CoreScreen from '@/components/always/CoreScreen.vue'
 import FormTarefa from '@/components/form/tarefas/TarefaDialog.vue'
 import SideAmbiente from '@/components/side/side-ambiente/SideAmbiente.vue';
+import CoreFilter from '@/components/filter/CoreFilter.vue';
 import axios from 'axios'
 
 export default {
@@ -12,6 +13,7 @@ export default {
         CoreScreen,
         FormTarefa,
         SideAmbiente,
+        CoreFilter,
     },
 
     data() {
@@ -21,21 +23,36 @@ export default {
             bufferValue: 100,
             modoLista: false,
             selecionado: null,
-
+            filter: false,
             tarefas: null,
-
             dialogTarefa: false,
             loading: true,
         };
     },
 
     methods: {
-        $_load() {
-            this.loading = true;
+        $_load(where) {
+            this.filter = false;
             const idUsuarioAmbiente = sessionStorage.getItem('usuarioambiente');
             const idAmbiente = sessionStorage.getItem('ambiente');
+            let dados = null;
+            if (where) {
+                dados = {
+                    idAmb: idAmbiente,
+                    idUsuAmb: idUsuarioAmbiente,
+                    where: { tardataabertura: [where.datainicial, where.datafinal] },
+                };
+            } else {
+                dados = {
+                    idAmb: idAmbiente,
+                    idUsuAmb: idUsuarioAmbiente,
+                }
+            }
+            this.loading = true;
             const res = axios.get(
-                `/tarefa/detalhado/${idUsuarioAmbiente}/${idAmbiente}`,
+                `/tarefa/detalhado/todos`,
+                { params: dados },
+                
             );
             res.then((item) => {
                 this.tarefas = item.data;
@@ -79,7 +96,6 @@ export default {
                         outlined
                         dense
                         append-icon="mdi-magnify"
-                        v-model="search"
                         label="Pesquisar Tarefa"
                         class="mx-4 input"
                     ></v-text-field>
@@ -87,7 +103,7 @@ export default {
                         <v-icon>mdi-view-list</v-icon></v-btn>
                     <v-btn color="white" v-else @click="modoLista = !modoLista">
                         <v-icon>mdi-card-multiple-outline</v-icon></v-btn>
-                    <v-btn color="primary"><v-icon>mdi-filter</v-icon></v-btn>
+                    <v-btn color="primary form-icon" @click="filter = !filter"><v-icon>mdi-filter</v-icon></v-btn>
                     <v-btn color="primary" @click="dialogTarefa = !dialogTarefa">Nova Tarefa</v-btn>
                 </div>
             </div>
@@ -107,6 +123,13 @@ export default {
                 <form-tarefa
                 @finalizar="dialogTarefa = false"
                 ></form-tarefa>
+            </v-dialog>
+            <v-dialog
+            v-model="filter"
+            width="500"
+            >
+                <core-filter @change="$_load" label="Data" tarefa>
+                </core-filter>
             </v-dialog>
         </template>
         <template v-slot:side>
@@ -225,5 +248,9 @@ export default {
 
     .form-icon {
         margin-right: 5px;
+    }
+
+     >>> .v-dialog {
+        overflow-y: visible;
     }
 </style>

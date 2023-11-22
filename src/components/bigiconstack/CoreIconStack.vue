@@ -1,6 +1,30 @@
 <template>
     <div>
-        <div class="icon-container" v-if="!stack">
+        <div class="icon-container" v-if="contato">
+            <v-avatar color="#ffb765" :class="{ avatar: true}" size="52px"
+                @click="showCard = !showCard; userInfo = items[0]">   
+                {{(items[0].usaapelido.slice(0, 2))}}
+            </v-avatar>
+            <div v-if="items.length > 5">
+                <v-avatar color='#30343f' class="avatar-dark" size="52px">   
+                    +{{items.length - 5}}
+                </v-avatar>
+            </div>
+        </div>
+        <div class="icon-container" v-else-if="colaborador">
+            <div v-for="(item, index) in $items" :key="item.useapelido">
+                <v-avatar color="#ffb765" class="avatar" :size="size" v-if="index !== 0"
+                 @click="showCard = !showCard; userInfo = item">   
+                    {{(item.usaapelido.slice(0, 2))}}
+                </v-avatar>
+            </div>
+            <div v-if="items.length > 5">
+                <v-avatar color='#30343f' class="avatar-dark" :size="size">   
+                    +{{items.length - 5}}
+                </v-avatar>
+            </div>
+        </div>
+        <div class="icon-container" v-else-if="!stack">
             <div v-for="item in $items" :key="item.useapelido" :class="{ concluido: item.coldatafinalizacao, margem: true}">
                 <v-avatar color="#ffb765" :class="{ avatar: true}" size="52px"
                  @click="showCard = !showCard; userInfo = item">   
@@ -62,11 +86,14 @@ export default {
     props: {
         items: Array,
         stack: Boolean,
+        colaborador: Boolean,
+        contato: Boolean,
     },
     data() {
         return {
             showCard: false,
             userInfo: null,
+            contador: 0,
         };
     },
 
@@ -74,6 +101,12 @@ export default {
         // initialColor(initalLetter) {
         //     return initialColor(initalLetter);
         // }
+    },
+
+    created() {
+        if (this.$props.contato) {
+            this.contador = 1;
+        }
     },
 
     computed: {

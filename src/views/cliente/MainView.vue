@@ -4,6 +4,7 @@ import CoreScreen from '@/components/always/CoreScreen.vue';
 import ClienteForm from '@/components/form/cliente/ClienteForm.vue';
 import SideCliente from '@/components/side/side-cliente/SideCliente.vue';
 import ShowMore from '@/components/show-more/ShowMore.vue'
+import CoreFilter from '@/components/filter/CoreFilter.vue';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -17,6 +18,7 @@ export default {
         ClienteForm,
         SideCliente,
         ShowMore,
+        CoreFilter,
     },
 
     data() {
@@ -44,6 +46,7 @@ export default {
             dialog: false,
             selecionado: null,
             loading: true,
+            filter: false,
         };
     },
 
@@ -60,10 +63,25 @@ export default {
             this.selecionado = e;
         },
 
-        $_load() {
+        $_load(where) {
+            this.filter = false;
+            const idAmb = sessionStorage.getItem('ambiente');
+            console.log(where, 'whereee');
+            let dados = null;
+            if (where) {
+                dados = {
+                    idAmb: idAmb,
+                    where: { clidatacriacao: [where.datainicial, where.datafinal] },
+                };
+            } else {
+                dados = {
+                    idAmb: idAmb,
+                }
+            }
             this.loading = true;
             const res = axios.get(
                 '/cliente/detalhado',
+                { params: dados },
             );
             res.then((item) => {
                 console.log(item.data, 'cliente');
@@ -108,7 +126,7 @@ export default {
                     class="mx-4"
                     ></v-text-field>     
                 </div>
-                <v-btn color="primary form-icon"><v-icon>mdi-filter</v-icon></v-btn>
+                <v-btn color="primary form-icon" @click="filter = !filter"><v-icon>mdi-filter</v-icon></v-btn>
                 <v-btn color="primary" @click="dialog = !dialog">Novo Cliente</v-btn>
             </div>
             <div class="table">
@@ -151,6 +169,14 @@ export default {
                     <v-icon x-large>mdi-tag</v-icon> Novo Cliente
                 </v-card-title>
                 <cliente-form @sucesso="$_reload"></cliente-form>
+            </v-dialog>
+            <v-dialog
+            v-model="filter"
+            width="500"
+            >
+                <core-filter @change="$_load" label="Data"
+                >
+                </core-filter>
             </v-dialog>
         </template>
         <template v-slot:side>
@@ -218,5 +244,10 @@ export default {
 
     .form-icon {
         margin-right: 15px;
+    }
+
+    
+     >>> .v-dialog {
+        overflow-y: visible;
     }
 </style>

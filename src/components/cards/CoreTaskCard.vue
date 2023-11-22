@@ -1,7 +1,7 @@
 <template>
     <v-card class="elevation-6 card" width="100%" >
         <v-card-title>
-            <div class="detalhes-nomes">
+            <div :class="{['detalhes-nomes']: !v2, ['detalhes-nomesv2']: v2}">
                 <div class="nome">{{dados.tarefa.tarnome}}</div>
                 <!-- <v-icon>mdi-source-branch</v-icon> 
                 <div>Fix</div> -->
@@ -14,7 +14,17 @@
                         </div>
                 </div>
             </div>
-            <div class="detalhes">
+            <div class="detalhes" v-if="!v2">
+                <div v-for="tag in dados.tags" :key="tag.id">
+                    <v-btn v-if="tag.tagtipo === 2"
+                    :color="tag.tagcor" rounded class="elevation-0 pa-2 tag" height="19px">
+                    </v-btn>
+                    <v-btn v-if="tag.tagtipo === 1" 
+                    :color="tag.tagcor" rounded class="elevation-0 pa-2 tag" height="19px">
+                    </v-btn>
+                </div>
+            </div>
+            <div class="detalhes-v2 d-flex" v-else>
                 <div v-for="tag in dados.tags" :key="tag.id">
                     <v-btn v-if="tag.tagtipo === 2"
                     :color="tag.tagcor" rounded class="elevation-0 pa-2 tag" height="19px">
@@ -25,9 +35,10 @@
                 </div>
             </div>
         </v-card-title>
-        <v-divider></v-divider>
+        <v-divider v-if="!v2"></v-divider>
+        <div v-else class="espaco"></div>
         <v-card-text class="d-flex justify-space-between pa-2" v-if="!v2">
-            <div class="flex-center margin">
+            <div class="flex-center margin" v-if="!dados.tarefa.tardatafinalizado">
                 <v-icon>
                     mdi-calendar
                 </v-icon>
@@ -35,10 +46,19 @@
                     {{$_formataData(dados.tarefa.tardataabertura)}} - {{$_formataData(dados.tarefa.tardataprazo)}}
                 </div>
             </div>
+            <div class="flex-center margin finalizado" v-else>
+                <v-icon color="rgb(25, 120, 88)">
+                    mdi-check-circle-outline
+                </v-icon>
+                <div>
+                    FINALIZADO   
+                </div>
+            </div>
             <core-icon-stack :items="dados.colaboradores"></core-icon-stack>
         </v-card-text>
         <v-card-text class="d-flex justify-space-between" v-else>
             <div class="flex-center ua">
+                
                 <v-icon>
                     mdi-calendar
                 </v-icon>
@@ -47,7 +67,7 @@
                 </div>
             </div>
             <div class="flex-center ua">
-                <div>Contato </div>
+                <div>Colaborador </div>
                 <v-icon>
                     mdi-xml
                 </v-icon>
@@ -102,10 +122,16 @@ export default {
         justify-content: space-between;
     }
 
+    .detalhes-nomesv2 {
+        width: 82%;
+        height: 66px;
+        height: 20px; /* ERA 70% */
+    }
+
     .detalhes-nomes {
         width: 82%;
         height: 66px;
-        height: 70px;
+        height: 70%; /* ERA 70% */
     }
 
     .nome {
@@ -120,5 +146,17 @@ export default {
 
     .detalhes {
         width: 18%;
+    }
+
+    .espaco {
+        height: 5px;
+    }
+
+    .finalizado {
+        color: rgb(25, 120, 88)
+    }
+
+    .finalizado > div {
+        margin-left: 5px;
     }
 </style>

@@ -48,7 +48,7 @@
     data() {
       return {
         subtarefa: [{label: 'Designações', url: "/ambiente"},{label: 'Detalhes', url: "/tarefa"}],
-        subatividade: [{label: 'Perfil', url: '/perfil'}, {label: 'Histórico'},{ label: 'Notificações'}],
+        subatividade: [{label: 'Perfil', url: '/perfil'},{ label: 'Notificações', url: '/notificacao'}],
         // subforum: [{label: 'Tarefa', url: '/perfil'}, {label: 'Histórico'},{ label: 'Notificações'}],
         diversos: [{label: 'Tags', url: '/tags'}, {label: 'Executaveis', url: '/executavel' }, {label: 'Clientes', url: '/cliente'}], 
         relatorio: [

@@ -1,10 +1,10 @@
 <template>
     <div>
        <v-card-title class="flex-center">
-            Dados de Projetos
+            Informações Gerais
         </v-card-title>
         <v-divider></v-divider>
-        <div class="flex-center">
+        <!-- <div class="flex-center">
             <div>
                 Gráfico de Contribuição
             </div>
@@ -29,15 +29,42 @@
         </div>
         <v-card-text>
             Aqui vai um gráfico...
-        </v-card-text>
+        </v-card-text> -->
+        <v-divider></v-divider>
+        <p class="flex-center">Detalhes</p>
+        <div class="flex-center">
+            <v-icon x-large>mdi-account</v-icon>
+        </div>
+        <br/>
+                <v-divider></v-divider>
+        <div class="d-flex justify-space-between ll">
+           <b class="margem">Membro á:</b><div>8 Meses</div>
+        </div>
+                <v-divider></v-divider>
+        <div class="d-flex justify-space-between ll">
+           <b class="margem">Tarefas em Andamento:</b><div>3</div>
+        </div>
+                <v-divider></v-divider>
+        <div class="d-flex justify-space-between ll">
+           <b class="margem">Tarefas Concluidas:</b><div>5</div>
+        </div>
+                <v-divider></v-divider>
+        <div class="d-flex justify-space-between ll">
+           <b class="margem">Comentários:</b><div>48</div>
+        </div>
+                <v-divider></v-divider>
+        <div class="d-flex justify-space-between ll">
+           <b class="margem">Permissões Administrativas?</b><div>Não</div>
+        </div>
         <v-divider></v-divider>
         <p class="flex-center">Ações</p>
         <br/>
         <div class="flex-center">
-            <v-btn color="primary"> PERMISSÃO </v-btn>
+            <v-btn> ENVIAR NOTIFICAÇÃO </v-btn>
         </div>
         <br/>
         <div class="flex-center">
+            <v-btn color="primary" class="margem"> PERMISSÕES </v-btn>
             <v-btn color="#e02434" style="color: white"> REMOVER </v-btn>
         </div>
         <br/>
@@ -153,6 +180,14 @@ export default {
     .flex-center {
         display: flex;
         justify-content: center;
+    }
+
+    .ll {
+        padding: 0px 10px 0px 10px;
+    }
+
+    .margem {
+        margin-right: 10px;
     }
 
     @media screen and (max-width: 768px) {

@@ -4,6 +4,7 @@ import CoreScreen from '@/components/always/CoreScreen.vue';
 import CommentField from '@/components/comment-field/CommentFIeld.vue'
 import SidePerfil from '@/components/side/side-perfil/SideForum.vue'
 import CoreTaskCard from '@/components/cards/CoreTaskCard.vue'
+import axios from 'axios';
 
 export default {
     name: 'ContatoView',
@@ -17,8 +18,10 @@ export default {
     data() {
         return {
             detail: false,
+            tarefas: null,
             progress: 10,
             bufferValue: 100,
+            loading: true,
         };
     },
 
@@ -32,41 +35,49 @@ export default {
             this.detail = bool;
         },
 
-        ShowProfile() {
-
+        $_load() {
+            this.loading = true;
+            const idUsuarioAmbiente = sessionStorage.getItem('usuarioambiente');
+            const idAmbiente = sessionStorage.getItem('ambiente');
+            const res = axios.get(
+                `/tarefa/detalhado/${idUsuarioAmbiente}/${idAmbiente}`,
+            );
+            res.then((item) => {
+                this.tarefas = item.data;
+                console.log(item.data, 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+                this.loading = false;
+            });
         },
     },
+
+    created() {
+        this.$_load();
+    }
 }
 </script>
 
 <template>
-    <core-screen>
+    <core-screen hasPrincipal hasSide showAsCard>
         <template v-slot:main>
             <div class="coluna-card">
                 <div class="d-flex">
                     <v-btn fab color="primary">F</v-btn>
-                    <div>
+                    <div class="margem">
                         <div class="header">
-                            <h2># Felipe Gomes</h2>
+                            <h2># Felipe</h2>
                         </div>
                         <div class="flex">
-                            <v-btn color="#4287f5" rounded dark class="elevation-0 pa-2 tag" height="19px">
-                                Desenvolvedor I
-                            </v-btn>
-                            <v-btn color="#4287f5" rounded dark class="elevation-0 pa-2 tag" height="19px">
-                                WEB
-                            </v-btn>
-                            <v-btn color="#3ad683" rounded class="elevation-0 pa-2 tag" height="19px">
-                                VUE
-                            </v-btn>
+                            Felipe Gomes
                         </div>
                     </div>
                 </div>
+                <br/>
                 <div class="flex-between">
                     <div>
                         <v-icon>mdi-flag-variant</v-icon> Membro des de: 27 de Março de 2023 as 14:32 (4 meses)
                     </div>
                 </div>
+                <br/>
                 <div class="expand" v-if="false">
                     <comment-field :label="'Descricao'"/>
                 </div>  
@@ -89,9 +100,9 @@ export default {
                     <h4>Contato e Plataformas</h4>
                     <div class="d-flex">
                         <v-icon>mdi-email</v-icon>
-                        <h4>fe@gmail.com</h4>
+                        <h4 class="margem">fe@gmail.com</h4>
                     </div>
-                    <div class="d-flex">
+                    <!-- <div class="d-flex">
                         <v-icon>mdi-github</v-icon>
                         <h4>fe@gmail.com</h4>
                     </div>   
@@ -102,16 +113,16 @@ export default {
                     <div class="d-flex">
                         <v-icon>mdi-gmail</v-icon>
                         <h4>fe@gmail.com</h4>
-                    </div>
+                    </div> -->
                 </div>
                 <br/>
                 <v-divider></v-divider>
                 <h4>Projetos em Andamento</h4>
                 <br/>
-                <div class="expand-card">
-                        <core-task-card v2></core-task-card>
-                        <core-task-card v2></core-task-card>
-                        <core-task-card v2></core-task-card>
+                <div v-if="!loading">
+                    <div class="expand-card"  v-for="(item, index) in tarefas" :key="index">
+                        <core-task-card v2 :dados="item"></core-task-card>
+                    </div>
                 </div>
             </div>    
         </template>
@@ -253,5 +264,9 @@ export default {
     .fill {
         width: 100%;
         /* background-color:  #ffb765; */
+    }
+
+    .margem {
+        margin-left: 15px;
     }
 </style>

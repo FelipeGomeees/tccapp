@@ -1,10 +1,12 @@
 <template>
   <v-app>
     <core-navigator class="d-print-none"
-    v-if="$route.fullPath !='/' && $route.fullPath !='/cadastro' && $route.fullPath !='/preambiente'">
+    v-if="$route.fullPath !='/' && $route.fullPath !='/cadastro' && $route.fullPath !='/preambiente'
+    && $route.fullPath !='/novaconta'">
     </core-navigator>
     <core-app-bar class="d-print-none"
-    v-if="$route.fullPath !='/' && $route.fullPath !='/cadastro' && $route.fullPath !='/preambiente'">
+    v-if="$route.fullPath !='/' && $route.fullPath !='/cadastro' && $route.fullPath !='/preambiente' 
+    && $route.fullPath !='/novaconta'">
     </core-app-bar>
     <v-main class="imagem">
       <router-view/>

@@ -59,6 +59,8 @@ export default {
             });
         },
 
+        
+
         $_formataData(data) {
             return moment(data).format('DD/MM/YYYY HH:mm');
         },

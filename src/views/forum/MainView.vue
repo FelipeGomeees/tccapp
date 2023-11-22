@@ -77,7 +77,7 @@ export default {
         <template v-slot:main>
                 <div class="header">
                     <h2># {{dadosTarefa.tarefa.idtarefa}} | {{dadosTarefa.tarefa.tarnome}}</h2>
-                    <v-icon>mdi-connection</v-icon>
+                    <!-- <v-icon>mdi-connection</v-icon> -->
                 </div>
                 <br/>
                  <tag-list :data="dadosTarefa.tags"></tag-list>
