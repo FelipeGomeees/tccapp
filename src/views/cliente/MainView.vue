@@ -172,6 +172,7 @@ export default {
             </v-dialog>
             <v-dialog
             v-model="filter"
+            persistent
             width="500"
             >
                 <core-filter @change="$_load" label="Data"

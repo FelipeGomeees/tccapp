@@ -2,6 +2,7 @@
 /* eslint-disable vue/valid-v-slot */
 import CoreScreen from '@/components/always/CoreScreen.vue';
 import SideUsuario from '@/components/side/side-usuario/SideUsuario.vue';
+import CoreFilter from '@/components/filter/CoreFilter.vue';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -12,6 +13,7 @@ export default {
         // CoreDialog,
         CoreScreen,
         SideUsuario,
+        CoreFilter,
     },
 
     data() {
@@ -35,6 +37,7 @@ export default {
             selecionado: null,
             loading: true,
             chave: null,
+            filter: false,
         };
     },
 
@@ -48,10 +51,28 @@ export default {
             this.selecionado = e;
         },
 
-        $_load() {
+        $_load(where) {
+            this.filter = false;
+            const idAmbiente = sessionStorage.getItem('ambiente');
+            let dados = {
+                idAmb: idAmbiente,
+            };
+            if (where) {
+                dados.where = {};
+                if (where.campo) { 
+                    dados.where[where.campo] = [where.datainicial, where.datafinal];
+                }   else {
+                    return;
+                }
+            } else {
+                dados = {
+                    idAmb: idAmbiente,
+                }
+            }
             this.loading = true;
             const res = axios.get(
                 '/usuarioambiente/detalhado',
+                { params: dados },
             );
             res.then((item) => {
                 this.items = item.data;
@@ -115,7 +136,7 @@ export default {
                         class="mx-4"
                         ></v-text-field>     
                     </div>
-                    <v-btn color="primary form-icon"><v-icon>mdi-filter</v-icon></v-btn>
+                    <v-btn color="primary form-icon" @click="filter = !filter"><v-icon>mdi-filter</v-icon></v-btn>
                     <v-btn color="primary" @click="dialog = !dialog">Gerar Convite</v-btn>
                 </div>
             <div class="table">
@@ -161,6 +182,15 @@ export default {
                     </div>
                     <br/>
                 </v-card>
+            </v-dialog>
+            <v-dialog
+            v-model="filter"
+            persistent
+            width="500"
+            >
+                <core-filter @change="$_load" label="Data Criação" usuario
+                >
+                </core-filter>
             </v-dialog>
         </template>
         <template v-slot:side>
@@ -225,5 +255,9 @@ export default {
 
     .sub {
         padding: 25px;
+    }
+
+    >>> .v-dialog {
+        overflow-y: visible;
     }
 </style>

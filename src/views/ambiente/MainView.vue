@@ -35,13 +35,23 @@ export default {
             this.filter = false;
             const idUsuarioAmbiente = sessionStorage.getItem('usuarioambiente');
             const idAmbiente = sessionStorage.getItem('ambiente');
-            let dados = null;
+            let dados = {
+                idAmb: idAmbiente,
+                idUsuAmb: idUsuarioAmbiente,
+            };
             if (where) {
-                dados = {
-                    idAmb: idAmbiente,
-                    idUsuAmb: idUsuarioAmbiente,
-                    where: { tardataabertura: [where.datainicial, where.datafinal] },
-                };
+                dados.where = {};
+                if (where.campo) { 
+                    dados.where[where.campo] = [where.datainicial, where.datafinal];
+                }   else {
+                    return;
+                }
+                // if (where.colaboradas) {
+                //     dados.where.visibidade = null,
+                // }
+                // if (where.colaboradas) {
+                //     dados.where.visibidade = null,
+                // }
             } else {
                 dados = {
                     idAmb: idAmbiente,
@@ -126,6 +136,7 @@ export default {
             </v-dialog>
             <v-dialog
             v-model="filter"
+            persistent
             width="500"
             >
                 <core-filter @change="$_load" label="Data" tarefa>
